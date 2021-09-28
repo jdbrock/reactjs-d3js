@@ -29,7 +29,8 @@ module.exports = createReactClass({
 
   getDefaultProps() {
     return {
-      circleRadius: 3,
+      colors: d3.scaleOrdinal(d3.schemeCategory10),
+      circleRadius: 0,
       className: 'rd3-linechart',
       hoverAnimation: true,
       margins: { top: 10, right: 20, bottom: 50, left: 45 },

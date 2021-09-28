@@ -34,6 +34,7 @@ module.exports = createReactClass({
           onMouseOver={this.props.handleMouseOver}
           onMouseLeave={this.props.handleMouseLeave}
           fill="transparent"
+          stroke='#F5F5F5'
           d={this.props.voronoiPath}
         />
         <circle

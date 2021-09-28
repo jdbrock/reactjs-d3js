@@ -29,7 +29,7 @@ module.exports = createReactClass({
       .x((d) => props.xScale(props.xAccessor(d)))
       .y0((d) => props.yScale(d.y0))
       .y1((d) => props.yScale(d.y0 + props.yAccessor(d)))
-      .interpolate(props.interpolationType);
+      .curve();
 
     const path = area(props.data);
 

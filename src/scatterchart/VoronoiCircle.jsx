@@ -36,6 +36,7 @@ module.exports = createReactClass({
         <path
           d={props.voronoiPath}
           fill={props.pathFill}
+          stroke='#DCDCDC'
           onMouseLeave={props.handleMouseLeave}
           onMouseOver={props.handleMouseOver}
         />

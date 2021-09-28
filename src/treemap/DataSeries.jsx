@@ -22,7 +22,7 @@ module.exports = createReactClass({
   getDefaultProps() {
     return {
       data: [],
-      colors: d3.scale.category20c(),
+      colors: d3.scaleOrdinal(d3.schemeCategory10),
       colorAccessor: (d, idx) => idx,
     };
   },

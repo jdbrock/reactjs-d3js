@@ -24,7 +24,7 @@ module.exports = createReactClass({
   getDefaultProps() {
     return {
       className: 'rd3-legend',
-      colors: d3.scale.category20c(),
+      color: d3.scaleOrdinal(d3.schemeCategory10),
       colorAccessor: (d, idx) => idx,
       itemClassName: 'rd3-legend-item',
       text: '#000',

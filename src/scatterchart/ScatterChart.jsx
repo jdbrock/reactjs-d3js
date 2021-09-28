@@ -38,6 +38,7 @@ module.exports = createReactClass({
 
   getDefaultProps() {
     return {
+      colors: d3.scaleOrdinal(d3.schemeBlues[6].reverse()),
       circleRadius: 3,
       className: 'rd3-scatterchart',
       hoverAnimation: true,
