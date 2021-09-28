@@ -12,8 +12,7 @@ LineChart and ScatterChart are fully migrated.
 As soons as I started to migrate to d3js v.7, I realize that there are other react/d3 frameworks available for free on GitHub. So this project will be on hold by now. 
 
 ## Demo
-https://fortinbras.github.io/rd3/
-
+https://fortinbras.github.io/reactjs-d3js/
 
 ### License
 MIT
