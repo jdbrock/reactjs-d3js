@@ -4,18 +4,18 @@ const React = require('react');
 const ReactDOM = require('react-dom');
 const d3 = require('d3');
 const createReactClass = require('create-react-class');
-const hljs = require('highlight.js');
+// const hljs = require('highlight.js');
 const rd3 = require('../../src');
 
-const BarChart = rd3.BarChart;
+// const BarChart = rd3.BarChart;
 const LineChart = rd3.LineChart;
-const CandlestickChart = rd3.CandlestickChart;
-const PieChart = rd3.PieChart;
-const AreaChart = rd3.AreaChart;
-const Treemap = rd3.Treemap;
+// const CandlestickChart = rd3.CandlestickChart;
+// const PieChart = rd3.PieChart;
+// const AreaChart = rd3.AreaChart;
+// const Treemap = rd3.Treemap;
 const ScatterChart = rd3.ScatterChart;
 
-hljs.initHighlightingOnLoad();
+// hljs.initHighlightingOnLoad();
 
 const Demos = createReactClass({
 
@@ -26,10 +26,12 @@ const Demos = createReactClass({
     };
   },
 
+  /*
   componentWillMount() {
     // Browser data adapted from nvd3's stacked area data
     // http://nvd3.org/examples/stackedArea.html
-    const parseDate = d3.time.format('%y-%b-%d').parse;
+    
+    const parseDate = d3.timeFormat('%y-%b-%d').parse;
     d3.json('data/stackedAreaData.json', (error, data) => {
       this.setState({ areaData: data });
     });
@@ -48,6 +50,7 @@ const Demos = createReactClass({
       this.setState({ ohlcData: [series] });
     });
   },
+  */
 
   render() {
     const lineData = [
@@ -137,7 +140,7 @@ const Demos = createReactClass({
               title="Line Chart"
               yAxisLabel="Altitude"
               xAxisLabel="Elapsed Time (sec)"
-              domain={{ x: [, 10], y: [-10, ] }}
+              domain={{ x: [, ], y: [, ] }}
               gridHorizontal
             />
           </div>
@@ -186,13 +189,20 @@ const Demos = createReactClass({
             </pre>
           </div>
         </div>
+
+
+
         <div className="row">
           <hr />
         </div>
         <div className="row">
           <div className="col-md-6">
             <ScatterChart
-              data={scatterData} width={500} height={400} title="Scatter Chart" domain={{ x: [-15, ], y: [-15, ] }}
+              data={scatterData} 
+              width={500} 
+              height={400} 
+              title="Scatter Chart" 
+              domain={{ x: [, ], y: [, ] }}
             />
           </div>
           <div className="col-md-6">
@@ -231,6 +241,7 @@ const Demos = createReactClass({
         <div className="row">
           <hr />
         </div>
+{/*
         <div className="row">
           <div className="col-md-6">
             <AreaChart
@@ -468,7 +479,7 @@ var treemapData = [
             </pre>
           </div>
         </div>
-
+              */}
       </div>
     );
   }

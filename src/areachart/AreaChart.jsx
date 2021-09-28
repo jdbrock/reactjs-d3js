@@ -52,7 +52,7 @@ module.exports = createReactClass({
       return null;
     }
 
-    const yScale = d3.scale.linear()
+    const yScale = d3.scaleLinear()
       .range([innerHeight, 0]);
 
     const xValues = [];
@@ -80,7 +80,7 @@ module.exports = createReactClass({
       xScale = d3.time.scale()
         .range([0, innerWidth]);
     } else {
-      xScale = d3.scale.linear()
+      xScale = d3.scaleLinear()
         .range([0, innerWidth]);
     }
 

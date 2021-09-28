@@ -42,7 +42,7 @@ module.exports = createReactClass({
       data: [],
       fillUp: () => '#ffffff',
       fillUpAccessor: (d, idx) => idx,
-      fillDown: d3.scale.category20c(),
+      fillDown: d3.scaleOrdinal(d3.schemeCategory10),
       fillDownAccessor: (d, idx) => idx,
       hoverAnimation: true,
       margins: { top: 10, right: 20, bottom: 30, left: 45 },

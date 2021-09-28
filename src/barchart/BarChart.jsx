@@ -115,7 +115,7 @@ module.exports = createReactClass({
     const minYDomain = Math.min(0, this._getStackedValuesMinY(_data));
     const maxYDomain = this._getStackedValuesMaxY(_data);
     const yDomain = domain.y || [minYDomain, maxYDomain];
-    const yScale = d3.scale.linear().range([innerHeight, 0]).domain(yDomain);
+    const yScale = d3.scaleLinear().range([innerHeight, 0]).domain(yDomain);
 
     const series = props.data.map((item) => item.name);
 

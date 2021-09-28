@@ -43,9 +43,11 @@ module.exports = createReactClass({
     const xAccessor = props.xAccessor;
     const yAccessor = props.yAccessor;
 
-    const interpolatePath = d3.svg.line()
+    const interpolatePath = d3.line()
+        .x((d) => props.xScale(xAccessor(d)))
         .y((d) => props.yScale(yAccessor(d)))
-        .interpolate(props.interpolationType);
+        .curve(d3.curveBasis);        
+
 
     if (this._isDate(props.data[0].values[0], xAccessor)) {
       interpolatePath.x(d => props.xScale(props.xAccessor(d).getTime()));
@@ -65,20 +67,27 @@ module.exports = createReactClass({
       )
     );
 
-    const voronoi = d3.geom.voronoi()
+
+    const voronoi = d3.voronoi()
       .x(d => xScale(d.coord.x))
       .y(d => yScale(d.coord.y))
-      .clipExtent([[0, 0], [props.width, props.height]]);
+      .extent([[0, 0], [props.width, props.height]]);
 
     let cx;
     let cy;
     let circleFill;
-    const regions = voronoi(props.value).map((vnode, idx) => {
-      const point = vnode.point.coord;
+
+    
+    const regions = voronoi(props.value).polygons().map( (polygon, idx) => {        
+      const point = polygon.data; 
+      delete polygon.data; 
+      const vnode = polygon;
+      // debugger;
+
       cx = props.xScale(point.x);
       cy = props.yScale(point.y);
 
-      circleFill = props.colors(props.colorAccessor(vnode, vnode.point.seriesIndex));
+      circleFill = props.colors(props.colorAccessor(vnode, point.seriesIndex));
 
       return (
         <VoronoiCircleContainer
@@ -92,7 +101,7 @@ module.exports = createReactClass({
           dataPoint={{
             xValue: point.x,
             yValue: point.y,
-            seriesName: vnode.point.series.name,
+            seriesName: point.series.name,
           }}
         />
       );

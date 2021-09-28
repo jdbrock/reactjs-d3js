@@ -32,7 +32,7 @@ module.exports = createReactClass({
   getDefaultProps() {
     return {
       className: 'rd3-legend-chart',
-      colors: d3.scale.category20c(),
+      colors: d3.scaleOrdinal(d3.schemeCategory10),
       colorAccessor: (d, idx) => idx,
       data: [],
       legend: false,

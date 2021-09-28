@@ -37,13 +37,16 @@ module.exports = createReactClass({
     const xAccessor = props.xAccessor;
     const yAccessor = props.yAccessor;
 
-    const voronoi = d3.geom.voronoi()
+    const voronoi = d3.voronoi()
       .x(d => xScale(d.coord.x))
       .y(d => yScale(d.coord.y))
-      .clipExtent([[0, 0], [props.width, props.height]]);
+      .extent([[0, 0], [props.width, props.height]]);
 
-    const regions = voronoi(props.data).map((vnode, idx) => {
-      const point = vnode.point;
+    const regions = voronoi(props.data).polygons().map( (polygon, idx) => {         
+      const point = polygon.data; 
+      delete polygon.data; 
+
+      const vnode = polygon;
       const coord = point.coord;
 
       const x = xAccessor(coord);

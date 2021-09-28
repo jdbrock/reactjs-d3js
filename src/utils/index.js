@@ -6,7 +6,7 @@ exports.calculateScales = (width, height, xValues, yValues, xDomain = [], yDomai
     xScale = d3.time.scale()
       .range([0, width]);
   } else {
-    xScale = d3.scale.linear()
+    xScale = d3.scaleLinear()
       .range([0, width]);
   }
   const xdomain = d3.extent(xValues);
@@ -19,7 +19,7 @@ exports.calculateScales = (width, height, xValues, yValues, xDomain = [], yDomai
     yScale = d3.time.scale()
       .range([height, 0]);
   } else {
-    yScale = d3.scale.linear()
+    yScale = d3.scaleLinear()
       .range([height, 0]);
   }
 

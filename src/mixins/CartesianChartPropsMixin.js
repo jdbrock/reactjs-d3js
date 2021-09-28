@@ -52,7 +52,7 @@ module.exports = {
   getDefaultProps() {
     return {
       axesColor: '#000',
-      colors: d3.scale.category20c(),
+      // colors: d3.scaleOrdinal(d3.schemeCategory10),
       colorAccessor: (d, idx) => idx,
       height: 200,
       horizontal: false,
