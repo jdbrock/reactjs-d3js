@@ -1,7 +1,7 @@
 
-## This is my fork of react-d3 running on d3js version 7  
+## Fork of react-d3 running on d3js version 7  
 
-This is my fork of rd3 - https://github.com/yang-wei/rd3
+This is a fork of rd3 - https://github.com/yang-wei/rd3
 
 It works with d3js v7.0.4, react 16 and node 10.24.
 

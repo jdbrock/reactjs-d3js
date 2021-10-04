@@ -18,7 +18,7 @@ const config = {
   production: true
 };
 
-gulp.task('clean:build', () => {
+gulp.task('clean:build', async () => {
   const del = require('del');
 
   del.sync(['build/'], { force: true });
@@ -106,16 +106,9 @@ const html = function () { return gulp.src('dist/public/*.html').pipe(gulp.dest(
 
 gulp.task('copy', () => merge(data, html));
 
-gulp.task('docs', ['clean:build'], () => merge(data(), html(), compileJS(['./docs/examples/main.js'])));
+gulp.task('docs',  gulp.series('clean:build', () => merge(data(), html(), compileJS(['./docs/examples/main.js']))));
 
-gulp.task('watch', ['clean:build', 'serve'], () => {
-  config.production = false;
-  compileJS(['./docs/examples/main.js']);
-  gulp.watch('dist/public/data/*', [data()], reload);
-  gulp.watch('dist/public/*.html', [html()], reload);
-});
-
-gulp.task('minified', ['clean:build'], () => {
+gulp.task('minified', gulp.series('clean:build', () => {
   config.production = true;
   const gulpFilter = require('gulp-filter');
   const jsfilter = gulpFilter(['*.js']);
@@ -127,7 +120,15 @@ gulp.task('minified', ['clean:build'], () => {
     .pipe(plugins.sourcemaps.write('./'))
     .pipe(gulp.dest('build/public/js'))
     ;
-});
+}));
+
+gulp.task('build', gulp.series('minified', 'docs'));
+gulp.task('watch', gulp.series('clean:build', 'build', serve, () => {
+  config.production = false;
+  compileJS(['./docs/examples/main.js']);
+  gulp.watch('dist/public/data/*', [data()], reload);
+  gulp.watch('dist/public/*.html', [html()], reload);
+}));
 
 
 gulp.task('copymisc', (cb) => {
@@ -144,9 +145,9 @@ gulp.task('copymisc', (cb) => {
 });
 
 
-gulp.task('build', ['minified', 'docs']);
+// gulp.task('build', gulp.series('minified', 'docs'));
 
-gulp.task('release', ['copymisc', 'minified'], (cb) => {
+gulp.task('release', gulp.series('copymisc', 'minified', (cb) => {
   const fs = require('fs');
   const Handlebars = require('handlebars');
   const path = require('path');
@@ -164,12 +165,18 @@ gulp.task('release', ['copymisc', 'minified'], (cb) => {
     process.exit(1);
   }
 
-  fs.writeFile(path.join(__dirname, 'build', 'cjs', 'package.json'), buildPackage, (err) => {
+  const DestinationFolder = path.join(__dirname, 'build', 'cjs')
+  try {
+    fs.mkdirSync(DestinationFolder, { recursive: true } );
+  } catch (e) {
+      console.log('Cannot create folder ', e);
+  }
+  fs.writeFile(path.join(DestinationFolder, 'package.json'), buildPackage, {flag: 'wx'}, (err) => {
     if (err) console.log(err);
     else console.log('CJS package.json file rendered');
     cb();
   });
-});
+}));
 
 function reload(updateEvent, buildTime) {
   if (buildTime) {
@@ -181,7 +188,7 @@ function reload(updateEvent, buildTime) {
   browserSync.reload();
 }
 
-gulp.task('serve', () => {
+function serve() {
   browserSync({
     server: {
       baseDir: ['build/public']
@@ -192,7 +199,9 @@ gulp.task('serve', () => {
     port: 4000,
     open: false
   });
-});
+};
+
+
 
 gulp.task('test', (cb) => {
   const server = new Server({
