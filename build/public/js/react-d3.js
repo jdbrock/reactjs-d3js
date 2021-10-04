@@ -1,4 +1,4 @@
-(function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.rd3 = f()}})(function(){var define,module,exports;return (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({"/home/robson/projetos/rd3/docs/examples/main.js":[function(require,module,exports){
+(function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.rd3 = f()}})(function(){var define,module,exports;return (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
 'use strict';
 
 var React = window.React;
@@ -121,7 +121,7 @@ var Demos = createReactClass({
 
 ReactDOM.render(React.createElement(Demos, null), document.getElementById('app'));
 
-},{"../../src":"/home/robson/projetos/rd3/src/index.js"}],"/home/robson/projetos/rd3/src/areachart/Area.jsx":[function(require,module,exports){
+},{"../../src":33}],2:[function(require,module,exports){
 'use strict';
 
 var PropTypes = window.PropTypes;
@@ -155,7 +155,7 @@ module.exports = createReactClass({
   }
 });
 
-},{}],"/home/robson/projetos/rd3/src/areachart/AreaChart.jsx":[function(require,module,exports){
+},{}],3:[function(require,module,exports){
 'use strict';
 
 var PropTypes = window.PropTypes;
@@ -336,7 +336,7 @@ module.exports = createReactClass({
   }
 });
 
-},{"../common":"/home/robson/projetos/rd3/src/common/index.js","../mixins":"/home/robson/projetos/rd3/src/mixins/index.js","./DataSeries":"/home/robson/projetos/rd3/src/areachart/DataSeries.jsx"}],"/home/robson/projetos/rd3/src/areachart/AreaContainer.jsx":[function(require,module,exports){
+},{"../common":32,"../mixins":44,"./DataSeries":5}],4:[function(require,module,exports){
 'use strict';
 
 var _extends = Object.assign || function (target) {
@@ -406,7 +406,7 @@ module.exports = createReactClass({
   }
 });
 
-},{"../utils":"/home/robson/projetos/rd3/src/utils/index.js","./Area":"/home/robson/projetos/rd3/src/areachart/Area.jsx"}],"/home/robson/projetos/rd3/src/areachart/DataSeries.jsx":[function(require,module,exports){
+},{"../utils":60,"./Area":2}],5:[function(require,module,exports){
 'use strict';
 
 var PropTypes = window.PropTypes;
@@ -451,12 +451,12 @@ module.exports = createReactClass({
   }
 });
 
-},{"./AreaContainer":"/home/robson/projetos/rd3/src/areachart/AreaContainer.jsx"}],"/home/robson/projetos/rd3/src/areachart/index.js":[function(require,module,exports){
+},{"./AreaContainer":4}],6:[function(require,module,exports){
 'use strict';
 
 exports.AreaChart = require('./AreaChart');
 
-},{"./AreaChart":"/home/robson/projetos/rd3/src/areachart/AreaChart.jsx"}],"/home/robson/projetos/rd3/src/barchart/Bar.jsx":[function(require,module,exports){
+},{"./AreaChart":3}],7:[function(require,module,exports){
 'use strict';
 
 var _extends = Object.assign || function (target) {
@@ -504,7 +504,7 @@ module.exports = createReactClass({
   }
 });
 
-},{}],"/home/robson/projetos/rd3/src/barchart/BarChart.jsx":[function(require,module,exports){
+},{}],8:[function(require,module,exports){
 'use strict';
 
 var PropTypes = window.PropTypes;
@@ -720,7 +720,7 @@ module.exports = createReactClass({
   }
 });
 
-},{"../common":"/home/robson/projetos/rd3/src/common/index.js","../mixins":"/home/robson/projetos/rd3/src/mixins/index.js","./DataSeries":"/home/robson/projetos/rd3/src/barchart/DataSeries.jsx"}],"/home/robson/projetos/rd3/src/barchart/BarContainer.jsx":[function(require,module,exports){
+},{"../common":32,"../mixins":44,"./DataSeries":10}],9:[function(require,module,exports){
 'use strict';
 
 var _extends = Object.assign || function (target) {
@@ -789,7 +789,7 @@ module.exports = createReactClass({
   }
 });
 
-},{"../utils":"/home/robson/projetos/rd3/src/utils/index.js","./Bar":"/home/robson/projetos/rd3/src/barchart/Bar.jsx"}],"/home/robson/projetos/rd3/src/barchart/DataSeries.jsx":[function(require,module,exports){
+},{"../utils":60,"./Bar":7}],10:[function(require,module,exports){
 'use strict';
 
 var PropTypes = window.PropTypes;
@@ -868,12 +868,12 @@ module.exports = createReactClass({
   }
 });
 
-},{"./BarContainer":"/home/robson/projetos/rd3/src/barchart/BarContainer.jsx"}],"/home/robson/projetos/rd3/src/barchart/index.js":[function(require,module,exports){
+},{"./BarContainer":9}],11:[function(require,module,exports){
 'use strict';
 
 exports.BarChart = require('./BarChart');
 
-},{"./BarChart":"/home/robson/projetos/rd3/src/barchart/BarChart.jsx"}],"/home/robson/projetos/rd3/src/candlestick/Candle.jsx":[function(require,module,exports){
+},{"./BarChart":8}],12:[function(require,module,exports){
 'use strict';
 
 var PropTypes = window.PropTypes;
@@ -918,7 +918,7 @@ module.exports = createReactClass({
   }
 });
 
-},{}],"/home/robson/projetos/rd3/src/candlestick/CandlestickChart.jsx":[function(require,module,exports){
+},{}],13:[function(require,module,exports){
 'use strict';
 
 var PropTypes = window.PropTypes;
@@ -1077,7 +1077,7 @@ module.exports = createReactClass({
   }
 });
 
-},{"../common":"/home/robson/projetos/rd3/src/common/index.js","../mixins":"/home/robson/projetos/rd3/src/mixins/index.js","../utils":"/home/robson/projetos/rd3/src/utils/index.js","./DataSeries":"/home/robson/projetos/rd3/src/candlestick/DataSeries.jsx"}],"/home/robson/projetos/rd3/src/candlestick/CandlestickContainer.jsx":[function(require,module,exports){
+},{"../common":32,"../mixins":44,"../utils":60,"./DataSeries":15}],14:[function(require,module,exports){
 'use strict';
 
 var PropTypes = window.PropTypes;
@@ -1160,7 +1160,7 @@ module.exports = createReactClass({
   }
 });
 
-},{"../utils":"/home/robson/projetos/rd3/src/utils/index.js","./Candle":"/home/robson/projetos/rd3/src/candlestick/Candle.jsx","./Wick":"/home/robson/projetos/rd3/src/candlestick/Wick.jsx"}],"/home/robson/projetos/rd3/src/candlestick/DataSeries.jsx":[function(require,module,exports){
+},{"../utils":60,"./Candle":12,"./Wick":16}],15:[function(require,module,exports){
 'use strict';
 
 var PropTypes = window.PropTypes;
@@ -1218,7 +1218,7 @@ module.exports = createReactClass({
   }
 });
 
-},{"./CandlestickContainer":"/home/robson/projetos/rd3/src/candlestick/CandlestickContainer.jsx"}],"/home/robson/projetos/rd3/src/candlestick/Wick.jsx":[function(require,module,exports){
+},{"./CandlestickContainer":14}],16:[function(require,module,exports){
 'use strict';
 
 var PropTypes = window.PropTypes;
@@ -1259,12 +1259,12 @@ module.exports = createReactClass({
   }
 });
 
-},{}],"/home/robson/projetos/rd3/src/candlestick/index.js":[function(require,module,exports){
+},{}],17:[function(require,module,exports){
 'use strict';
 
 exports.CandlestickChart = require('./CandlestickChart');
 
-},{"./CandlestickChart":"/home/robson/projetos/rd3/src/candlestick/CandlestickChart.jsx"}],"/home/robson/projetos/rd3/src/common/Legend.jsx":[function(require,module,exports){
+},{"./CandlestickChart":13}],18:[function(require,module,exports){
 'use strict';
 
 var PropTypes = window.PropTypes;
@@ -1344,7 +1344,7 @@ module.exports = createReactClass({
   }
 });
 
-},{}],"/home/robson/projetos/rd3/src/common/Polygon.jsx":[function(require,module,exports){
+},{}],19:[function(require,module,exports){
 'use strict';
 
 var PropTypes = window.PropTypes;
@@ -1390,7 +1390,7 @@ module.exports = createReactClass({
   }
 });
 
-},{}],"/home/robson/projetos/rd3/src/common/Tooltip.jsx":[function(require,module,exports){
+},{}],20:[function(require,module,exports){
 'use strict';
 
 var PropTypes = window.PropTypes;
@@ -1434,7 +1434,7 @@ module.exports = createReactClass({
   }
 });
 
-},{}],"/home/robson/projetos/rd3/src/common/Voronoi.jsx":[function(require,module,exports){
+},{}],21:[function(require,module,exports){
 'use strict';
 
 var PropTypes = window.PropTypes;
@@ -1477,7 +1477,7 @@ module.exports = createReactClass({
   }
 });
 
-},{"./Polygon":"/home/robson/projetos/rd3/src/common/Polygon.jsx"}],"/home/robson/projetos/rd3/src/common/axes/AxisLine.jsx":[function(require,module,exports){
+},{"./Polygon":19}],22:[function(require,module,exports){
 'use strict';
 
 var PropTypes = window.PropTypes;
@@ -1541,7 +1541,7 @@ module.exports = createReactClass({
   }
 });
 
-},{}],"/home/robson/projetos/rd3/src/common/axes/AxisTicks.jsx":[function(require,module,exports){
+},{}],23:[function(require,module,exports){
 'use strict';
 
 var _extends = Object.assign || function (target) {
@@ -1783,7 +1783,7 @@ module.exports = createReactClass({
   }
 });
 
-},{}],"/home/robson/projetos/rd3/src/common/axes/Label.jsx":[function(require,module,exports){
+},{}],24:[function(require,module,exports){
 'use strict';
 
 var PropTypes = window.PropTypes;
@@ -1852,7 +1852,7 @@ module.exports = createReactClass({
   }
 });
 
-},{}],"/home/robson/projetos/rd3/src/common/axes/XAxis.jsx":[function(require,module,exports){
+},{}],25:[function(require,module,exports){
 'use strict';
 
 var _extends = Object.assign || function (target) {
@@ -1963,7 +1963,7 @@ module.exports = createReactClass({
   }
 });
 
-},{"./AxisLine":"/home/robson/projetos/rd3/src/common/axes/AxisLine.jsx","./AxisTicks":"/home/robson/projetos/rd3/src/common/axes/AxisTicks.jsx","./Label":"/home/robson/projetos/rd3/src/common/axes/Label.jsx"}],"/home/robson/projetos/rd3/src/common/axes/YAxis.jsx":[function(require,module,exports){
+},{"./AxisLine":22,"./AxisTicks":23,"./Label":24}],26:[function(require,module,exports){
 'use strict';
 
 var _extends = Object.assign || function (target) {
@@ -2078,13 +2078,13 @@ module.exports = createReactClass({
   }
 });
 
-},{"./AxisLine":"/home/robson/projetos/rd3/src/common/axes/AxisLine.jsx","./AxisTicks":"/home/robson/projetos/rd3/src/common/axes/AxisTicks.jsx","./Label":"/home/robson/projetos/rd3/src/common/axes/Label.jsx"}],"/home/robson/projetos/rd3/src/common/axes/index.js":[function(require,module,exports){
+},{"./AxisLine":22,"./AxisTicks":23,"./Label":24}],27:[function(require,module,exports){
 'use strict';
 
 exports.XAxis = require('./XAxis');
 exports.YAxis = require('./YAxis');
 
-},{"./XAxis":"/home/robson/projetos/rd3/src/common/axes/XAxis.jsx","./YAxis":"/home/robson/projetos/rd3/src/common/axes/YAxis.jsx"}],"/home/robson/projetos/rd3/src/common/charts/BasicChart.jsx":[function(require,module,exports){
+},{"./XAxis":25,"./YAxis":26}],28:[function(require,module,exports){
 'use strict';
 
 var PropTypes = window.PropTypes;
@@ -2142,7 +2142,7 @@ module.exports = createReactClass({
   }
 });
 
-},{}],"/home/robson/projetos/rd3/src/common/charts/Chart.jsx":[function(require,module,exports){
+},{}],29:[function(require,module,exports){
 'use strict';
 
 var _extends = Object.assign || function (target) {
@@ -2200,7 +2200,7 @@ module.exports = createReactClass({
   }
 });
 
-},{"./BasicChart":"/home/robson/projetos/rd3/src/common/charts/BasicChart.jsx","./LegendChart":"/home/robson/projetos/rd3/src/common/charts/LegendChart.jsx"}],"/home/robson/projetos/rd3/src/common/charts/LegendChart.jsx":[function(require,module,exports){
+},{"./BasicChart":28,"./LegendChart":30}],30:[function(require,module,exports){
 'use strict';
 
 var PropTypes = window.PropTypes;
@@ -2294,14 +2294,14 @@ module.exports = createReactClass({
   }
 });
 
-},{"../Legend":"/home/robson/projetos/rd3/src/common/Legend.jsx"}],"/home/robson/projetos/rd3/src/common/charts/index.js":[function(require,module,exports){
+},{"../Legend":18}],31:[function(require,module,exports){
 'use strict';
 
 exports.BasicChart = require('./BasicChart');
 exports.Chart = require('./Chart');
 exports.LegendChart = require('./LegendChart');
 
-},{"./BasicChart":"/home/robson/projetos/rd3/src/common/charts/BasicChart.jsx","./Chart":"/home/robson/projetos/rd3/src/common/charts/Chart.jsx","./LegendChart":"/home/robson/projetos/rd3/src/common/charts/LegendChart.jsx"}],"/home/robson/projetos/rd3/src/common/index.js":[function(require,module,exports){
+},{"./BasicChart":28,"./Chart":29,"./LegendChart":30}],32:[function(require,module,exports){
 'use strict';
 
 exports.XAxis = require('./axes').XAxis;
@@ -2312,7 +2312,7 @@ exports.Legend = require('./Legend');
 exports.Tooltip = require('./Tooltip');
 exports.Voronoi = require('./Voronoi');
 
-},{"./Legend":"/home/robson/projetos/rd3/src/common/Legend.jsx","./Tooltip":"/home/robson/projetos/rd3/src/common/Tooltip.jsx","./Voronoi":"/home/robson/projetos/rd3/src/common/Voronoi.jsx","./axes":"/home/robson/projetos/rd3/src/common/axes/index.js","./charts":"/home/robson/projetos/rd3/src/common/charts/index.js"}],"/home/robson/projetos/rd3/src/index.js":[function(require,module,exports){
+},{"./Legend":18,"./Tooltip":20,"./Voronoi":21,"./axes":27,"./charts":31}],33:[function(require,module,exports){
 'use strict';
 
 exports.BarChart = require('./barchart').BarChart;
@@ -2323,7 +2323,7 @@ exports.Treemap = require('./treemap').Treemap;
 exports.ScatterChart = require('./scatterchart').ScatterChart;
 exports.CandlestickChart = require('./candlestick').CandlestickChart;
 
-},{"./areachart":"/home/robson/projetos/rd3/src/areachart/index.js","./barchart":"/home/robson/projetos/rd3/src/barchart/index.js","./candlestick":"/home/robson/projetos/rd3/src/candlestick/index.js","./linechart":"/home/robson/projetos/rd3/src/linechart/index.js","./piechart":"/home/robson/projetos/rd3/src/piechart/index.js","./scatterchart":"/home/robson/projetos/rd3/src/scatterchart/index.js","./treemap":"/home/robson/projetos/rd3/src/treemap/index.js"}],"/home/robson/projetos/rd3/src/linechart/DataSeries.jsx":[function(require,module,exports){
+},{"./areachart":6,"./barchart":11,"./candlestick":17,"./linechart":39,"./piechart":49,"./scatterchart":54,"./treemap":59}],34:[function(require,module,exports){
 'use strict';
 
 var PropTypes = window.PropTypes;
@@ -2439,7 +2439,7 @@ module.exports = createReactClass({
   }
 });
 
-},{"./Line":"/home/robson/projetos/rd3/src/linechart/Line.jsx","./VoronoiCircleContainer":"/home/robson/projetos/rd3/src/linechart/VoronoiCircleContainer.jsx"}],"/home/robson/projetos/rd3/src/linechart/Line.jsx":[function(require,module,exports){
+},{"./Line":35,"./VoronoiCircleContainer":38}],35:[function(require,module,exports){
 'use strict';
 
 var PropTypes = window.PropTypes;
@@ -2479,7 +2479,7 @@ module.exports = createReactClass({
   }
 });
 
-},{}],"/home/robson/projetos/rd3/src/linechart/LineChart.jsx":[function(require,module,exports){
+},{}],36:[function(require,module,exports){
 'use strict';
 
 var PropTypes = window.PropTypes;
@@ -2636,7 +2636,7 @@ module.exports = createReactClass({
   }
 });
 
-},{"../common":"/home/robson/projetos/rd3/src/common/index.js","../mixins":"/home/robson/projetos/rd3/src/mixins/index.js","../utils":"/home/robson/projetos/rd3/src/utils/index.js","./DataSeries":"/home/robson/projetos/rd3/src/linechart/DataSeries.jsx"}],"/home/robson/projetos/rd3/src/linechart/VoronoiCircle.jsx":[function(require,module,exports){
+},{"../common":32,"../mixins":44,"../utils":60,"./DataSeries":34}],37:[function(require,module,exports){
 'use strict';
 
 var PropTypes = window.PropTypes;
@@ -2683,7 +2683,7 @@ module.exports = createReactClass({
   }
 });
 
-},{}],"/home/robson/projetos/rd3/src/linechart/VoronoiCircleContainer.jsx":[function(require,module,exports){
+},{}],38:[function(require,module,exports){
 'use strict';
 
 var PropTypes = window.PropTypes;
@@ -2765,12 +2765,12 @@ module.exports = createReactClass({
   }
 });
 
-},{"../utils":"/home/robson/projetos/rd3/src/utils/index.js","./VoronoiCircle":"/home/robson/projetos/rd3/src/linechart/VoronoiCircle.jsx"}],"/home/robson/projetos/rd3/src/linechart/index.js":[function(require,module,exports){
+},{"../utils":60,"./VoronoiCircle":37}],39:[function(require,module,exports){
 'use strict';
 
 exports.LineChart = require('./LineChart');
 
-},{"./LineChart":"/home/robson/projetos/rd3/src/linechart/LineChart.jsx"}],"/home/robson/projetos/rd3/src/mixins/CartesianChartPropsMixin.js":[function(require,module,exports){
+},{"./LineChart":36}],40:[function(require,module,exports){
 'use strict';
 
 var d3 = window.d3;
@@ -2863,7 +2863,7 @@ module.exports = {
   }
 };
 
-},{}],"/home/robson/projetos/rd3/src/mixins/DefaultAccessorsMixin.js":[function(require,module,exports){
+},{}],41:[function(require,module,exports){
 'use strict';
 
 var PropTypes = window.PropTypes;
@@ -2886,7 +2886,7 @@ module.exports = {
   }
 };
 
-},{}],"/home/robson/projetos/rd3/src/mixins/TooltipMixin.js":[function(require,module,exports){
+},{}],42:[function(require,module,exports){
 'use strict';
 
 var PropTypes = window.PropTypes;
@@ -2952,7 +2952,7 @@ module.exports = {
   }
 };
 
-},{}],"/home/robson/projetos/rd3/src/mixins/ViewBoxMixin.js":[function(require,module,exports){
+},{}],43:[function(require,module,exports){
 
 'use strict';
 
@@ -3031,7 +3031,7 @@ module.exports = {
   }
 };
 
-},{}],"/home/robson/projetos/rd3/src/mixins/index.js":[function(require,module,exports){
+},{}],44:[function(require,module,exports){
 'use strict';
 
 exports.CartesianChartPropsMixin = require('./CartesianChartPropsMixin');
@@ -3039,7 +3039,7 @@ exports.DefaultAccessorsMixin = require('./DefaultAccessorsMixin');
 exports.ViewBoxMixin = require('./ViewBoxMixin');
 exports.TooltipMixin = require('./TooltipMixin');
 
-},{"./CartesianChartPropsMixin":"/home/robson/projetos/rd3/src/mixins/CartesianChartPropsMixin.js","./DefaultAccessorsMixin":"/home/robson/projetos/rd3/src/mixins/DefaultAccessorsMixin.js","./TooltipMixin":"/home/robson/projetos/rd3/src/mixins/TooltipMixin.js","./ViewBoxMixin":"/home/robson/projetos/rd3/src/mixins/ViewBoxMixin.js"}],"/home/robson/projetos/rd3/src/piechart/Arc.jsx":[function(require,module,exports){
+},{"./CartesianChartPropsMixin":40,"./DefaultAccessorsMixin":41,"./TooltipMixin":42,"./ViewBoxMixin":43}],45:[function(require,module,exports){
 'use strict';
 
 var PropTypes = window.PropTypes;
@@ -3134,7 +3134,7 @@ module.exports = createReactClass({
   }
 });
 
-},{}],"/home/robson/projetos/rd3/src/piechart/ArcContainer.jsx":[function(require,module,exports){
+},{}],46:[function(require,module,exports){
 'use strict';
 
 var _extends = Object.assign || function (target) {
@@ -3199,7 +3199,7 @@ module.exports = createReactClass({
   }
 });
 
-},{"../utils":"/home/robson/projetos/rd3/src/utils/index.js","./Arc":"/home/robson/projetos/rd3/src/piechart/Arc.jsx"}],"/home/robson/projetos/rd3/src/piechart/DataSeries.jsx":[function(require,module,exports){
+},{"../utils":60,"./Arc":45}],47:[function(require,module,exports){
 'use strict';
 
 var PropTypes = window.PropTypes;
@@ -3271,7 +3271,7 @@ module.exports = createReactClass({
   }
 });
 
-},{"./ArcContainer":"/home/robson/projetos/rd3/src/piechart/ArcContainer.jsx"}],"/home/robson/projetos/rd3/src/piechart/PieChart.jsx":[function(require,module,exports){
+},{"./ArcContainer":46}],48:[function(require,module,exports){
 'use strict';
 
 var d3 = window.d3;
@@ -3368,12 +3368,12 @@ module.exports = createReactClass({
   }
 });
 
-},{"../common":"/home/robson/projetos/rd3/src/common/index.js","../mixins":"/home/robson/projetos/rd3/src/mixins/index.js","./DataSeries":"/home/robson/projetos/rd3/src/piechart/DataSeries.jsx"}],"/home/robson/projetos/rd3/src/piechart/index.js":[function(require,module,exports){
+},{"../common":32,"../mixins":44,"./DataSeries":47}],49:[function(require,module,exports){
 'use strict';
 
 exports.PieChart = require('./PieChart');
 
-},{"./PieChart":"/home/robson/projetos/rd3/src/piechart/PieChart.jsx"}],"/home/robson/projetos/rd3/src/scatterchart/DataSeries.jsx":[function(require,module,exports){
+},{"./PieChart":48}],50:[function(require,module,exports){
 'use strict';
 
 var PropTypes = window.PropTypes;
@@ -3462,7 +3462,7 @@ module.exports = createReactClass({
   }
 });
 
-},{"./VoronoiCircleContainer":"/home/robson/projetos/rd3/src/scatterchart/VoronoiCircleContainer.jsx"}],"/home/robson/projetos/rd3/src/scatterchart/ScatterChart.jsx":[function(require,module,exports){
+},{"./VoronoiCircleContainer":53}],51:[function(require,module,exports){
 'use strict';
 
 var PropTypes = window.PropTypes;
@@ -3629,7 +3629,7 @@ module.exports = createReactClass({
   }
 });
 
-},{"../common":"/home/robson/projetos/rd3/src/common/index.js","../mixins":"/home/robson/projetos/rd3/src/mixins/index.js","../utils":"/home/robson/projetos/rd3/src/utils/index.js","./DataSeries":"/home/robson/projetos/rd3/src/scatterchart/DataSeries.jsx"}],"/home/robson/projetos/rd3/src/scatterchart/VoronoiCircle.jsx":[function(require,module,exports){
+},{"../common":32,"../mixins":44,"../utils":60,"./DataSeries":50}],52:[function(require,module,exports){
 'use strict';
 
 var PropTypes = window.PropTypes;
@@ -3679,7 +3679,7 @@ module.exports = createReactClass({
   }
 });
 
-},{}],"/home/robson/projetos/rd3/src/scatterchart/VoronoiCircleContainer.jsx":[function(require,module,exports){
+},{}],53:[function(require,module,exports){
 'use strict';
 
 var PropTypes = window.PropTypes;
@@ -3769,12 +3769,12 @@ module.exports = createReactClass({
   }
 });
 
-},{"../utils":"/home/robson/projetos/rd3/src/utils/index.js","./VoronoiCircle":"/home/robson/projetos/rd3/src/scatterchart/VoronoiCircle.jsx"}],"/home/robson/projetos/rd3/src/scatterchart/index.js":[function(require,module,exports){
+},{"../utils":60,"./VoronoiCircle":52}],54:[function(require,module,exports){
 'use strict';
 
 exports.ScatterChart = require('./ScatterChart');
 
-},{"./ScatterChart":"/home/robson/projetos/rd3/src/scatterchart/ScatterChart.jsx"}],"/home/robson/projetos/rd3/src/treemap/Cell.jsx":[function(require,module,exports){
+},{"./ScatterChart":51}],55:[function(require,module,exports){
 'use strict';
 
 var PropTypes = window.PropTypes;
@@ -3820,7 +3820,7 @@ module.exports = createReactClass({
   }
 });
 
-},{}],"/home/robson/projetos/rd3/src/treemap/CellContainer.jsx":[function(require,module,exports){
+},{}],56:[function(require,module,exports){
 'use strict';
 
 var _extends = Object.assign || function (target) {
@@ -3876,7 +3876,7 @@ module.exports = createReactClass({
   }
 });
 
-},{"../utils":"/home/robson/projetos/rd3/src/utils/index.js","./Cell":"/home/robson/projetos/rd3/src/treemap/Cell.jsx"}],"/home/robson/projetos/rd3/src/treemap/DataSeries.jsx":[function(require,module,exports){
+},{"../utils":60,"./Cell":55}],57:[function(require,module,exports){
 'use strict';
 
 var PropTypes = window.PropTypes;
@@ -3939,7 +3939,7 @@ module.exports = createReactClass({
   }
 });
 
-},{"./CellContainer":"/home/robson/projetos/rd3/src/treemap/CellContainer.jsx"}],"/home/robson/projetos/rd3/src/treemap/Treemap.jsx":[function(require,module,exports){
+},{"./CellContainer":56}],58:[function(require,module,exports){
 'use strict';
 
 var d3 = window.d3;
@@ -4005,12 +4005,12 @@ module.exports = createReactClass({
   }
 });
 
-},{"../common":"/home/robson/projetos/rd3/src/common/index.js","./DataSeries":"/home/robson/projetos/rd3/src/treemap/DataSeries.jsx"}],"/home/robson/projetos/rd3/src/treemap/index.js":[function(require,module,exports){
+},{"../common":32,"./DataSeries":57}],59:[function(require,module,exports){
 'use strict';
 
 exports.Treemap = require('./Treemap');
 
-},{"./Treemap":"/home/robson/projetos/rd3/src/treemap/Treemap.jsx"}],"/home/robson/projetos/rd3/src/utils/index.js":[function(require,module,exports){
+},{"./Treemap":58}],60:[function(require,module,exports){
 'use strict';
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) {
@@ -4174,7 +4174,7 @@ exports.shade = function (hex, percent) {
   return '#' + red + green + blue;
 };
 
-},{}]},{},["/home/robson/projetos/rd3/docs/examples/main.js"])("/home/robson/projetos/rd3/docs/examples/main.js")
+},{}]},{},[1])(1)
 });
 
 //# sourceMappingURL=react-d3.js.map

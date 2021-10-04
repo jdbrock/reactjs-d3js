@@ -22,3 +22,7 @@ npm-debug.log
 
 # gitbook
 _book
+
+workspace*
+
+*.bkp
