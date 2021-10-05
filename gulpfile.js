@@ -100,12 +100,6 @@ function bundleShare(b) {
 }
 
 
-const data = function () { return gulp.src('dist/public/data/*').pipe(gulp.dest('build/public/data')); };
-
-const html = function () { return gulp.src('dist/public/*.html').pipe(gulp.dest('build/public')); };
-
-gulp.task('copy', () => merge(data, html));
-
 gulp.task('docs',  gulp.series('clean:build', () => merge(data(), html(), compileJS(['./docs/examples/main.js']))));
 
 gulp.task('minified', gulp.series('clean:build', () => {
@@ -123,12 +117,7 @@ gulp.task('minified', gulp.series('clean:build', () => {
 }));
 
 gulp.task('build', gulp.series('minified', 'docs'));
-gulp.task('watch', gulp.series('clean:build', 'build', serve, () => {
-  config.production = false;
-  compileJS(['./docs/examples/main.js']);
-  gulp.watch('dist/public/data/*', [data()], reload);
-  gulp.watch('dist/public/*.html', [html()], reload);
-}));
+gulp.task('watch', gulp.series('clean:build', serve));
 
 
 gulp.task('copymisc', (cb) => {
@@ -188,6 +177,11 @@ function reload(updateEvent, buildTime) {
   browserSync.reload();
 }
 
+
+function data(){ return gulp.src('dist/public/data/*').pipe(gulp.dest('build/public/data')); };
+function html() { return gulp.src('dist/public/*.html').pipe(gulp.dest('build/public')); };
+function copy(){ return merge(data(), html()) }
+
 function serve() {
   browserSync({
     server: {
@@ -199,6 +193,13 @@ function serve() {
     port: 4000,
     open: false
   });
+
+  config.production = false;
+  compileJS(['./docs/examples/main.js']);
+  /* TODO: This is not right */
+  gulp.watch('dist/public/data/*', gulp.series=(copy));
+  gulp.watch('dist/public/*.html', gulp.series(data), reload);
+
 };
 
 
