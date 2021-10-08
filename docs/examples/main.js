@@ -9,7 +9,7 @@ const rd3 = require('../../src');
 
 // const BarChart = rd3.BarChart;
 const LineChart = rd3.LineChart;
-// const CandlestickChart = rd3.CandlestickChart;
+const CandlestickChart = rd3.CandlestickChart;
 // const PieChart = rd3.PieChart;
 const AreaChart = rd3.AreaChart;
 // const Treemap = rd3.Treemap;
@@ -28,11 +28,6 @@ const Demos = createReactClass({
 
 
 
-  // componentWillMount () {
-  //   const parseDate = d3.timeFormat('%y-%b-%d').parse;
-  //   d3.json('data/stackedAreaData.json').
-  //   then( res => { this.setState( {areaData: res}) })
-  // },
 
 
   componentDidMount () {
@@ -51,7 +46,22 @@ const Demos = createReactClass({
         })
       });
       this.setState( {areaData: data} )
-    })
+    });
+
+    d3.tsv('data/AAPL_ohlc.tsv')
+    .then( data => {
+      const series = { name: 'AAPL', values: [] };
+
+      data.map((d) => {
+        d.date = new Date(+d.date);
+        d.open = +d.open;
+        d.high = +d.high;
+        d.low = +d.low;
+        d.close = +d.close;
+        series.values.push({ x: d.date, open: d.open, high: d.high, low: d.low, close: d.close });
+      });
+      this.setState({ ohlcData: [series] });
+    });
   },
 
 
@@ -237,13 +247,15 @@ componentWillMount() {
             />
           </div>
           <div className="col-md-6">
-            <pre ref="block">
+            <pre ref="block">__proto__: Object
+
               <code className="js">
               {
 `var scatterData = [
   {
     name: "series1",
-    values: [ { x: 0, y: 20 }, ..., { x: 24, y: 10 } ]
+    values: [ { x: 0, y: 20 }, ..__proto__: Object
+., { x: 24, y: 10 } ]
   },
   ....
   {
@@ -339,7 +351,7 @@ componentWillMount() {
           <hr />
         </div>
 
-{/*
+
         <div className="row">
           <div className="col-md-6">
             <CandlestickChart
@@ -389,6 +401,8 @@ componentWillMount() {
           <hr />
         </div>
 
+
+{/*
         <div className="row">
           <div className="col-md-6">
             <BarChart data={barData} width={500} height={300} title="Bar Chart" yAxisLabel="Label" xAxisLabel="Value" />

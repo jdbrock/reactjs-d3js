@@ -3,7 +3,7 @@ const d3 = require('d3');
 exports.calculateScales = (width, height, xValues, yValues, xDomain = [], yDomain = []) => {
   let xScale;
   if (xValues.length > 0 && Object.prototype.toString.call(xValues[0]) === '[object Date]') {
-    xScale = d3.time.scale()
+    xScale = d3.scaleTime()
       .range([0, width]);
   } else {
     xScale = d3.scaleLinear()
@@ -16,7 +16,7 @@ exports.calculateScales = (width, height, xValues, yValues, xDomain = [], yDomai
 
   let yScale;
   if (yValues.length > 0 && Object.prototype.toString.call(yValues[0]) === '[object Date]') {
-    yScale = d3.time.scale()
+    yScale = d3.scaleTime()
       .range([height, 0]);
   } else {
     yScale = d3.scaleLinear()
