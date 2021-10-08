@@ -60,7 +60,7 @@ module.exports = createReactClass({
     }
 
     if (typeof props.xAxisTickInterval !== 'undefined') {
-      tickArguments = [d3.time[props.xAxisTickInterval.unit], props.xAxisTickInterval.interval];
+      // tickArguments = [d3.time[props.xAxisTickInterval.unit], props.xAxisTickInterval.interval];
     }
 
     return (

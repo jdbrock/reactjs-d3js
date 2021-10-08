@@ -25,11 +25,11 @@ module.exports = createReactClass({
   render() {
     const props = this.props;
 
-    const area = d3.svg.area()
-      .x((d) => props.xScale(props.xAccessor(d)))
-      .y0((d) => props.yScale(d.y0))
-      .y1((d) => props.yScale(d.y0 + props.yAccessor(d)))
-      .curve();
+    const area = d3.area()
+    .x((d) => props.xScale(d.data.date))
+    .y0((d) => props.yScale(d[0]))
+    .y1((d) => props.yScale(d[1]))
+    .curve(d3.curveCatmullRom.alpha(0.5));
 
     const path = area(props.data);
 

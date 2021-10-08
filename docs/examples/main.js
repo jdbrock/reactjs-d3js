@@ -11,7 +11,7 @@ const rd3 = require('../../src');
 const LineChart = rd3.LineChart;
 // const CandlestickChart = rd3.CandlestickChart;
 // const PieChart = rd3.PieChart;
-// const AreaChart = rd3.AreaChart;
+const AreaChart = rd3.AreaChart;
 // const Treemap = rd3.Treemap;
 const ScatterChart = rd3.ScatterChart;
 
@@ -26,31 +26,61 @@ const Demos = createReactClass({
     };
   },
 
-  /*
-  componentWillMount() {
-    // Browser data adapted from nvd3's stacked area data
-    // http://nvd3.org/examples/stackedArea.html
-    
+
+
+  // componentWillMount () {
+  //   const parseDate = d3.timeFormat('%y-%b-%d').parse;
+  //   d3.json('data/stackedAreaData.json').
+  //   then( res => { this.setState( {areaData: res}) })
+  // },
+
+
+  componentDidMount () {
     const parseDate = d3.timeFormat('%y-%b-%d').parse;
-    d3.json('data/stackedAreaData.json', (error, data) => {
-      this.setState({ areaData: data });
-    });
-
-    d3.tsv('data/AAPL_ohlc.tsv', (error, data) => {
-      const series = { name: 'AAPL', values: [] };
-
-      data.map((d) => {
-        d.date = new Date(+d.date);
-        d.open = +d.open;
-        d.high = +d.high;
-        d.low = +d.low;
-        d.close = +d.close;
-        series.values.push({ x: d.date, open: d.open, high: d.high, low: d.low, close: d.close });
+    /* This function is valid for this dataset only.
+      You can provide a dataset already formated and remove this. */
+    d3.json('data/stackedAreaData.json').
+    then( res => {
+      const data = []
+      res[0].values.forEach((num0, index) => {
+        const num1 = res[1].values[index];
+        data.push({
+          "date": new Date(num0[0]),
+          [res[0].name]: num0[1],
+          [res[1].name]: num1[1],
+        })
       });
-      this.setState({ ohlcData: [series] });
-    });
+      this.setState( {areaData: data} )
+    })
   },
-  */
+
+
+
+/*
+componentWillMount() {
+  // Browser data adapted from nvd3's stacked area data
+  // http://nvd3.org/examples/stackedArea.html
+
+  const parseDate = d3.timeFormat('%y-%b-%d').parse;
+  d3.json('data/stackedAreaData.json', (error, data) => {
+    this.setState({ areaData: data });
+  });
+
+  d3.tsv('data/AAPL_ohlc.tsv', (error, data) => {
+    const series = { name: 'AAPL', values: [] };
+
+    data.map((d) => {
+      d.date = new Date(+d.date);
+      d.open = +d.open;
+      d.high = +d.high;
+      d.low = +d.low;
+      d.close = +d.close;
+      series.values.push({ x: d.date, open: d.open, high: d.high, low: d.low, close: d.close });
+    });
+    this.setState({ ohlcData: [series] });
+  });
+},
+*/
 
   render() {
     const lineData = [
@@ -124,6 +154,7 @@ const Demos = createReactClass({
         <div className="row">
           <h3 className="page-header">reactjs-d3js: Multiple series charts</h3>
         </div>
+
         <div className="row">
           <div className="col-md-6">
             <LineChart
@@ -198,10 +229,10 @@ const Demos = createReactClass({
         <div className="row">
           <div className="col-md-6">
             <ScatterChart
-              data={scatterData} 
-              width={500} 
-              height={400} 
-              title="Scatter Chart" 
+              data={scatterData}
+              width={500}
+              height={400}
+              title="Scatter Chart"
               domain={{ x: [, ], y: [, ] }}
             />
           </div>
@@ -241,7 +272,7 @@ const Demos = createReactClass({
         <div className="row">
           <hr />
         </div>
-{/*
+
         <div className="row">
           <div className="col-md-6">
             <AreaChart
@@ -261,7 +292,7 @@ const Demos = createReactClass({
               xAccessor={(d) => new Date(d[0])
               }
               yAccessor={(d) => d[1]}
-              domain={{ y: [, 60] }}
+              // domain={{ y: [, 60] }}
             />
           </div>
           <div className="col-md-6">
@@ -307,6 +338,8 @@ const Demos = createReactClass({
         <div className="row">
           <hr />
         </div>
+
+{/*
         <div className="row">
           <div className="col-md-6">
             <CandlestickChart
