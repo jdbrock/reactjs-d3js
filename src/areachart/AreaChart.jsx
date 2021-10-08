@@ -25,8 +25,9 @@ module.exports = createReactClass({
 
   getDefaultProps() {
     return {
-      colors: d3.schemeBlues[3].reverse(),
-      // colors: d3.schemePastel2,
+      colors: d3.scaleOrdinal(d3.schemeBlues[3].reverse()),
+      // colors: d3.scaleOrdinal(d3.schemePastel2),
+
       margins: { top: 10, right: 20, bottom: 40, left: 45 },
       yAxisTickCount: 4,
       interpolate: false,
@@ -98,18 +99,18 @@ module.exports = createReactClass({
 
     yScale.domain(ydomain);
 
+    const colorsDomain = Array.from(Array(seriesNames.length).keys())
+    props.colors.domain(colorsDomain);
 
     const stack = d3.stack()
     stack.keys(seriesNames)
 
     const layers = stack(data)
-
-
     const dataSeries = layers.map((d, idx) => (
         <DataSeries
         key={idx}
+        fill={props.colors(props.colorAccessor(d, idx))}
         // seriesName={d.name}
-        fill={props.colors[idx]}
         index={idx}
         xScale={xScale}
         yScale={yScale}
@@ -128,8 +129,6 @@ module.exports = createReactClass({
         legend={props.legend}
         data={data}
         margins={props.margins}
-        colors={props.colors}
-        // colorAccessor={props.colorAccessor}
         width={props.width}
         height={props.height}
         title={props.title}

@@ -249,8 +249,9 @@ module.exports = createReactClass({
 
   getDefaultProps: function getDefaultProps() {
     return {
-      colors: d3.schemeBlues[3].reverse(),
-      // colors: d3.schemePastel2,
+      colors: d3.scaleOrdinal(d3.schemeBlues[3].reverse()),
+      // colors: d3.scaleOrdinal(d3.schemePastel2),
+
       margins: { top: 10, right: 20, bottom: 40, left: 45 },
       yAxisTickCount: 4,
       interpolate: false,
@@ -321,17 +322,19 @@ module.exports = createReactClass({
 
     yScale.domain(ydomain);
 
+    var colorsDomain = Array.from(Array(seriesNames.length).keys());
+    props.colors.domain(colorsDomain);
+
     var stack = d3.stack();
     stack.keys(seriesNames);
 
     var layers = stack(data);
-
     var dataSeries = layers.map(function (d, idx) {
       return React.createElement(DataSeries, {
-        key: idx
+        key: idx,
+        fill: props.colors(props.colorAccessor(d, idx))
         // seriesName={d.name}
-        , fill: props.colors[idx],
-        index: idx,
+        , index: idx,
         xScale: xScale,
         yScale: yScale,
         data: d,
@@ -347,9 +350,7 @@ module.exports = createReactClass({
       legend: props.legend,
       data: data,
       margins: props.margins,
-      colors: props.colors
-      // colorAccessor={props.colorAccessor}
-      , width: props.width,
+      width: props.width,
       height: props.height,
       title: props.title
     }, React.createElement('g', { transform: trans, className: props.className }, React.createElement(XAxis, {
