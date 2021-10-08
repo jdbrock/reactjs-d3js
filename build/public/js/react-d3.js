@@ -18,7 +18,7 @@ var rd3 = require('../../src');
 
 // const BarChart = rd3.BarChart;
 var LineChart = rd3.LineChart;
-// const CandlestickChart = rd3.CandlestickChart;
+var CandlestickChart = rd3.CandlestickChart;
 // const PieChart = rd3.PieChart;
 var AreaChart = rd3.AreaChart;
 // const Treemap = rd3.Treemap;
@@ -34,14 +34,6 @@ var Demos = createReactClass({
       ohlcData: []
     };
   },
-
-  // componentWillMount () {
-  //   const parseDate = d3.timeFormat('%y-%b-%d').parse;
-  //   d3.json('data/stackedAreaData.json').
-  //   then( res => { this.setState( {areaData: res}) })
-  // },
-
-
   componentDidMount: function componentDidMount() {
     var _this = this;
 
@@ -59,6 +51,20 @@ var Demos = createReactClass({
         }, _defineProperty(_data$push, res[0].name, num0[1]), _defineProperty(_data$push, res[1].name, num1[1]), _data$push));
       });
       _this.setState({ areaData: data });
+    });
+
+    d3.tsv('data/AAPL_ohlc.tsv').then(function (data) {
+      var series = { name: 'AAPL', values: [] };
+
+      data.map(function (d) {
+        d.date = new Date(+d.date);
+        d.open = +d.open;
+        d.high = +d.high;
+        d.low = +d.low;
+        d.close = +d.close;
+        series.values.push({ x: d.date, open: d.open, high: d.high, low: d.low, close: d.close });
+      });
+      _this.setState({ ohlcData: [series] });
     });
   },
 
@@ -152,7 +158,7 @@ var Demos = createReactClass({
       height: 400,
       title: 'Scatter Chart',
       domain: { x: [,], y: [,] }
-    })), React.createElement('div', { className: 'col-md-6' }, React.createElement('pre', { ref: 'block' }, React.createElement('code', { className: 'js' }, 'var scatterData = [\n  {\n    name: "series1",\n    values: [ { x: 0, y: 20 }, ..., { x: 24, y: 10 } ]\n  },\n  ....\n  {\n    name: "series3",\n    values: [ { x: 70, y: 82 }, ..., { x: 76, y: 82 } ]\n  }\n];')), React.createElement('pre', { ref: 'block' }, React.createElement('code', { className: 'html' }, '<ScatterChart\n  data={scatterData}\n  width={500}\n  height={400}\n  domain={{y: [-15,], y: [-15,]}}\n  title="Scatter Chart"\n/>')))), React.createElement('div', { className: 'row' }, React.createElement('hr', null)), React.createElement('div', { className: 'row' }, React.createElement('div', { className: 'col-md-6' }, React.createElement(AreaChart, {
+    })), React.createElement('div', { className: 'col-md-6' }, React.createElement('pre', { ref: 'block' }, '__proto__: Object', React.createElement('code', { className: 'js' }, 'var scatterData = [\n  {\n    name: "series1",\n    values: [ { x: 0, y: 20 }, ..__proto__: Object\n., { x: 24, y: 10 } ]\n  },\n  ....\n  {\n    name: "series3",\n    values: [ { x: 70, y: 82 }, ..., { x: 76, y: 82 } ]\n  }\n];')), React.createElement('pre', { ref: 'block' }, React.createElement('code', { className: 'html' }, '<ScatterChart\n  data={scatterData}\n  width={500}\n  height={400}\n  domain={{y: [-15,], y: [-15,]}}\n  title="Scatter Chart"\n/>')))), React.createElement('div', { className: 'row' }, React.createElement('hr', null)), React.createElement('div', { className: 'row' }, React.createElement('div', { className: 'col-md-6' }, React.createElement(AreaChart, {
       data: this.state.areaData,
       width: '100%',
       viewBoxObject: {
@@ -173,7 +179,14 @@ var Demos = createReactClass({
         return d[1];
       }
       // domain={{ y: [, 60] }}
-    })), React.createElement('div', { className: 'col-md-6' }, React.createElement('pre', { ref: 'block' }, React.createElement('code', { className: 'js' }, 'var areaData = [\n  {\n    name: "series1",\n    values: [ { x: [object Date], y: 20.5 }, ..., { x: [object Date], y: 4.2 } ]\n  },\n  ...\n  {\n    name: "series2",\n    values: [ { x: [object Date], y: 3.2 }, ..., { x: [object Date], y: 11.2 } ]\n  }\n];')), React.createElement('pre', { ref: 'block' }, React.createElement('code', { className: 'html' }, '<AreaChart\n  data={areaData}\n  width="100%"\n  height={300}\n  viewBoxObject={{\n    x: 0,\n    y: 0,\n    height: 400,\n    width: 500\n  }}\n  domain={{y: [,60]}}\n  xAxisTickInterval={{unit: \'year\', interval: 2}}\n  title="Area Chart"\n/>')))), React.createElement('div', { className: 'row' }, React.createElement('hr', null)));
+    })), React.createElement('div', { className: 'col-md-6' }, React.createElement('pre', { ref: 'block' }, React.createElement('code', { className: 'js' }, 'var areaData = [\n  {\n    name: "series1",\n    values: [ { x: [object Date], y: 20.5 }, ..., { x: [object Date], y: 4.2 } ]\n  },\n  ...\n  {\n    name: "series2",\n    values: [ { x: [object Date], y: 3.2 }, ..., { x: [object Date], y: 11.2 } ]\n  }\n];')), React.createElement('pre', { ref: 'block' }, React.createElement('code', { className: 'html' }, '<AreaChart\n  data={areaData}\n  width="100%"\n  height={300}\n  viewBoxObject={{\n    x: 0,\n    y: 0,\n    height: 400,\n    width: 500\n  }}\n  domain={{y: [,60]}}\n  xAxisTickInterval={{unit: \'year\', interval: 2}}\n  title="Area Chart"\n/>')))), React.createElement('div', { className: 'row' }, React.createElement('hr', null)), React.createElement('div', { className: 'row' }, React.createElement('div', { className: 'col-md-6' }, React.createElement(CandlestickChart, {
+      data: this.state.ohlcData,
+      width: 500,
+      height: 400,
+      yAxisOffset: -10,
+      title: 'Candlestick Chart',
+      domain: { y: [400, 500] }
+    })), React.createElement('div', { className: 'col-md-6' }, React.createElement('pre', { ref: 'block' }, React.createElement('code', { className: 'js' }, 'var ohlcData = [\n  {\n    name: "AAPL",\n    values: [ { x: [object Date], open: 451.69, high: 456.23, low: 435, close: 439.88 },\n              { x: [object Date], open: 437.82, high: 453.21, low: 435.86 , close: 449.83 },\n              ...\n            ]\n  }\n];')), React.createElement('pre', { ref: 'block' }, React.createElement('code', { className: 'html' }, '<CandlestickChart\n  data={ohlcData}\n  width={500}\n  height={400}\n  xAxisTickInterval={{unit: \'month\', interval: 1}}\n  yAxisOffset={-10}\n  title="Candlestick Chart"\n  domain={{y:[400, 500]}}\n/>')))), React.createElement('div', { className: 'row' }, React.createElement('hr', null)));
   }
 });
 
@@ -970,7 +983,7 @@ module.exports = createReactClass({
       fill: props.candleFill,
       x: props.candleX,
       y: props.candleY,
-      stroke: props.stroke,
+      stroke: props.candleFill,
       strokeWidth: props.strokeWidth,
       style: { shapeRendering: props.shapeRendering },
       width: props.candleWidth,
@@ -1029,12 +1042,15 @@ module.exports = createReactClass({
       yAxisClassName: 'rd3-candlestick-yaxis',
       data: [],
       fillUp: function fillUp() {
-        return '#ffffff';
+        return '#009900';
       },
       fillUpAccessor: function fillUpAccessor(d, idx) {
         return idx;
       },
-      fillDown: d3.scaleOrdinal(d3.schemeCategory10),
+      // fillDown: d3.scaleOrdinal(d3.schemeCategory10),
+      fillDown: function fillDown() {
+        return '#FF3300';
+      },
       fillDownAccessor: function fillDownAccessor(d, idx) {
         return idx;
       },
@@ -1302,7 +1318,7 @@ module.exports = createReactClass({
   getDefaultProps: function getDefaultProps() {
     return {
       className: 'rd3-candlestick-wick',
-      stroke: '#000',
+      stroke: '#666666',
       strokeWidth: 1,
       shapeRendering: 'crispEdges'
     };
@@ -1311,9 +1327,9 @@ module.exports = createReactClass({
     var props = this.props;
     return React.createElement('line', {
       stroke: props.stroke,
-      strokeWidth: props.strokeWidth,
-      style: { shapeRendering: props.shapeRendering },
-      className: props.className,
+      strokeWidth: props.strokeWidth
+      // style={{ shapeRendering: props.shapeRendering }}
+      , className: props.className,
       x1: props.wickX1,
       y1: props.wickY1,
       x2: props.wickX2,
@@ -4090,7 +4106,7 @@ exports.calculateScales = function (width, height, xValues, yValues) {
 
   var xScale = void 0;
   if (xValues.length > 0 && Object.prototype.toString.call(xValues[0]) === '[object Date]') {
-    xScale = d3.time.scale().range([0, width]);
+    xScale = d3.scaleTime().range([0, width]);
   } else {
     xScale = d3.scaleLinear().range([0, width]);
   }
@@ -4101,7 +4117,7 @@ exports.calculateScales = function (width, height, xValues, yValues) {
 
   var yScale = void 0;
   if (yValues.length > 0 && Object.prototype.toString.call(yValues[0]) === '[object Date]') {
-    yScale = d3.time.scale().range([height, 0]);
+    yScale = d3.scaleTime().range([height, 0]);
   } else {
     yScale = d3.scaleLinear().range([height, 0]);
   }

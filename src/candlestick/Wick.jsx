@@ -19,7 +19,7 @@ module.exports = createReactClass({
   getDefaultProps() {
     return {
       className: 'rd3-candlestick-wick',
-      stroke: '#000',
+      stroke: '#666666',
       strokeWidth: 1,
       shapeRendering: 'crispEdges',
     };
@@ -30,7 +30,7 @@ module.exports = createReactClass({
     return (<line
       stroke={props.stroke}
       strokeWidth={props.strokeWidth}
-      style={{ shapeRendering: props.shapeRendering }}
+      // style={{ shapeRendering: props.shapeRendering }}
       className={props.className}
       x1={props.wickX1}
       y1={props.wickY1}
