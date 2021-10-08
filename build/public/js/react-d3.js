@@ -1,5 +1,13 @@
-(function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.rd3 = f()}})(function(){var define,module,exports;return (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
+(function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.rd3 = f()}})(function(){var define,module,exports;return (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({"/home/robson/projetos/rd3/docs/examples/main.js":[function(require,module,exports){
 'use strict';
+
+function _defineProperty(obj, key, value) {
+  if (key in obj) {
+    Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });
+  } else {
+    obj[key] = value;
+  }return obj;
+}
 
 var React = window.React;
 var ReactDOM = window.ReactDOM;
@@ -12,7 +20,7 @@ var rd3 = require('../../src');
 var LineChart = rd3.LineChart;
 // const CandlestickChart = rd3.CandlestickChart;
 // const PieChart = rd3.PieChart;
-// const AreaChart = rd3.AreaChart;
+var AreaChart = rd3.AreaChart;
 // const Treemap = rd3.Treemap;
 var ScatterChart = rd3.ScatterChart;
 
@@ -27,18 +35,47 @@ var Demos = createReactClass({
     };
   },
 
+  // componentWillMount () {
+  //   const parseDate = d3.timeFormat('%y-%b-%d').parse;
+  //   d3.json('data/stackedAreaData.json').
+  //   then( res => { this.setState( {areaData: res}) })
+  // },
+
+
+  componentDidMount: function componentDidMount() {
+    var _this = this;
+
+    var parseDate = d3.timeFormat('%y-%b-%d').parse;
+    /* This function is valid for this dataset only.
+      You can provide a dataset already formated and remove this. */
+    d3.json('data/stackedAreaData.json').then(function (res) {
+      var data = [];
+      res[0].values.forEach(function (num0, index) {
+        var _data$push;
+
+        var num1 = res[1].values[index];
+        data.push((_data$push = {
+          "date": new Date(num0[0])
+        }, _defineProperty(_data$push, res[0].name, num0[1]), _defineProperty(_data$push, res[1].name, num1[1]), _data$push));
+      });
+      _this.setState({ areaData: data });
+    });
+  },
+
   /*
   componentWillMount() {
     // Browser data adapted from nvd3's stacked area data
     // http://nvd3.org/examples/stackedArea.html
-    
+  
     const parseDate = d3.timeFormat('%y-%b-%d').parse;
     d3.json('data/stackedAreaData.json', (error, data) => {
       this.setState({ areaData: data });
     });
-     d3.tsv('data/AAPL_ohlc.tsv', (error, data) => {
+  
+    d3.tsv('data/AAPL_ohlc.tsv', (error, data) => {
       const series = { name: 'AAPL', values: [] };
-       data.map((d) => {
+  
+      data.map((d) => {
         d.date = new Date(+d.date);
         d.open = +d.open;
         d.high = +d.high;
@@ -115,13 +152,34 @@ var Demos = createReactClass({
       height: 400,
       title: 'Scatter Chart',
       domain: { x: [,], y: [,] }
-    })), React.createElement('div', { className: 'col-md-6' }, React.createElement('pre', { ref: 'block' }, React.createElement('code', { className: 'js' }, 'var scatterData = [\n  {\n    name: "series1",\n    values: [ { x: 0, y: 20 }, ..., { x: 24, y: 10 } ]\n  },\n  ....\n  {\n    name: "series3",\n    values: [ { x: 70, y: 82 }, ..., { x: 76, y: 82 } ]\n  }\n];')), React.createElement('pre', { ref: 'block' }, React.createElement('code', { className: 'html' }, '<ScatterChart\n  data={scatterData}\n  width={500}\n  height={400}\n  domain={{y: [-15,], y: [-15,]}}\n  title="Scatter Chart"\n/>')))), React.createElement('div', { className: 'row' }, React.createElement('hr', null)));
+    })), React.createElement('div', { className: 'col-md-6' }, React.createElement('pre', { ref: 'block' }, React.createElement('code', { className: 'js' }, 'var scatterData = [\n  {\n    name: "series1",\n    values: [ { x: 0, y: 20 }, ..., { x: 24, y: 10 } ]\n  },\n  ....\n  {\n    name: "series3",\n    values: [ { x: 70, y: 82 }, ..., { x: 76, y: 82 } ]\n  }\n];')), React.createElement('pre', { ref: 'block' }, React.createElement('code', { className: 'html' }, '<ScatterChart\n  data={scatterData}\n  width={500}\n  height={400}\n  domain={{y: [-15,], y: [-15,]}}\n  title="Scatter Chart"\n/>')))), React.createElement('div', { className: 'row' }, React.createElement('hr', null)), React.createElement('div', { className: 'row' }, React.createElement('div', { className: 'col-md-6' }, React.createElement(AreaChart, {
+      data: this.state.areaData,
+      width: '100%',
+      viewBoxObject: {
+        x: 0,
+        y: 0,
+        height: 400,
+        width: 500
+      },
+      height: 400,
+      title: 'Area Chart',
+      xAxisTickInterval: { unit: 'year', interval: 2 },
+      xAxisLabel: 'Year',
+      yAxisLabel: 'Share Price',
+      xAccessor: function xAccessor(d) {
+        return new Date(d[0]);
+      },
+      yAccessor: function yAccessor(d) {
+        return d[1];
+      }
+      // domain={{ y: [, 60] }}
+    })), React.createElement('div', { className: 'col-md-6' }, React.createElement('pre', { ref: 'block' }, React.createElement('code', { className: 'js' }, 'var areaData = [\n  {\n    name: "series1",\n    values: [ { x: [object Date], y: 20.5 }, ..., { x: [object Date], y: 4.2 } ]\n  },\n  ...\n  {\n    name: "series2",\n    values: [ { x: [object Date], y: 3.2 }, ..., { x: [object Date], y: 11.2 } ]\n  }\n];')), React.createElement('pre', { ref: 'block' }, React.createElement('code', { className: 'html' }, '<AreaChart\n  data={areaData}\n  width="100%"\n  height={300}\n  viewBoxObject={{\n    x: 0,\n    y: 0,\n    height: 400,\n    width: 500\n  }}\n  domain={{y: [,60]}}\n  xAxisTickInterval={{unit: \'year\', interval: 2}}\n  title="Area Chart"\n/>')))), React.createElement('div', { className: 'row' }, React.createElement('hr', null)));
   }
 });
 
 ReactDOM.render(React.createElement(Demos, null), document.getElementById('app'));
 
-},{"../../src":33}],2:[function(require,module,exports){
+},{"../../src":"/home/robson/projetos/rd3/src/index.js"}],"/home/robson/projetos/rd3/src/areachart/Area.jsx":[function(require,module,exports){
 'use strict';
 
 var PropTypes = window.PropTypes;
@@ -155,7 +213,7 @@ module.exports = createReactClass({
   }
 });
 
-},{}],3:[function(require,module,exports){
+},{}],"/home/robson/projetos/rd3/src/areachart/AreaChart.jsx":[function(require,module,exports){
 'use strict';
 
 var PropTypes = window.PropTypes;
@@ -191,6 +249,8 @@ module.exports = createReactClass({
 
   getDefaultProps: function getDefaultProps() {
     return {
+      colors: d3.schemeBlues[3].reverse(),
+      // colors: d3.schemePastel2,
       margins: { top: 10, right: 20, bottom: 40, left: 45 },
       yAxisTickCount: 4,
       interpolate: false,
@@ -224,25 +284,29 @@ module.exports = createReactClass({
 
     var xValues = [];
     var yValues = [];
-    var seriesNames = [];
-    var yMaxValues = [];
+    // const seriesNames = [];
+    // const yMaxValues = [];
     var domain = props.domain || {};
     var xDomain = domain.x || [];
     var yDomain = domain.y || [];
-    data.forEach(function (series) {
-      var upper = 0;
-      seriesNames.push(series.name);
-      series.values.forEach(function (val) {
-        upper = Math.max(upper, props.yAccessor(val));
-        xValues.push(props.xAccessor(val));
-        yValues.push(props.yAccessor(val));
-      });
-      yMaxValues.push(upper);
+    var seriesNames = Object.keys(data[0]).filter(function (f) {
+      return f !== 'date';
+    }) || [];
+
+    var yMaxValues = d3.sum(seriesNames.map(function (n) {
+      return d3.max(data.map(function (d) {
+        return d[n];
+      }));
+    }));
+
+    /* TODO - generalize. Only acceptint field date for x axis*/
+    data.map(function (d) {
+      xValues.push(d.date);
     });
 
     var xScale = void 0;
     if (xValues.length > 0 && Object.prototype.toString.call(xValues[0]) === '[object Date]' && props.xAxisTickInterval) {
-      xScale = d3.time.scale().range([0, innerWidth]);
+      xScale = d3.scaleTime().range([0, innerWidth]);
     } else {
       xScale = d3.scaleLinear().range([0, innerWidth]);
     }
@@ -251,28 +315,26 @@ module.exports = createReactClass({
     if (xDomain[0] !== undefined && xDomain[0] !== null) xdomain[0] = xDomain[0];
     if (xDomain[1] !== undefined && xDomain[1] !== null) xdomain[1] = xDomain[1];
     xScale.domain(xdomain);
-    var ydomain = [0, d3.sum(yMaxValues)];
+    var ydomain = [0, yMaxValues];
     if (yDomain[0] !== undefined && yDomain[0] !== null) ydomain[0] = yDomain[0];
     if (yDomain[1] !== undefined && yDomain[1] !== null) ydomain[1] = yDomain[1];
+
     yScale.domain(ydomain);
 
-    props.colors.domain(seriesNames);
-
-    var stack = d3.layout.stack().x(props.xAccessor).y(props.yAccessor).values(function (d) {
-      return d.values;
-    });
+    var stack = d3.stack();
+    stack.keys(seriesNames);
 
     var layers = stack(data);
 
     var dataSeries = layers.map(function (d, idx) {
       return React.createElement(DataSeries, {
-        key: idx,
-        seriesName: d.name,
-        fill: props.colors(props.colorAccessor(d, idx)),
+        key: idx
+        // seriesName={d.name}
+        , fill: props.colors[idx],
         index: idx,
         xScale: xScale,
         yScale: yScale,
-        data: d.values,
+        data: d,
         xAccessor: props.xAccessor,
         yAccessor: props.yAccessor,
         interpolationType: interpolationType,
@@ -285,9 +347,9 @@ module.exports = createReactClass({
       legend: props.legend,
       data: data,
       margins: props.margins,
-      colors: props.colors,
-      colorAccessor: props.colorAccessor,
-      width: props.width,
+      colors: props.colors
+      // colorAccessor={props.colorAccessor}
+      , width: props.width,
       height: props.height,
       title: props.title
     }, React.createElement('g', { transform: trans, className: props.className }, React.createElement(XAxis, {
@@ -336,7 +398,7 @@ module.exports = createReactClass({
   }
 });
 
-},{"../common":32,"../mixins":44,"./DataSeries":5}],4:[function(require,module,exports){
+},{"../common":"/home/robson/projetos/rd3/src/common/index.js","../mixins":"/home/robson/projetos/rd3/src/mixins/index.js","./DataSeries":"/home/robson/projetos/rd3/src/areachart/DataSeries.jsx"}],"/home/robson/projetos/rd3/src/areachart/AreaContainer.jsx":[function(require,module,exports){
 'use strict';
 
 var _extends = Object.assign || function (target) {
@@ -406,7 +468,7 @@ module.exports = createReactClass({
   }
 });
 
-},{"../utils":60,"./Area":2}],5:[function(require,module,exports){
+},{"../utils":"/home/robson/projetos/rd3/src/utils/index.js","./Area":"/home/robson/projetos/rd3/src/areachart/Area.jsx"}],"/home/robson/projetos/rd3/src/areachart/DataSeries.jsx":[function(require,module,exports){
 'use strict';
 
 var PropTypes = window.PropTypes;
@@ -433,13 +495,13 @@ module.exports = createReactClass({
   render: function render() {
     var props = this.props;
 
-    var area = d3.svg.area().x(function (d) {
-      return props.xScale(props.xAccessor(d));
+    var area = d3.area().x(function (d) {
+      return props.xScale(d.data.date);
     }).y0(function (d) {
-      return props.yScale(d.y0);
+      return props.yScale(d[0]);
     }).y1(function (d) {
-      return props.yScale(d.y0 + props.yAccessor(d));
-    }).curve();
+      return props.yScale(d[1]);
+    }).curve(d3.curveCatmullRom.alpha(0.5));
 
     var path = area(props.data);
 
@@ -451,12 +513,12 @@ module.exports = createReactClass({
   }
 });
 
-},{"./AreaContainer":4}],6:[function(require,module,exports){
+},{"./AreaContainer":"/home/robson/projetos/rd3/src/areachart/AreaContainer.jsx"}],"/home/robson/projetos/rd3/src/areachart/index.js":[function(require,module,exports){
 'use strict';
 
 exports.AreaChart = require('./AreaChart');
 
-},{"./AreaChart":3}],7:[function(require,module,exports){
+},{"./AreaChart":"/home/robson/projetos/rd3/src/areachart/AreaChart.jsx"}],"/home/robson/projetos/rd3/src/barchart/Bar.jsx":[function(require,module,exports){
 'use strict';
 
 var _extends = Object.assign || function (target) {
@@ -504,7 +566,7 @@ module.exports = createReactClass({
   }
 });
 
-},{}],8:[function(require,module,exports){
+},{}],"/home/robson/projetos/rd3/src/barchart/BarChart.jsx":[function(require,module,exports){
 'use strict';
 
 var PropTypes = window.PropTypes;
@@ -720,7 +782,7 @@ module.exports = createReactClass({
   }
 });
 
-},{"../common":32,"../mixins":44,"./DataSeries":10}],9:[function(require,module,exports){
+},{"../common":"/home/robson/projetos/rd3/src/common/index.js","../mixins":"/home/robson/projetos/rd3/src/mixins/index.js","./DataSeries":"/home/robson/projetos/rd3/src/barchart/DataSeries.jsx"}],"/home/robson/projetos/rd3/src/barchart/BarContainer.jsx":[function(require,module,exports){
 'use strict';
 
 var _extends = Object.assign || function (target) {
@@ -789,7 +851,7 @@ module.exports = createReactClass({
   }
 });
 
-},{"../utils":60,"./Bar":7}],10:[function(require,module,exports){
+},{"../utils":"/home/robson/projetos/rd3/src/utils/index.js","./Bar":"/home/robson/projetos/rd3/src/barchart/Bar.jsx"}],"/home/robson/projetos/rd3/src/barchart/DataSeries.jsx":[function(require,module,exports){
 'use strict';
 
 var PropTypes = window.PropTypes;
@@ -868,12 +930,12 @@ module.exports = createReactClass({
   }
 });
 
-},{"./BarContainer":9}],11:[function(require,module,exports){
+},{"./BarContainer":"/home/robson/projetos/rd3/src/barchart/BarContainer.jsx"}],"/home/robson/projetos/rd3/src/barchart/index.js":[function(require,module,exports){
 'use strict';
 
 exports.BarChart = require('./BarChart');
 
-},{"./BarChart":8}],12:[function(require,module,exports){
+},{"./BarChart":"/home/robson/projetos/rd3/src/barchart/BarChart.jsx"}],"/home/robson/projetos/rd3/src/candlestick/Candle.jsx":[function(require,module,exports){
 'use strict';
 
 var PropTypes = window.PropTypes;
@@ -918,7 +980,7 @@ module.exports = createReactClass({
   }
 });
 
-},{}],13:[function(require,module,exports){
+},{}],"/home/robson/projetos/rd3/src/candlestick/CandlestickChart.jsx":[function(require,module,exports){
 'use strict';
 
 var PropTypes = window.PropTypes;
@@ -1077,7 +1139,7 @@ module.exports = createReactClass({
   }
 });
 
-},{"../common":32,"../mixins":44,"../utils":60,"./DataSeries":15}],14:[function(require,module,exports){
+},{"../common":"/home/robson/projetos/rd3/src/common/index.js","../mixins":"/home/robson/projetos/rd3/src/mixins/index.js","../utils":"/home/robson/projetos/rd3/src/utils/index.js","./DataSeries":"/home/robson/projetos/rd3/src/candlestick/DataSeries.jsx"}],"/home/robson/projetos/rd3/src/candlestick/CandlestickContainer.jsx":[function(require,module,exports){
 'use strict';
 
 var PropTypes = window.PropTypes;
@@ -1160,7 +1222,7 @@ module.exports = createReactClass({
   }
 });
 
-},{"../utils":60,"./Candle":12,"./Wick":16}],15:[function(require,module,exports){
+},{"../utils":"/home/robson/projetos/rd3/src/utils/index.js","./Candle":"/home/robson/projetos/rd3/src/candlestick/Candle.jsx","./Wick":"/home/robson/projetos/rd3/src/candlestick/Wick.jsx"}],"/home/robson/projetos/rd3/src/candlestick/DataSeries.jsx":[function(require,module,exports){
 'use strict';
 
 var PropTypes = window.PropTypes;
@@ -1218,7 +1280,7 @@ module.exports = createReactClass({
   }
 });
 
-},{"./CandlestickContainer":14}],16:[function(require,module,exports){
+},{"./CandlestickContainer":"/home/robson/projetos/rd3/src/candlestick/CandlestickContainer.jsx"}],"/home/robson/projetos/rd3/src/candlestick/Wick.jsx":[function(require,module,exports){
 'use strict';
 
 var PropTypes = window.PropTypes;
@@ -1259,12 +1321,12 @@ module.exports = createReactClass({
   }
 });
 
-},{}],17:[function(require,module,exports){
+},{}],"/home/robson/projetos/rd3/src/candlestick/index.js":[function(require,module,exports){
 'use strict';
 
 exports.CandlestickChart = require('./CandlestickChart');
 
-},{"./CandlestickChart":13}],18:[function(require,module,exports){
+},{"./CandlestickChart":"/home/robson/projetos/rd3/src/candlestick/CandlestickChart.jsx"}],"/home/robson/projetos/rd3/src/common/Legend.jsx":[function(require,module,exports){
 'use strict';
 
 var PropTypes = window.PropTypes;
@@ -1344,7 +1406,7 @@ module.exports = createReactClass({
   }
 });
 
-},{}],19:[function(require,module,exports){
+},{}],"/home/robson/projetos/rd3/src/common/Polygon.jsx":[function(require,module,exports){
 'use strict';
 
 var PropTypes = window.PropTypes;
@@ -1390,7 +1452,7 @@ module.exports = createReactClass({
   }
 });
 
-},{}],20:[function(require,module,exports){
+},{}],"/home/robson/projetos/rd3/src/common/Tooltip.jsx":[function(require,module,exports){
 'use strict';
 
 var PropTypes = window.PropTypes;
@@ -1434,7 +1496,7 @@ module.exports = createReactClass({
   }
 });
 
-},{}],21:[function(require,module,exports){
+},{}],"/home/robson/projetos/rd3/src/common/Voronoi.jsx":[function(require,module,exports){
 'use strict';
 
 var PropTypes = window.PropTypes;
@@ -1477,7 +1539,7 @@ module.exports = createReactClass({
   }
 });
 
-},{"./Polygon":19}],22:[function(require,module,exports){
+},{"./Polygon":"/home/robson/projetos/rd3/src/common/Polygon.jsx"}],"/home/robson/projetos/rd3/src/common/axes/AxisLine.jsx":[function(require,module,exports){
 'use strict';
 
 var PropTypes = window.PropTypes;
@@ -1541,7 +1603,7 @@ module.exports = createReactClass({
   }
 });
 
-},{}],23:[function(require,module,exports){
+},{}],"/home/robson/projetos/rd3/src/common/axes/AxisTicks.jsx":[function(require,module,exports){
 'use strict';
 
 var _extends = Object.assign || function (target) {
@@ -1783,7 +1845,7 @@ module.exports = createReactClass({
   }
 });
 
-},{}],24:[function(require,module,exports){
+},{}],"/home/robson/projetos/rd3/src/common/axes/Label.jsx":[function(require,module,exports){
 'use strict';
 
 var PropTypes = window.PropTypes;
@@ -1852,7 +1914,7 @@ module.exports = createReactClass({
   }
 });
 
-},{}],25:[function(require,module,exports){
+},{}],"/home/robson/projetos/rd3/src/common/axes/XAxis.jsx":[function(require,module,exports){
 'use strict';
 
 var _extends = Object.assign || function (target) {
@@ -1924,7 +1986,7 @@ module.exports = createReactClass({
     }
 
     if (typeof props.xAxisTickInterval !== 'undefined') {
-      tickArguments = [d3.time[props.xAxisTickInterval.unit], props.xAxisTickInterval.interval];
+      // tickArguments = [d3.time[props.xAxisTickInterval.unit], props.xAxisTickInterval.interval];
     }
 
     return React.createElement('g', {
@@ -1963,7 +2025,7 @@ module.exports = createReactClass({
   }
 });
 
-},{"./AxisLine":22,"./AxisTicks":23,"./Label":24}],26:[function(require,module,exports){
+},{"./AxisLine":"/home/robson/projetos/rd3/src/common/axes/AxisLine.jsx","./AxisTicks":"/home/robson/projetos/rd3/src/common/axes/AxisTicks.jsx","./Label":"/home/robson/projetos/rd3/src/common/axes/Label.jsx"}],"/home/robson/projetos/rd3/src/common/axes/YAxis.jsx":[function(require,module,exports){
 'use strict';
 
 var _extends = Object.assign || function (target) {
@@ -2078,13 +2140,13 @@ module.exports = createReactClass({
   }
 });
 
-},{"./AxisLine":22,"./AxisTicks":23,"./Label":24}],27:[function(require,module,exports){
+},{"./AxisLine":"/home/robson/projetos/rd3/src/common/axes/AxisLine.jsx","./AxisTicks":"/home/robson/projetos/rd3/src/common/axes/AxisTicks.jsx","./Label":"/home/robson/projetos/rd3/src/common/axes/Label.jsx"}],"/home/robson/projetos/rd3/src/common/axes/index.js":[function(require,module,exports){
 'use strict';
 
 exports.XAxis = require('./XAxis');
 exports.YAxis = require('./YAxis');
 
-},{"./XAxis":25,"./YAxis":26}],28:[function(require,module,exports){
+},{"./XAxis":"/home/robson/projetos/rd3/src/common/axes/XAxis.jsx","./YAxis":"/home/robson/projetos/rd3/src/common/axes/YAxis.jsx"}],"/home/robson/projetos/rd3/src/common/charts/BasicChart.jsx":[function(require,module,exports){
 'use strict';
 
 var PropTypes = window.PropTypes;
@@ -2142,7 +2204,7 @@ module.exports = createReactClass({
   }
 });
 
-},{}],29:[function(require,module,exports){
+},{}],"/home/robson/projetos/rd3/src/common/charts/Chart.jsx":[function(require,module,exports){
 'use strict';
 
 var _extends = Object.assign || function (target) {
@@ -2200,7 +2262,7 @@ module.exports = createReactClass({
   }
 });
 
-},{"./BasicChart":28,"./LegendChart":30}],30:[function(require,module,exports){
+},{"./BasicChart":"/home/robson/projetos/rd3/src/common/charts/BasicChart.jsx","./LegendChart":"/home/robson/projetos/rd3/src/common/charts/LegendChart.jsx"}],"/home/robson/projetos/rd3/src/common/charts/LegendChart.jsx":[function(require,module,exports){
 'use strict';
 
 var PropTypes = window.PropTypes;
@@ -2294,14 +2356,14 @@ module.exports = createReactClass({
   }
 });
 
-},{"../Legend":18}],31:[function(require,module,exports){
+},{"../Legend":"/home/robson/projetos/rd3/src/common/Legend.jsx"}],"/home/robson/projetos/rd3/src/common/charts/index.js":[function(require,module,exports){
 'use strict';
 
 exports.BasicChart = require('./BasicChart');
 exports.Chart = require('./Chart');
 exports.LegendChart = require('./LegendChart');
 
-},{"./BasicChart":28,"./Chart":29,"./LegendChart":30}],32:[function(require,module,exports){
+},{"./BasicChart":"/home/robson/projetos/rd3/src/common/charts/BasicChart.jsx","./Chart":"/home/robson/projetos/rd3/src/common/charts/Chart.jsx","./LegendChart":"/home/robson/projetos/rd3/src/common/charts/LegendChart.jsx"}],"/home/robson/projetos/rd3/src/common/index.js":[function(require,module,exports){
 'use strict';
 
 exports.XAxis = require('./axes').XAxis;
@@ -2312,7 +2374,7 @@ exports.Legend = require('./Legend');
 exports.Tooltip = require('./Tooltip');
 exports.Voronoi = require('./Voronoi');
 
-},{"./Legend":18,"./Tooltip":20,"./Voronoi":21,"./axes":27,"./charts":31}],33:[function(require,module,exports){
+},{"./Legend":"/home/robson/projetos/rd3/src/common/Legend.jsx","./Tooltip":"/home/robson/projetos/rd3/src/common/Tooltip.jsx","./Voronoi":"/home/robson/projetos/rd3/src/common/Voronoi.jsx","./axes":"/home/robson/projetos/rd3/src/common/axes/index.js","./charts":"/home/robson/projetos/rd3/src/common/charts/index.js"}],"/home/robson/projetos/rd3/src/index.js":[function(require,module,exports){
 'use strict';
 
 exports.BarChart = require('./barchart').BarChart;
@@ -2323,7 +2385,7 @@ exports.Treemap = require('./treemap').Treemap;
 exports.ScatterChart = require('./scatterchart').ScatterChart;
 exports.CandlestickChart = require('./candlestick').CandlestickChart;
 
-},{"./areachart":6,"./barchart":11,"./candlestick":17,"./linechart":39,"./piechart":49,"./scatterchart":54,"./treemap":59}],34:[function(require,module,exports){
+},{"./areachart":"/home/robson/projetos/rd3/src/areachart/index.js","./barchart":"/home/robson/projetos/rd3/src/barchart/index.js","./candlestick":"/home/robson/projetos/rd3/src/candlestick/index.js","./linechart":"/home/robson/projetos/rd3/src/linechart/index.js","./piechart":"/home/robson/projetos/rd3/src/piechart/index.js","./scatterchart":"/home/robson/projetos/rd3/src/scatterchart/index.js","./treemap":"/home/robson/projetos/rd3/src/treemap/index.js"}],"/home/robson/projetos/rd3/src/linechart/DataSeries.jsx":[function(require,module,exports){
 'use strict';
 
 var PropTypes = window.PropTypes;
@@ -2439,7 +2501,7 @@ module.exports = createReactClass({
   }
 });
 
-},{"./Line":35,"./VoronoiCircleContainer":38}],35:[function(require,module,exports){
+},{"./Line":"/home/robson/projetos/rd3/src/linechart/Line.jsx","./VoronoiCircleContainer":"/home/robson/projetos/rd3/src/linechart/VoronoiCircleContainer.jsx"}],"/home/robson/projetos/rd3/src/linechart/Line.jsx":[function(require,module,exports){
 'use strict';
 
 var PropTypes = window.PropTypes;
@@ -2479,7 +2541,7 @@ module.exports = createReactClass({
   }
 });
 
-},{}],36:[function(require,module,exports){
+},{}],"/home/robson/projetos/rd3/src/linechart/LineChart.jsx":[function(require,module,exports){
 'use strict';
 
 var PropTypes = window.PropTypes;
@@ -2636,7 +2698,7 @@ module.exports = createReactClass({
   }
 });
 
-},{"../common":32,"../mixins":44,"../utils":60,"./DataSeries":34}],37:[function(require,module,exports){
+},{"../common":"/home/robson/projetos/rd3/src/common/index.js","../mixins":"/home/robson/projetos/rd3/src/mixins/index.js","../utils":"/home/robson/projetos/rd3/src/utils/index.js","./DataSeries":"/home/robson/projetos/rd3/src/linechart/DataSeries.jsx"}],"/home/robson/projetos/rd3/src/linechart/VoronoiCircle.jsx":[function(require,module,exports){
 'use strict';
 
 var PropTypes = window.PropTypes;
@@ -2683,7 +2745,7 @@ module.exports = createReactClass({
   }
 });
 
-},{}],38:[function(require,module,exports){
+},{}],"/home/robson/projetos/rd3/src/linechart/VoronoiCircleContainer.jsx":[function(require,module,exports){
 'use strict';
 
 var PropTypes = window.PropTypes;
@@ -2765,12 +2827,12 @@ module.exports = createReactClass({
   }
 });
 
-},{"../utils":60,"./VoronoiCircle":37}],39:[function(require,module,exports){
+},{"../utils":"/home/robson/projetos/rd3/src/utils/index.js","./VoronoiCircle":"/home/robson/projetos/rd3/src/linechart/VoronoiCircle.jsx"}],"/home/robson/projetos/rd3/src/linechart/index.js":[function(require,module,exports){
 'use strict';
 
 exports.LineChart = require('./LineChart');
 
-},{"./LineChart":36}],40:[function(require,module,exports){
+},{"./LineChart":"/home/robson/projetos/rd3/src/linechart/LineChart.jsx"}],"/home/robson/projetos/rd3/src/mixins/CartesianChartPropsMixin.js":[function(require,module,exports){
 'use strict';
 
 var d3 = window.d3;
@@ -2863,7 +2925,7 @@ module.exports = {
   }
 };
 
-},{}],41:[function(require,module,exports){
+},{}],"/home/robson/projetos/rd3/src/mixins/DefaultAccessorsMixin.js":[function(require,module,exports){
 'use strict';
 
 var PropTypes = window.PropTypes;
@@ -2886,7 +2948,7 @@ module.exports = {
   }
 };
 
-},{}],42:[function(require,module,exports){
+},{}],"/home/robson/projetos/rd3/src/mixins/TooltipMixin.js":[function(require,module,exports){
 'use strict';
 
 var PropTypes = window.PropTypes;
@@ -2952,7 +3014,7 @@ module.exports = {
   }
 };
 
-},{}],43:[function(require,module,exports){
+},{}],"/home/robson/projetos/rd3/src/mixins/ViewBoxMixin.js":[function(require,module,exports){
 
 'use strict';
 
@@ -3031,7 +3093,7 @@ module.exports = {
   }
 };
 
-},{}],44:[function(require,module,exports){
+},{}],"/home/robson/projetos/rd3/src/mixins/index.js":[function(require,module,exports){
 'use strict';
 
 exports.CartesianChartPropsMixin = require('./CartesianChartPropsMixin');
@@ -3039,7 +3101,7 @@ exports.DefaultAccessorsMixin = require('./DefaultAccessorsMixin');
 exports.ViewBoxMixin = require('./ViewBoxMixin');
 exports.TooltipMixin = require('./TooltipMixin');
 
-},{"./CartesianChartPropsMixin":40,"./DefaultAccessorsMixin":41,"./TooltipMixin":42,"./ViewBoxMixin":43}],45:[function(require,module,exports){
+},{"./CartesianChartPropsMixin":"/home/robson/projetos/rd3/src/mixins/CartesianChartPropsMixin.js","./DefaultAccessorsMixin":"/home/robson/projetos/rd3/src/mixins/DefaultAccessorsMixin.js","./TooltipMixin":"/home/robson/projetos/rd3/src/mixins/TooltipMixin.js","./ViewBoxMixin":"/home/robson/projetos/rd3/src/mixins/ViewBoxMixin.js"}],"/home/robson/projetos/rd3/src/piechart/Arc.jsx":[function(require,module,exports){
 'use strict';
 
 var PropTypes = window.PropTypes;
@@ -3134,7 +3196,7 @@ module.exports = createReactClass({
   }
 });
 
-},{}],46:[function(require,module,exports){
+},{}],"/home/robson/projetos/rd3/src/piechart/ArcContainer.jsx":[function(require,module,exports){
 'use strict';
 
 var _extends = Object.assign || function (target) {
@@ -3199,7 +3261,7 @@ module.exports = createReactClass({
   }
 });
 
-},{"../utils":60,"./Arc":45}],47:[function(require,module,exports){
+},{"../utils":"/home/robson/projetos/rd3/src/utils/index.js","./Arc":"/home/robson/projetos/rd3/src/piechart/Arc.jsx"}],"/home/robson/projetos/rd3/src/piechart/DataSeries.jsx":[function(require,module,exports){
 'use strict';
 
 var PropTypes = window.PropTypes;
@@ -3271,7 +3333,7 @@ module.exports = createReactClass({
   }
 });
 
-},{"./ArcContainer":46}],48:[function(require,module,exports){
+},{"./ArcContainer":"/home/robson/projetos/rd3/src/piechart/ArcContainer.jsx"}],"/home/robson/projetos/rd3/src/piechart/PieChart.jsx":[function(require,module,exports){
 'use strict';
 
 var d3 = window.d3;
@@ -3368,12 +3430,12 @@ module.exports = createReactClass({
   }
 });
 
-},{"../common":32,"../mixins":44,"./DataSeries":47}],49:[function(require,module,exports){
+},{"../common":"/home/robson/projetos/rd3/src/common/index.js","../mixins":"/home/robson/projetos/rd3/src/mixins/index.js","./DataSeries":"/home/robson/projetos/rd3/src/piechart/DataSeries.jsx"}],"/home/robson/projetos/rd3/src/piechart/index.js":[function(require,module,exports){
 'use strict';
 
 exports.PieChart = require('./PieChart');
 
-},{"./PieChart":48}],50:[function(require,module,exports){
+},{"./PieChart":"/home/robson/projetos/rd3/src/piechart/PieChart.jsx"}],"/home/robson/projetos/rd3/src/scatterchart/DataSeries.jsx":[function(require,module,exports){
 'use strict';
 
 var PropTypes = window.PropTypes;
@@ -3462,7 +3524,7 @@ module.exports = createReactClass({
   }
 });
 
-},{"./VoronoiCircleContainer":53}],51:[function(require,module,exports){
+},{"./VoronoiCircleContainer":"/home/robson/projetos/rd3/src/scatterchart/VoronoiCircleContainer.jsx"}],"/home/robson/projetos/rd3/src/scatterchart/ScatterChart.jsx":[function(require,module,exports){
 'use strict';
 
 var PropTypes = window.PropTypes;
@@ -3629,7 +3691,7 @@ module.exports = createReactClass({
   }
 });
 
-},{"../common":32,"../mixins":44,"../utils":60,"./DataSeries":50}],52:[function(require,module,exports){
+},{"../common":"/home/robson/projetos/rd3/src/common/index.js","../mixins":"/home/robson/projetos/rd3/src/mixins/index.js","../utils":"/home/robson/projetos/rd3/src/utils/index.js","./DataSeries":"/home/robson/projetos/rd3/src/scatterchart/DataSeries.jsx"}],"/home/robson/projetos/rd3/src/scatterchart/VoronoiCircle.jsx":[function(require,module,exports){
 'use strict';
 
 var PropTypes = window.PropTypes;
@@ -3679,7 +3741,7 @@ module.exports = createReactClass({
   }
 });
 
-},{}],53:[function(require,module,exports){
+},{}],"/home/robson/projetos/rd3/src/scatterchart/VoronoiCircleContainer.jsx":[function(require,module,exports){
 'use strict';
 
 var PropTypes = window.PropTypes;
@@ -3769,12 +3831,12 @@ module.exports = createReactClass({
   }
 });
 
-},{"../utils":60,"./VoronoiCircle":52}],54:[function(require,module,exports){
+},{"../utils":"/home/robson/projetos/rd3/src/utils/index.js","./VoronoiCircle":"/home/robson/projetos/rd3/src/scatterchart/VoronoiCircle.jsx"}],"/home/robson/projetos/rd3/src/scatterchart/index.js":[function(require,module,exports){
 'use strict';
 
 exports.ScatterChart = require('./ScatterChart');
 
-},{"./ScatterChart":51}],55:[function(require,module,exports){
+},{"./ScatterChart":"/home/robson/projetos/rd3/src/scatterchart/ScatterChart.jsx"}],"/home/robson/projetos/rd3/src/treemap/Cell.jsx":[function(require,module,exports){
 'use strict';
 
 var PropTypes = window.PropTypes;
@@ -3820,7 +3882,7 @@ module.exports = createReactClass({
   }
 });
 
-},{}],56:[function(require,module,exports){
+},{}],"/home/robson/projetos/rd3/src/treemap/CellContainer.jsx":[function(require,module,exports){
 'use strict';
 
 var _extends = Object.assign || function (target) {
@@ -3876,7 +3938,7 @@ module.exports = createReactClass({
   }
 });
 
-},{"../utils":60,"./Cell":55}],57:[function(require,module,exports){
+},{"../utils":"/home/robson/projetos/rd3/src/utils/index.js","./Cell":"/home/robson/projetos/rd3/src/treemap/Cell.jsx"}],"/home/robson/projetos/rd3/src/treemap/DataSeries.jsx":[function(require,module,exports){
 'use strict';
 
 var PropTypes = window.PropTypes;
@@ -3939,7 +4001,7 @@ module.exports = createReactClass({
   }
 });
 
-},{"./CellContainer":56}],58:[function(require,module,exports){
+},{"./CellContainer":"/home/robson/projetos/rd3/src/treemap/CellContainer.jsx"}],"/home/robson/projetos/rd3/src/treemap/Treemap.jsx":[function(require,module,exports){
 'use strict';
 
 var d3 = window.d3;
@@ -4005,12 +4067,12 @@ module.exports = createReactClass({
   }
 });
 
-},{"../common":32,"./DataSeries":57}],59:[function(require,module,exports){
+},{"../common":"/home/robson/projetos/rd3/src/common/index.js","./DataSeries":"/home/robson/projetos/rd3/src/treemap/DataSeries.jsx"}],"/home/robson/projetos/rd3/src/treemap/index.js":[function(require,module,exports){
 'use strict';
 
 exports.Treemap = require('./Treemap');
 
-},{"./Treemap":58}],60:[function(require,module,exports){
+},{"./Treemap":"/home/robson/projetos/rd3/src/treemap/Treemap.jsx"}],"/home/robson/projetos/rd3/src/utils/index.js":[function(require,module,exports){
 'use strict';
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) {
@@ -4174,7 +4236,7 @@ exports.shade = function (hex, percent) {
   return '#' + red + green + blue;
 };
 
-},{}]},{},[1])(1)
+},{}]},{},["/home/robson/projetos/rd3/docs/examples/main.js"])("/home/robson/projetos/rd3/docs/examples/main.js")
 });
 
 //# sourceMappingURL=react-d3.js.map

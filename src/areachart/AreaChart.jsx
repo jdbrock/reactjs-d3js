@@ -25,6 +25,8 @@ module.exports = createReactClass({
 
   getDefaultProps() {
     return {
+      colors: d3.schemeBlues[3].reverse(),
+      // colors: d3.schemePastel2,
       margins: { top: 10, right: 20, bottom: 40, left: 45 },
       yAxisTickCount: 4,
       interpolate: false,
@@ -57,27 +59,29 @@ module.exports = createReactClass({
 
     const xValues = [];
     const yValues = [];
-    const seriesNames = [];
-    const yMaxValues = [];
+    // const seriesNames = [];
+    // const yMaxValues = [];
     const domain = props.domain || {};
     const xDomain = domain.x || [];
     const yDomain = domain.y || [];
-    data.forEach((series) => {
-      let upper = 0;
-      seriesNames.push(series.name);
-      series.values.forEach((val) => {
-        upper = Math.max(upper, props.yAccessor(val));
-        xValues.push(props.xAccessor(val));
-        yValues.push(props.yAccessor(val));
-      });
-      yMaxValues.push(upper);
-    });
+    const seriesNames = Object.keys(data[0]).filter( f => f !== 'date') || [];
+
+    const yMaxValues = d3.sum(seriesNames.map( n => {
+        return d3.max(data.map( d => { return d[n]}))
+    }))
+
+
+    /* TODO - generalize. Only acceptint field date for x axis*/
+    data.map( d => {
+      xValues.push(d.date);
+    })
+
 
     let xScale;
     if (xValues.length > 0 &&
       Object.prototype.toString.call(xValues[0]) === '[object Date]' &&
       props.xAxisTickInterval) {
-      xScale = d3.time.scale()
+      xScale = d3.scaleTime()
         .range([0, innerWidth]);
     } else {
       xScale = d3.scaleLinear()
@@ -88,36 +92,35 @@ module.exports = createReactClass({
     if (xDomain[0] !== undefined && xDomain[0] !== null) xdomain[0] = xDomain[0];
     if (xDomain[1] !== undefined && xDomain[1] !== null) xdomain[1] = xDomain[1];
     xScale.domain(xdomain);
-    const ydomain = [0, d3.sum(yMaxValues)];
+    const ydomain = [0, yMaxValues];
     if (yDomain[0] !== undefined && yDomain[0] !== null) ydomain[0] = yDomain[0];
     if (yDomain[1] !== undefined && yDomain[1] !== null) ydomain[1] = yDomain[1];
+
     yScale.domain(ydomain);
 
-    props.colors.domain(seriesNames);
 
-    const stack = d3.layout.stack()
-      .x(props.xAccessor)
-      .y(props.yAccessor)
-      .values((d) => d.values);
+    const stack = d3.stack()
+    stack.keys(seriesNames)
 
-    const layers = stack(data);
+    const layers = stack(data)
+
 
     const dataSeries = layers.map((d, idx) => (
         <DataSeries
-          key={idx}
-          seriesName={d.name}
-          fill={props.colors(props.colorAccessor(d, idx))}
-          index={idx}
-          xScale={xScale}
-          yScale={yScale}
-          data={d.values}
-          xAccessor={props.xAccessor}
-          yAccessor={props.yAccessor}
-          interpolationType={interpolationType}
-          hoverAnimation={props.hoverAnimation}
-        />
-      )
-    );
+        key={idx}
+        // seriesName={d.name}
+        fill={props.colors[idx]}
+        index={idx}
+        xScale={xScale}
+        yScale={yScale}
+        data={d}
+        xAccessor={props.xAccessor}
+        yAccessor={props.yAccessor}
+        interpolationType={interpolationType}
+        hoverAnimation={props.hoverAnimation}
+      />
+
+    ));
 
     return (
       <Chart
@@ -126,7 +129,7 @@ module.exports = createReactClass({
         data={data}
         margins={props.margins}
         colors={props.colors}
-        colorAccessor={props.colorAccessor}
+        // colorAccessor={props.colorAccessor}
         width={props.width}
         height={props.height}
         title={props.title}
