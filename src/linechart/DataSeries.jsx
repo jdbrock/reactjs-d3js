@@ -46,7 +46,7 @@ module.exports = createReactClass({
     const interpolatePath = d3.line()
         .x((d) => props.xScale(xAccessor(d)))
         .y((d) => props.yScale(yAccessor(d)))
-        .curve(d3.curveBasis);        
+        .curve(d3.curveBasis);
 
 
     if (this._isDate(props.data[0].values[0], xAccessor)) {
@@ -77,10 +77,10 @@ module.exports = createReactClass({
     let cy;
     let circleFill;
 
-    
-    const regions = voronoi(props.value).polygons().map( (polygon, idx) => {        
-      const point = polygon.data; 
-      delete polygon.data; 
+
+    const regions = voronoi(props.value).polygons().map( (polygon, idx) => {
+      const point = polygon.data;
+      delete polygon.data;
       const vnode = polygon;
       // debugger;
 

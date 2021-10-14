@@ -10,6 +10,9 @@ module.exports = {
 
   getDefaultProps() {
     return {
+      xAccessorBar: (d) => d.data.x,
+      yAccessorBar: (d) => d[1],
+
       xAccessor: (d) => d.x,
       yAccessor: (d) => d.y,
     };

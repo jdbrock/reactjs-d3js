@@ -7,7 +7,7 @@ const createReactClass = require('create-react-class');
 // const hljs = require('highlight.js');
 const rd3 = require('../../src');
 
-// const BarChart = rd3.BarChart;
+const BarChart = rd3.BarChart;
 const LineChart = rd3.LineChart;
 const CandlestickChart = rd3.CandlestickChart;
 // const PieChart = rd3.PieChart;
@@ -32,6 +32,7 @@ const Demos = createReactClass({
 
   componentDidMount () {
     const parseDate = d3.timeFormat('%y-%b-%d').parse;
+
     /* This function is valid for this dataset only.
       You can provide a dataset already formated and remove this. */
     d3.json('data/stackedAreaData.json').
@@ -63,34 +64,6 @@ const Demos = createReactClass({
       this.setState({ ohlcData: [series] });
     });
   },
-
-
-
-/*
-componentWillMount() {
-  // Browser data adapted from nvd3's stacked area data
-  // http://nvd3.org/examples/stackedArea.html
-
-  const parseDate = d3.timeFormat('%y-%b-%d').parse;
-  d3.json('data/stackedAreaData.json', (error, data) => {
-    this.setState({ areaData: data });
-  });
-
-  d3.tsv('data/AAPL_ohlc.tsv', (error, data) => {
-    const series = { name: 'AAPL', values: [] };
-
-    data.map((d) => {
-      d.date = new Date(+d.date);
-      d.open = +d.open;
-      d.high = +d.high;
-      d.low = +d.low;
-      d.close = +d.close;
-      series.values.push({ x: d.date, open: d.open, high: d.high, low: d.low, close: d.close });
-    });
-    this.setState({ ohlcData: [series] });
-  });
-},
-*/
 
   render() {
     const lineData = [
@@ -164,6 +137,7 @@ componentWillMount() {
         <div className="row">
           <h3 className="page-header">reactjs-d3js: Multiple series charts</h3>
         </div>
+
 
         <div className="row">
           <div className="col-md-6">
@@ -402,10 +376,18 @@ componentWillMount() {
         </div>
 
 
-{/*
+
         <div className="row">
           <div className="col-md-6">
-            <BarChart data={barData} width={500} height={300} title="Bar Chart" yAxisLabel="Label" xAxisLabel="Value" />
+            <BarChart
+                data={barData}
+                grouped={true}
+                width={500}
+                height={300}
+                title="Bar Chart"
+                yAxisLabel="Label"
+                xAxisLabel="Value"
+            />
           </div>
           <div className="col-md-6">
             <pre ref="block">
@@ -445,6 +427,8 @@ componentWillMount() {
         </div>
 
         </div>
+
+{/*
 
         <div className="row">
           <div className="col-md-6">
