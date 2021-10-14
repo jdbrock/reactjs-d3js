@@ -94,7 +94,8 @@ module.exports = createReactClass({
       tickFormat = (d) => d;
     }
 
-    const adjustedScale = scale.rangeBand ? d => scale(d) + scale.rangeBand() / 2 : scale;
+    const adjustedScale = scale.bandwidth ? d => scale(d) + scale.bandwidth() / 2 : scale;
+
 
 
     // Still working on this

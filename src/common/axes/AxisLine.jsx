@@ -61,8 +61,11 @@ module.exports = createReactClass({
         d={d}
         style={{ shapeRendering: 'crispEdges' }}
         fill={props.fill}
-        stroke={props.stroke}
-        strokeWidth={props.strokeWidth}
+        stroke='#000000'
+        strokeWidth='1'
+
+        // stroke={props.stroke}
+        // strokeWidth={props.strokeWidth}
       >
       </path>
     );

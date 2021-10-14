@@ -19,8 +19,8 @@ module.exports = createReactClass({
     height: PropTypes.number,
     width: PropTypes.number,
     valuesAccessor: PropTypes.func,
-    xAccessor: PropTypes.func,
-    yAccessor: PropTypes.func,
+    xAccessorBar: PropTypes.func,
+    yAccessorBar: PropTypes.func,
     y0Accessor: PropTypes.func,
     onMouseOver: PropTypes.func,
     onMouseLeave: PropTypes.func,
@@ -38,27 +38,31 @@ module.exports = createReactClass({
 
   _renderBarContainer(segment, seriesIdx) {
     const { colors, colorAccessor, grouped, hoverAnimation, series, xScale, yScale } = this.props;
-    const barHeight = Math.abs(yScale(0) - yScale(this.props.yAccessor(segment)));
-    const yWidth = yScale(this.props.y0Accessor(segment) + this.props.yAccessor(segment));
-    const y = grouped ? yScale(this.props.yAccessor(segment)) : yWidth;
+    const barHeight = Math.abs(yScale(this.props.y0Accessor(segment)) - yScale(this.props.yAccessorBar(segment)));
+    const yWidth = yScale(this.props.y0Accessor(segment) + this.props.yAccessorBar(segment));
+    const y = grouped ? yScale(this.props.yAccessorBar(segment)) : yWidth;
+    const key = this.props.series[seriesIdx] + segment.data.x +segment[1]
+
     return (
       <BarContainer
+        key={key}
         height={barHeight}
-        width={grouped ? xScale.rangeBand() / series.length : xScale.rangeBand() }
-        x={grouped ?
-          xScale(this.props.xAccessor(segment)) + xScale.rangeBand() / series.length * seriesIdx :
-          xScale(this.props.xAccessor(segment))
+        width={xScale.bandwidth() }
+        x={
+          xScale(this.props.xAccessorBar(segment))
         }
-        y={(this.props.yAccessor(segment) >= 0) ? y : y - barHeight}
-        fill={colors(colorAccessor(segment, seriesIdx))}
-        hoverAnimation={hoverAnimation}
+
+        y={(this.props.yAccessorBar(segment) >= 0) ? y : y - barHeight}
+        fill={this.props.colors(this.props.colorAccessor(series, seriesIdx))}
+
+        // hoverAnimation={hoverAnimation}
         onMouseOver={this.props.onMouseOver}
         onMouseLeave={this.props.onMouseLeave}
-        dataPoint={{
-          xValue: this.props.xAccessor(segment),
-          yValue: this.props.yAccessor(segment),
-          seriesName: this.props.series[seriesIdx],
-        }}
+        // dataPoint={{
+        //   xValue: this.props.xAccessorBar(segment),
+        //   yValue: this.props.yAccessorBar(segment),
+        //   seriesName: this.props.series[seriesIdx],
+        // }}
       />
     );
   },
