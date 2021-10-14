@@ -16,7 +16,7 @@ var createReactClass = window.createReactClass;
 // const hljs = require('highlight.js');
 var rd3 = require('../../src');
 
-// const BarChart = rd3.BarChart;
+var BarChart = rd3.BarChart;
 var LineChart = rd3.LineChart;
 var CandlestickChart = rd3.CandlestickChart;
 // const PieChart = rd3.PieChart;
@@ -38,6 +38,7 @@ var Demos = createReactClass({
     var _this = this;
 
     var parseDate = d3.timeFormat('%y-%b-%d').parse;
+
     /* This function is valid for this dataset only.
       You can provide a dataset already formated and remove this. */
     d3.json('data/stackedAreaData.json').then(function (res) {
@@ -67,33 +68,6 @@ var Demos = createReactClass({
       _this.setState({ ohlcData: [series] });
     });
   },
-
-  /*
-  componentWillMount() {
-    // Browser data adapted from nvd3's stacked area data
-    // http://nvd3.org/examples/stackedArea.html
-  
-    const parseDate = d3.timeFormat('%y-%b-%d').parse;
-    d3.json('data/stackedAreaData.json', (error, data) => {
-      this.setState({ areaData: data });
-    });
-  
-    d3.tsv('data/AAPL_ohlc.tsv', (error, data) => {
-      const series = { name: 'AAPL', values: [] };
-  
-      data.map((d) => {
-        d.date = new Date(+d.date);
-        d.open = +d.open;
-        d.high = +d.high;
-        d.low = +d.low;
-        d.close = +d.close;
-        series.values.push({ x: d.date, open: d.open, high: d.high, low: d.low, close: d.close });
-      });
-      this.setState({ ohlcData: [series] });
-    });
-  },
-  */
-
   render: function render() {
     var lineData = [{
       name: 'series1',
@@ -186,7 +160,15 @@ var Demos = createReactClass({
       yAxisOffset: -10,
       title: 'Candlestick Chart',
       domain: { y: [400, 500] }
-    })), React.createElement('div', { className: 'col-md-6' }, React.createElement('pre', { ref: 'block' }, React.createElement('code', { className: 'js' }, 'var ohlcData = [\n  {\n    name: "AAPL",\n    values: [ { x: [object Date], open: 451.69, high: 456.23, low: 435, close: 439.88 },\n              { x: [object Date], open: 437.82, high: 453.21, low: 435.86 , close: 449.83 },\n              ...\n            ]\n  }\n];')), React.createElement('pre', { ref: 'block' }, React.createElement('code', { className: 'html' }, '<CandlestickChart\n  data={ohlcData}\n  width={500}\n  height={400}\n  xAxisTickInterval={{unit: \'month\', interval: 1}}\n  yAxisOffset={-10}\n  title="Candlestick Chart"\n  domain={{y:[400, 500]}}\n/>')))), React.createElement('div', { className: 'row' }, React.createElement('hr', null)));
+    })), React.createElement('div', { className: 'col-md-6' }, React.createElement('pre', { ref: 'block' }, React.createElement('code', { className: 'js' }, 'var ohlcData = [\n  {\n    name: "AAPL",\n    values: [ { x: [object Date], open: 451.69, high: 456.23, low: 435, close: 439.88 },\n              { x: [object Date], open: 437.82, high: 453.21, low: 435.86 , close: 449.83 },\n              ...\n            ]\n  }\n];')), React.createElement('pre', { ref: 'block' }, React.createElement('code', { className: 'html' }, '<CandlestickChart\n  data={ohlcData}\n  width={500}\n  height={400}\n  xAxisTickInterval={{unit: \'month\', interval: 1}}\n  yAxisOffset={-10}\n  title="Candlestick Chart"\n  domain={{y:[400, 500]}}\n/>')))), React.createElement('div', { className: 'row' }, React.createElement('hr', null)), React.createElement('div', { className: 'row' }, React.createElement('div', { className: 'col-md-6' }, React.createElement(BarChart, {
+      data: barData,
+      grouped: true,
+      width: 500,
+      height: 300,
+      title: 'Bar Chart',
+      yAxisLabel: 'Label',
+      xAxisLabel: 'Value'
+    })), React.createElement('div', { className: 'col-md-6' }, React.createElement('pre', { ref: 'block' }, React.createElement('code', { className: 'js' }, 'var barData = [\n  {\n    "name": "Series A",\n    "values": [\n      { "x": 1, "y":  91},\n      ...\n  },\n  {\n    "name": "Series B",\n     "values": [ ... ]\n  }\n  ...\n];')), React.createElement('pre', { ref: 'block' }, React.createElement('code', { className: 'html' }, '<BarChart\n  data={barData}\n  width={500}\n  height={200}\n  fill={\'#3182bd\'}\n  title=\'Bar Chart\'\n  yAxisLabel=\'Label\'\n  xAxisLabel=\'Value\'\n/>'))), React.createElement('div', { className: 'row' }, React.createElement('h3', { className: 'page-header' }, 'reactjs-d3js: Single series charts'))));
   }
 });
 
@@ -342,6 +324,7 @@ module.exports = createReactClass({
     stack.keys(seriesNames);
 
     var layers = stack(data);
+
     var dataSeries = layers.map(function (d, idx) {
       return React.createElement(DataSeries, {
         key: idx,
@@ -583,6 +566,14 @@ module.exports = createReactClass({
 },{}],"/home/robson/projetos/rd3/src/barchart/BarChart.jsx":[function(require,module,exports){
 'use strict';
 
+function _defineProperty(obj, key, value) {
+  if (key in obj) {
+    Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });
+  } else {
+    obj[key] = value;
+  }return obj;
+}
+
 var PropTypes = window.PropTypes;
 var React = window.React;
 var createReactClass = window.createReactClass;
@@ -616,8 +607,8 @@ module.exports = createReactClass({
     stackOffset: PropTypes.oneOf(['silhouette', 'expand', 'wigget', 'zero']),
     grouped: PropTypes.bool,
     valuesAccessor: PropTypes.func,
-    xAccessor: PropTypes.func,
-    yAccessor: PropTypes.func,
+    xAccessorBar: PropTypes.func,
+    yAccessorBar: PropTypes.func,
     y0Accessor: PropTypes.func,
     title: PropTypes.string,
     xAxisClassName: PropTypes.string,
@@ -630,70 +621,41 @@ module.exports = createReactClass({
   getDefaultProps: function getDefaultProps() {
     return {
       chartClassName: 'rd3-barchart',
+      colors: d3.scaleOrdinal(d3.schemeGnBu[9].reverse()),
       hoverAnimation: true,
       margins: { top: 10, right: 20, bottom: 40, left: 45 },
       rangeRoundBandsPadding: 0.25,
       stackOffset: 'zero',
       grouped: false,
       valuesAccessor: function valuesAccessor(d) {
-        return d.values;
+        return d;
       },
       y0Accessor: function y0Accessor(d) {
-        return d.y0;
+        return d[0];
       },
       xAxisClassName: 'rd3-barchart-xaxis',
       yAxisClassName: 'rd3-barchart-yaxis',
       yAxisTickCount: 4
     };
   },
-  _getStackedValuesMaxY: function _getStackedValuesMaxY(_data) {
-    var _this = this;
-
-    // in stacked bar chart, the maximum height we need for
-    // yScale domain is the sum of y0 + y
-    var valuesAccessor = this.props.valuesAccessor;
-
-    return d3.max(_data, function (d) {
-      return d3.max(valuesAccessor(d), function (d2) {
-        return (
-          // where y0, y is generated by d3.layout.stack()
-          _this.props.y0Accessor(d2) + _this.props.yAccessor(d2)
-        );
-      });
-    });
-  },
-  _getStackedValuesMinY: function _getStackedValuesMinY(_data) {
-    var _this2 = this;
-
-    var valuesAccessor = this.props.valuesAccessor;
-
-    return d3.min(_data, function (d) {
-      return d3.min(valuesAccessor(d), function (d2) {
-        return (
-          // where y0, y is generated by d3.layout.stack()
-          _this2.props.y0Accessor(d2) + _this2.props.yAccessor(d2)
-        );
-      });
-    });
-  },
   _getLabels: function _getLabels(firstSeries) {
     // we only need first series to get all the labels
     var _props = this.props,
         valuesAccessor = _props.valuesAccessor,
-        xAccessor = _props.xAccessor;
+        xAccessorBar = _props.xAccessorBar;
 
-    return valuesAccessor(firstSeries).map(xAccessor);
+    return valuesAccessor(firstSeries).map(xAccessorBar);
   },
-  _stack: function _stack() {
+  _stack: function _stack(seriesNames) {
     // Only support columns with all positive or all negative values
     // https://github.com/mbostock/d3/issues/2265
     var _props2 = this.props,
         stackOffset = _props2.stackOffset,
-        xAccessor = _props2.xAccessor,
-        yAccessor = _props2.yAccessor,
+        xAccessorBar = _props2.xAccessorBar,
+        yAccessorBar = _props2.yAccessorBar,
         valuesAccessor = _props2.valuesAccessor;
 
-    return d3.layout.stack().offset(stackOffset).x(xAccessor).y(yAccessor).values(valuesAccessor);
+    return d3.stack().keys(seriesNames).order(d3.stackOrderNone).offset(d3.stackOffsetNone);
   },
   render: function render() {
     var props = this.props;
@@ -704,7 +666,31 @@ module.exports = createReactClass({
     if (props.data.length === 0) {
       return null;
     }
-    var _data = this._stack()(props.data);
+
+    /*
+    mudar a orientacao do array pq vem errado
+    https://stackoverflow.com/questions/17428587/transposing-a-2d-array-in-javascript
+    Para chegar nisso
+    https://github.com/d3/d3-shape/blob/v3.0.1/README.md#stack
+    Isso funciona:
+    */
+
+    var _array = props.data;
+    var data = [];
+
+    _array.map(function (elem, idxE) {
+      elem.values.map(function (v, idxV) {
+        if (typeof data[idxV] === 'undefined') {
+          data[idxV] = _defineProperty({ 'x': v.x }, elem['name'], v.y);
+        } else {
+          data[idxV][[elem['name']]] = v.y;
+        }
+      });
+    });
+    var series = props.data.map(function (item) {
+      return item.name;
+    });
+    var _data = this._stack(series)(data);
 
     var _getDimensions = this.getDimensions(),
         innerHeight = _getDimensions.innerHeight,
@@ -712,17 +698,26 @@ module.exports = createReactClass({
         trans = _getDimensions.trans,
         svgMargins = _getDimensions.svgMargins;
 
-    var xDomain = domain.x || this._getLabels(_data[0]);
-    var xScale = d3.scale.ordinal().domain(xDomain).rangeRoundBands([0, innerWidth], props.rangeRoundBandsPadding);
+    var xScale = d3.scaleBand().domain(data.map(function (d) {
+      return d.x;
+    })).paddingInner(0.1).paddingOuter(0.1).range([0, innerWidth]);
 
-    var minYDomain = Math.min(0, this._getStackedValuesMinY(_data));
-    var maxYDomain = this._getStackedValuesMaxY(_data);
-    var yDomain = domain.y || [minYDomain, maxYDomain];
-    var yScale = d3.scaleLinear().range([innerHeight, 0]).domain(yDomain);
-
-    var series = props.data.map(function (item) {
-      return item.name;
+    var minYDomain = Math.min(0, d3.min(_data, function (d) {
+      return d[1];
+    }));
+    var maxYDomain = d3.max(_data, function (d) {
+      return d[1];
     });
+    var yDomain = [d3.min(_data, function (d) {
+      return d3.min(d, function (d) {
+        return d[1];
+      });
+    }), d3.max(_data, function (d) {
+      return d3.max(d, function (d) {
+        return d[1];
+      });
+    })];
+    var yScale = d3.scaleLinear().range([innerHeight, 0]).domain(yDomain);
 
     return React.createElement('span', null, React.createElement(Chart, {
       viewBox: this.getViewBox(),
@@ -787,8 +782,8 @@ module.exports = createReactClass({
       colorAccessor: props.colorAccessor,
       hoverAnimation: props.hoverAnimation,
       valuesAccessor: props.valuesAccessor,
-      xAccessor: props.xAccessor,
-      yAccessor: props.yAccessor,
+      xAccessorBar: props.xAccessorBar,
+      yAccessorBar: props.yAccessorBar,
       y0Accessor: props.y0Accessor,
       onMouseOver: this.onMouseOver,
       onMouseLeave: this.onMouseLeave
@@ -825,13 +820,13 @@ module.exports = createReactClass({
   propTypes: {
     fill: PropTypes.string,
     onMouseOver: PropTypes.func,
-    onMouseLeave: PropTypes.func,
-    dataPoint: PropTypes.any // TODO: prop types?
+    onMouseLeave: PropTypes.func
+    // dataPoint: PropTypes.any, // TODO: prop types?
   },
 
   getDefaultProps: function getDefaultProps() {
     return {
-      fill: '#3182BD'
+      fill: '#000000'
     };
   },
   getInitialState: function getInitialState() {
@@ -858,9 +853,9 @@ module.exports = createReactClass({
     var props = this.props;
 
     return React.createElement(Bar, _extends({}, props, {
-      fill: this.state.fill,
-      handleMouseOver: props.hoverAnimation ? this._animateBar : null,
-      handleMouseLeave: props.hoverAnimation ? this._restoreBar : null
+      fill: this.props.fill
+      // handleMouseOver={props.hoverAnimation ? this._animateBar : null}
+      // handleMouseLeave={props.hoverAnimation ? this._restoreBar : null}
     }));
   }
 });
@@ -887,8 +882,8 @@ module.exports = createReactClass({
     height: PropTypes.number,
     width: PropTypes.number,
     valuesAccessor: PropTypes.func,
-    xAccessor: PropTypes.func,
-    yAccessor: PropTypes.func,
+    xAccessorBar: PropTypes.func,
+    yAccessorBar: PropTypes.func,
     y0Accessor: PropTypes.func,
     onMouseOver: PropTypes.func,
     onMouseLeave: PropTypes.func,
@@ -920,23 +915,28 @@ module.exports = createReactClass({
         xScale = _props2.xScale,
         yScale = _props2.yScale;
 
-    var barHeight = Math.abs(yScale(0) - yScale(this.props.yAccessor(segment)));
-    var yWidth = yScale(this.props.y0Accessor(segment) + this.props.yAccessor(segment));
-    var y = grouped ? yScale(this.props.yAccessor(segment)) : yWidth;
+    var barHeight = Math.abs(yScale(this.props.y0Accessor(segment)) - yScale(this.props.yAccessorBar(segment)));
+    var yWidth = yScale(this.props.y0Accessor(segment) + this.props.yAccessorBar(segment));
+    var y = grouped ? yScale(this.props.yAccessorBar(segment)) : yWidth;
+    var key = this.props.series[seriesIdx] + segment.data.x + segment[1];
+
     return React.createElement(BarContainer, {
+      key: key,
       height: barHeight,
-      width: grouped ? xScale.rangeBand() / series.length : xScale.rangeBand(),
-      x: grouped ? xScale(this.props.xAccessor(segment)) + xScale.rangeBand() / series.length * seriesIdx : xScale(this.props.xAccessor(segment)),
-      y: this.props.yAccessor(segment) >= 0 ? y : y - barHeight,
-      fill: colors(colorAccessor(segment, seriesIdx)),
-      hoverAnimation: hoverAnimation,
-      onMouseOver: this.props.onMouseOver,
-      onMouseLeave: this.props.onMouseLeave,
-      dataPoint: {
-        xValue: this.props.xAccessor(segment),
-        yValue: this.props.yAccessor(segment),
-        seriesName: this.props.series[seriesIdx]
-      }
+      width: xScale.bandwidth(),
+      x: xScale(this.props.xAccessorBar(segment)),
+
+      y: this.props.yAccessorBar(segment) >= 0 ? y : y - barHeight,
+      fill: this.props.colors(this.props.colorAccessor(series, seriesIdx))
+
+      // hoverAnimation={hoverAnimation}
+      , onMouseOver: this.props.onMouseOver,
+      onMouseLeave: this.props.onMouseLeave
+      // dataPoint={{
+      //   xValue: this.props.xAccessorBar(segment),
+      //   yValue: this.props.yAccessorBar(segment),
+      //   seriesName: this.props.series[seriesIdx],
+      // }}
     });
   },
   render: function render() {
@@ -1614,8 +1614,11 @@ module.exports = createReactClass({
       d: d,
       style: { shapeRendering: 'crispEdges' },
       fill: props.fill,
-      stroke: props.stroke,
-      strokeWidth: props.strokeWidth
+      stroke: '#000000',
+      strokeWidth: '1'
+
+      // stroke={props.stroke}
+      // strokeWidth={props.strokeWidth}
     });
   }
 });
@@ -1727,8 +1730,8 @@ module.exports = createReactClass({
       };
     }
 
-    var adjustedScale = scale.rangeBand ? function (d) {
-      return scale(d) + scale.rangeBand() / 2;
+    var adjustedScale = scale.bandwidth ? function (d) {
+      return scale(d) + scale.bandwidth() / 2;
     } : scale;
 
     // Still working on this
@@ -2955,6 +2958,13 @@ module.exports = {
 
   getDefaultProps: function getDefaultProps() {
     return {
+      xAccessorBar: function xAccessorBar(d) {
+        return d.data.x;
+      },
+      yAccessorBar: function yAccessorBar(d) {
+        return d[1];
+      },
+
       xAccessor: function xAccessor(d) {
         return d.x;
       },
