@@ -19,9 +19,9 @@ var rd3 = require('../../src');
 var BarChart = rd3.BarChart;
 var LineChart = rd3.LineChart;
 var CandlestickChart = rd3.CandlestickChart;
-// const PieChart = rd3.PieChart;
+var PieChart = rd3.PieChart;
 var AreaChart = rd3.AreaChart;
-// const Treemap = rd3.Treemap;
+var Treemap = rd3.Treemap;
 var ScatterChart = rd3.ScatterChart;
 
 // hljs.initHighlightingOnLoad();
@@ -97,7 +97,7 @@ var Demos = createReactClass({
 
     // 2014 Most Populous Countries
     // http://www.prb.org/pdf14/2014-world-population-data-sheet_eng.pdf
-    var treemapData = [{ label: 'China', value: 1364 }, { label: 'India', value: 1296 }, { label: 'United States', value: 318 }, { label: 'Indonesia', value: 251 }, { label: 'Brazil', value: 203 }];
+    var treemapData = [{ label: 'Origin', parent: '', value: '' }, { label: 'China', parent: 'Origin', value: 1364 }, { label: 'India', parent: 'Origin', value: 1296 }, { label: 'United States', parent: 'Origin', value: 318 }, { label: 'Indonesia', parent: 'Origin', value: 251 }, { label: 'Brazil', parent: 'Origin', value: 203 }];
 
     var scatterData = [{
       name: 'series1',
@@ -168,7 +168,15 @@ var Demos = createReactClass({
       title: 'Bar Chart',
       yAxisLabel: 'Label',
       xAxisLabel: 'Value'
-    })), React.createElement('div', { className: 'col-md-6' }, React.createElement('pre', { ref: 'block' }, React.createElement('code', { className: 'js' }, 'var barData = [\n  {\n    "name": "Series A",\n    "values": [\n      { "x": 1, "y":  91},\n      ...\n  },\n  {\n    "name": "Series B",\n     "values": [ ... ]\n  }\n  ...\n];')), React.createElement('pre', { ref: 'block' }, React.createElement('code', { className: 'html' }, '<BarChart\n  data={barData}\n  width={500}\n  height={200}\n  fill={\'#3182bd\'}\n  title=\'Bar Chart\'\n  yAxisLabel=\'Label\'\n  xAxisLabel=\'Value\'\n/>'))), React.createElement('div', { className: 'row' }, React.createElement('h3', { className: 'page-header' }, 'reactjs-d3js: Single series charts'))));
+    })), React.createElement('div', { className: 'col-md-6' }, React.createElement('pre', { ref: 'block' }, React.createElement('code', { className: 'js' }, 'var barData = [\n  {\n    "name": "Series A",\n    "values": [\n      { "x": 1, "y":  91},\n      ...\n  },\n  {\n    "name": "Series B",\n     "values": [ ... ]\n  }\n  ...\n];')), React.createElement('pre', { ref: 'block' }, React.createElement('code', { className: 'html' }, '<BarChart\n  data={barData}\n  width={500}\n  height={200}\n  fill={\'#3182bd\'}\n  title=\'Bar Chart\'\n  yAxisLabel=\'Label\'\n  xAxisLabel=\'Value\'\n/>'))), React.createElement('div', { className: 'row' }, React.createElement('h3', { className: 'page-header' }, 'reactjs-d3js: Single series charts'))), React.createElement('div', { className: 'row' }, React.createElement('div', { className: 'col-md-6' }, React.createElement(PieChart, { data: pieData, width: 450, height: 400, radius: 110, innerRadius: 20, sectorBorderColor: 'white', title: 'Pie Chart' })), React.createElement('div', { className: 'col-md-6' }, React.createElement('pre', { ref: 'block' }, React.createElement('code', { className: 'js' }, 'var pieData = [\n  {label: \'Margarita\', value: 20.0},\n  {label: \'John\', value: 55.0},\n  {label: \'Tim\', value: 25.0 }\n];')), React.createElement('pre', { ref: 'block' }, React.createElement('code', { className: 'html' }, '<PieChart\n  data={pieData}\n  width={400}\n  height={400}\n  radius={100}\n  innerRadius={20}\n  sectorBorderColor="white"\n  title="Pie Chart"\n/>')))), React.createElement('div', { className: 'row' }, React.createElement('hr', null)), React.createElement('div', { className: 'row' }, React.createElement('div', { className: 'col-md-6' }, React.createElement(Treemap, {
+      width: 450,
+      height: 250,
+      title: 'Treemap',
+      data: treemapData,
+      textColor: '#484848',
+      fontColor: '12px',
+      hoverAnimation: false
+    })), React.createElement('div', { className: 'col-md-6' }, React.createElement('pre', { ref: 'block' }, React.createElement('code', { className: 'js' }, '//2014 World Most Populous Countries (millions)\n//http://www.prb.org/pdf14/2014-world-population-data-sheet_eng.pdf\nvar treemapData = [\n  {label: "China", value: 1364},\n  {label: "India", value: 1296},\n...\n  {label: "Brazil", value: 203}\n];')), React.createElement('pre', { ref: 'block' }, React.createElement('code', { className: 'html' }, '<Treemap\n  data={treemapData}\n  width={450}\n  height={250}\n  textColor="#484848"\n  fontSize="12px"\n  title="Treemap"\n  hoverAnimation={false}\n/>')))));
   }
 });
 
@@ -324,7 +332,6 @@ module.exports = createReactClass({
     stack.keys(seriesNames);
 
     var layers = stack(data);
-
     var dataSeries = layers.map(function (d, idx) {
       return React.createElement(DataSeries, {
         key: idx,
@@ -3211,7 +3218,7 @@ module.exports = createReactClass({
   render: function render() {
     var props = this.props;
 
-    var arc = d3.svg.arc().innerRadius(props.innerRadius).outerRadius(props.outerRadius).startAngle(props.startAngle).endAngle(props.endAngle);
+    var arc = d3.arc().innerRadius(props.innerRadius).outerRadius(props.outerRadius).startAngle(props.startAngle).endAngle(props.endAngle);
 
     return React.createElement('g', { className: 'rd3-piechart-arc' }, React.createElement('path', {
       d: arc(),
@@ -3329,7 +3336,7 @@ module.exports = createReactClass({
   render: function render() {
     var props = this.props;
 
-    var pie = d3.layout.pie().sort(null);
+    var pie = d3.pie().sort(null);
 
     var arcData = pie(props.values);
 
@@ -3887,7 +3894,8 @@ module.exports = createReactClass({
     var textStyle = {
       textAnchor: 'middle',
       fill: props.textColor,
-      fontSize: props.fontSize
+      fontSize: props.fontSize,
+      fontWeight: '600'
     };
 
     var t = 'translate(' + props.x + ', ' + props.y + '  )';
@@ -3956,7 +3964,6 @@ module.exports = createReactClass({
   },
   render: function render() {
     var props = this.props;
-
     return React.createElement(Cell, _extends({}, props, {
       fill: this.state.fill,
       handleMouseOver: props.hoverAnimation ? this._animateCell : null,
@@ -3990,7 +3997,7 @@ module.exports = createReactClass({
   getDefaultProps: function getDefaultProps() {
     return {
       data: [],
-      colors: d3.scaleOrdinal(d3.schemeCategory10),
+      colors: d3.scaleOrdinal(d3.schemePastel2),
       colorAccessor: function colorAccessor(d, idx) {
         return idx;
       }
@@ -3999,25 +4006,30 @@ module.exports = createReactClass({
   render: function render() {
     var props = this.props;
 
-    var treemap = d3.layout.treemap()
-    // make sure calculation loop through all objects inside array
-    .children(function (d) {
-      return d;
-    }).size([props.width, props.height]).sticky(true).value(function (d) {
-      return d.value;
+    var treemap = d3.treemap().size([props.width, props.height]);
+
+    // stratify the data: reformatting for d3.js
+    var root = d3.stratify().id(function (d) {
+      return d.label;
+    }).parentId(function (d) {
+      return d.parent;
+    })(props.data);
+
+    root.sum(function (d) {
+      return +d.value;
     });
 
-    var tree = treemap(props.data);
+    var tree = treemap(root);
 
-    var cells = tree.map(function (node, idx) {
+    var cells = tree.children.map(function (node, idx) {
       return React.createElement(CellContainer, {
         key: idx,
-        x: node.x,
-        y: node.y,
-        width: node.dx,
-        height: node.dy,
+        x: node.x0,
+        y: node.y0,
+        width: node.x1 - node.x0,
+        height: node.y1 - node.y0,
         fill: props.colors(props.colorAccessor(node, idx)),
-        label: node.label,
+        label: node.data.label,
         fontSize: props.fontSize,
         textColor: props.textColor,
         hoverAnimation: props.hoverAnimation
@@ -4065,7 +4077,7 @@ module.exports = createReactClass({
       title: '',
       textColor: '#f7f7f7',
       fontSize: '0.85em',
-      colors: d3.scaleOrdinal(d3.schemeCategory10),
+      // colors: d3.scaleOrdinal(d3.schemeCategory10),
       colorAccessor: function colorAccessor(d, idx) {
         return idx;
       }

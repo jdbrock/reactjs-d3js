@@ -37,7 +37,7 @@ module.exports = createReactClass({
       title: '',
       textColor: '#f7f7f7',
       fontSize: '0.85em',
-      colors: d3.scaleOrdinal(d3.schemeCategory10),
+      // colors: d3.scaleOrdinal(d3.schemeCategory10),
       colorAccessor: (d, idx) => idx,
     };
   },

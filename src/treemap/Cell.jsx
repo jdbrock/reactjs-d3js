@@ -23,6 +23,7 @@ module.exports = createReactClass({
       textAnchor: 'middle',
       fill: props.textColor,
       fontSize: props.fontSize,
+      fontWeight: '600'
     };
 
     const t = `translate(${props.x}, ${props.y}  )`;
