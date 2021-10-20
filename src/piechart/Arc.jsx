@@ -95,7 +95,7 @@ module.exports = createReactClass({
   render() {
     const props = this.props;
 
-    const arc = d3.svg.arc()
+    const arc = d3.arc()
       .innerRadius(props.innerRadius)
       .outerRadius(props.outerRadius)
       .startAngle(props.startAngle)

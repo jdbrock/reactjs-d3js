@@ -22,7 +22,7 @@ module.exports = createReactClass({
   getDefaultProps() {
     return {
       data: [],
-      colors: d3.scaleOrdinal(d3.schemeCategory10),
+      colors: d3.scaleOrdinal(d3.schemePastel2),
       colorAccessor: (d, idx) => idx,
     };
   },
@@ -30,29 +30,33 @@ module.exports = createReactClass({
   render() {
     const props = this.props;
 
-    const treemap = d3.layout.treemap()
-                    // make sure calculation loop through all objects inside array
-                    .children(d => d)
-                    .size([props.width, props.height])
-                    .sticky(true)
-                    .value(d => d.value);
+    const treemap = d3.treemap()
+                    .size([props.width, props.height]);
 
-    const tree = treemap(props.data);
+    // stratify the data: reformatting for d3.js
+    var root = d3.stratify()
+      .id(function(d) { return d.label; })
+      .parentId(function(d) { return d.parent; })
+      (props.data);
 
-    const cells = tree.map((node, idx) => (
+    root.sum(function(d) { return +d.value })
+
+    const tree = treemap(root);
+
+    const cells = tree.children.map((node, idx) => (
         <CellContainer
           key={idx}
-          x={node.x}
-          y={node.y}
-          width={node.dx}
-          height={node.dy}
+          x={node.x0}
+          y={node.y0}
+          width={node.x1 - node.x0}
+          height={node.y1 - node.y0}
           fill={props.colors(props.colorAccessor(node, idx))}
-          label={node.label}
+          label={node.data.label}
           fontSize={props.fontSize}
           textColor={props.textColor}
           hoverAnimation={props.hoverAnimation}
         />
-      ), this);
+    ), this);
 
     return (
       <g transform={props.transform} className="treemap">

@@ -10,9 +10,9 @@ const rd3 = require('../../src');
 const BarChart = rd3.BarChart;
 const LineChart = rd3.LineChart;
 const CandlestickChart = rd3.CandlestickChart;
-// const PieChart = rd3.PieChart;
+const PieChart = rd3.PieChart;
 const AreaChart = rd3.AreaChart;
-// const Treemap = rd3.Treemap;
+const Treemap = rd3.Treemap;
 const ScatterChart = rd3.ScatterChart;
 
 // hljs.initHighlightingOnLoad();
@@ -114,7 +114,13 @@ const Demos = createReactClass({
 
     // 2014 Most Populous Countries
     // http://www.prb.org/pdf14/2014-world-population-data-sheet_eng.pdf
-    const treemapData = [{ label: 'China', value: 1364 }, { label: 'India', value: 1296 }, { label: 'United States', value: 318 }, { label: 'Indonesia', value: 251 }, { label: 'Brazil', value: 203 }];
+    const treemapData = [{ label: 'Origin', parent:'', value: '' },
+                          { label: 'China', parent:'Origin', value: 1364 },
+                          { label: 'India', parent:'Origin', value: 1296 },
+                          { label: 'United States', parent:'Origin', value: 318 },
+                          { label: 'Indonesia', parent:'Origin', value: 251 },
+                          { label: 'Brazil', parent:'Origin', value: 203 }
+                          ];
 
     const scatterData = [
       {
@@ -137,6 +143,9 @@ const Demos = createReactClass({
         <div className="row">
           <h3 className="page-header">reactjs-d3js: Multiple series charts</h3>
         </div>
+
+
+
 
 
         <div className="row">
@@ -427,9 +436,6 @@ const Demos = createReactClass({
         </div>
 
         </div>
-
-{/*
-
         <div className="row">
           <div className="col-md-6">
             <PieChart data={pieData} width={450} height={400} radius={110} innerRadius={20} sectorBorderColor="white" title="Pie Chart" />
@@ -463,6 +469,9 @@ const Demos = createReactClass({
             </pre>
           </div>
         </div>
+
+
+
         <div className="row">
           <hr />
         </div>
@@ -510,7 +519,7 @@ var treemapData = [
             </pre>
           </div>
         </div>
-              */}
+
       </div>
     );
   }

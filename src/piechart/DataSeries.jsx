@@ -38,9 +38,8 @@ module.exports = createReactClass({
   render() {
     const props = this.props;
 
-    const pie = d3.layout
-      .pie()
-      .sort(null);
+    const pie = d3.pie()
+                  .sort(null);
 
     const arcData = pie(props.values);
 

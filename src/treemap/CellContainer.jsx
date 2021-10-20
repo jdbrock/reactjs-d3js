@@ -38,7 +38,6 @@ module.exports = createReactClass({
 
   render() {
     const props = this.props;
-
     return (
       <Cell
         {...props}
