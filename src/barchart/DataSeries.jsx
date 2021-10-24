@@ -24,7 +24,7 @@ module.exports = createReactClass({
     y0Accessor: PropTypes.func,
     onMouseOver: PropTypes.func,
     onMouseLeave: PropTypes.func,
-    hoverAnimation: PropTypes.any, // TODO: prop types?
+    hoverAnimation: PropTypes.bool, // TODO: prop types?
     xScale: PropTypes.any,
     yScale: PropTypes.any,
   },
@@ -37,7 +37,7 @@ module.exports = createReactClass({
   },
 
   _renderBarContainer(segment, seriesIdx) {
-    const { colors, colorAccessor, grouped, hoverAnimation, series, xScale, yScale } = this.props;
+    const { colors, colorAccessor, grouped, series, xScale, yScale } = this.props;
     const barHeight = Math.abs(yScale(this.props.y0Accessor(segment)) - yScale(this.props.yAccessorBar(segment)));
     const yWidth = yScale(this.props.y0Accessor(segment) + this.props.yAccessorBar(segment));
     const y = grouped ? yScale(this.props.yAccessorBar(segment)) : yWidth;
@@ -48,21 +48,17 @@ module.exports = createReactClass({
         key={key}
         height={barHeight}
         width={xScale.bandwidth() }
-        x={
-          xScale(this.props.xAccessorBar(segment))
-        }
-
+        x={ xScale(this.props.xAccessorBar(segment)) }
         y={(this.props.yAccessorBar(segment) >= 0) ? y : y - barHeight}
         fill={this.props.colors(this.props.colorAccessor(series, seriesIdx))}
-
-        // hoverAnimation={hoverAnimation}
+        hoverAnimation={this.props.hoverAnimation}
         onMouseOver={this.props.onMouseOver}
         onMouseLeave={this.props.onMouseLeave}
-        // dataPoint={{
-        //   xValue: this.props.xAccessorBar(segment),
-        //   yValue: this.props.yAccessorBar(segment),
-        //   seriesName: this.props.series[seriesIdx],
-        // }}
+        datapoint={{
+          xValue: this.props.xAccessorBar(segment),
+          yValue: this.props.yAccessorBar(segment),
+          seriesName: this.props.series[seriesIdx],
+        }}
       />
     );
   },

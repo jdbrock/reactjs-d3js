@@ -845,7 +845,7 @@ module.exports = createReactClass({
   },
   _animateBar: function _animateBar() {
     var rect = findDOMNode(this).getBoundingClientRect();
-    this.props.onMouseOver.call(this, rect.right, rect.top, this.props.dataPoint);
+    this.props.onMouseOver.call(this, rect.right, rect.top, this.props.datapoint);
     this.setState({
       fill: shade(this.props.fill, 0.2)
     });
@@ -860,9 +860,9 @@ module.exports = createReactClass({
     var props = this.props;
 
     return React.createElement(Bar, _extends({}, props, {
-      fill: this.props.fill
-      // handleMouseOver={props.hoverAnimation ? this._animateBar : null}
-      // handleMouseLeave={props.hoverAnimation ? this._restoreBar : null}
+      fill: this.state.fill,
+      handleMouseOver: props.hoverAnimation ? this._animateBar : null,
+      handleMouseLeave: props.hoverAnimation ? this._restoreBar : null
     }));
   }
 });
@@ -894,7 +894,7 @@ module.exports = createReactClass({
     y0Accessor: PropTypes.func,
     onMouseOver: PropTypes.func,
     onMouseLeave: PropTypes.func,
-    hoverAnimation: PropTypes.any, // TODO: prop types?
+    hoverAnimation: PropTypes.bool, // TODO: prop types?
     xScale: PropTypes.any,
     yScale: PropTypes.any
   },
@@ -917,7 +917,6 @@ module.exports = createReactClass({
         colors = _props2.colors,
         colorAccessor = _props2.colorAccessor,
         grouped = _props2.grouped,
-        hoverAnimation = _props2.hoverAnimation,
         series = _props2.series,
         xScale = _props2.xScale,
         yScale = _props2.yScale;
@@ -932,18 +931,16 @@ module.exports = createReactClass({
       height: barHeight,
       width: xScale.bandwidth(),
       x: xScale(this.props.xAccessorBar(segment)),
-
       y: this.props.yAccessorBar(segment) >= 0 ? y : y - barHeight,
-      fill: this.props.colors(this.props.colorAccessor(series, seriesIdx))
-
-      // hoverAnimation={hoverAnimation}
-      , onMouseOver: this.props.onMouseOver,
-      onMouseLeave: this.props.onMouseLeave
-      // dataPoint={{
-      //   xValue: this.props.xAccessorBar(segment),
-      //   yValue: this.props.yAccessorBar(segment),
-      //   seriesName: this.props.series[seriesIdx],
-      // }}
+      fill: this.props.colors(this.props.colorAccessor(series, seriesIdx)),
+      hoverAnimation: this.props.hoverAnimation,
+      onMouseOver: this.props.onMouseOver,
+      onMouseLeave: this.props.onMouseLeave,
+      datapoint: {
+        xValue: this.props.xAccessorBar(segment),
+        yValue: this.props.yAccessorBar(segment),
+        seriesName: this.props.series[seriesIdx]
+      }
     });
   },
   render: function render() {
