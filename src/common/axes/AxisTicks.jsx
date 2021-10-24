@@ -45,8 +45,8 @@ module.exports = createReactClass({
       gridVertical: false,
       gridHorizontalStroke: '#D8D7D7',
       gridVerticalStroke: '#D8D7D7',
-      gridHorizontalStrokeWidth: 1,
-      gridVerticalStrokeWidth: 1,
+      gridHorizontalStrokeWidth: 0.6,
+      gridVerticalStrokeWidth: 0.6,
       gridHorizontalStrokeDash: '5, 5',
       gridVerticalStrokeDash: '5, 5',
     };
