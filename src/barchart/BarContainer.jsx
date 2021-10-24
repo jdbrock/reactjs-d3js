@@ -50,12 +50,26 @@ module.exports = createReactClass({
   render() {
     const props = this.props;
 
+    // animation controller
+    let handleMouseOver;
+    let handleMouseLeave;
+    if (props.hoverAnimation) {
+      handleMouseOver = this._animateArea;
+      handleMouseLeave = this._restoreArea;
+    } else {
+      handleMouseOver = handleMouseLeave = null;
+    }
+
     return (
       <Bar
         {...props}
         fill={this.state.fill}
-        handleMouseOver={props.hoverAnimation ? this._animateBar : null}
-        handleMouseLeave={props.hoverAnimation ? this._restoreBar : null}
+        // onMouseOver={handleMouseOver}
+        // onMouseLeave={handleMouseLeave}
+
+
+        onMouseOver={props.hoverAnimation ? this._animateBar : null}
+        onMouseLeave={props.hoverAnimation ? this._restoreBar : null}
       />
     );
   },
