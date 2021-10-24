@@ -181,7 +181,7 @@ var Demos = createReactClass({
       gridHorizontal: true,
       gridVertical: true,
       gridHorizontalStrokeDash: true,
-      gridVerticalStrokeDash: true
+      gridVerticalStrokeDash: ''
     })), React.createElement('div', { className: 'col-md-6' }, React.createElement('pre', { ref: 'block' }, React.createElement('code', { className: 'js' }, 'var ohlcData = [\n  {\n    name: "AAPL",\n    values: [ { x: [object Date], open: 451.69, high: 456.23, low: 435, close: 439.88 },\n              { x: [object Date], open: 437.82, high: 453.21, low: 435.86 , close: 449.83 },\n              ...\n            ]\n  }\n];')), React.createElement('pre', { ref: 'block' }, React.createElement('code', { className: 'html' }, '<CandlestickChart\n  data={ohlcData}\n  width={500}\n  height={400}\n  xAxisTickInterval={{unit: \'month\', interval: 1}}\n  yAxisOffset={-10}\n  title="Candlestick Chart"\n  domain={{y:[400, 500]}}\n/>')))), React.createElement('div', { className: 'row' }, React.createElement('hr', null)), React.createElement('div', { className: 'row' }, React.createElement('div', { className: 'col-md-6' }, React.createElement(BarChart, (_React$createElement = {
       data: barData,
       grouped: true,
@@ -263,7 +263,9 @@ var DataSeries = require('./DataSeries');
 var _require = require('../common'),
     Chart = _require.Chart,
     XAxis = _require.XAxis,
-    YAxis = _require.YAxis;
+    YAxis = _require.YAxis,
+    XGrid = _require.XGrid,
+    YGrid = _require.YGrid;
 
 var _require2 = require('../mixins'),
     CartesianChartPropsMixin = _require2.CartesianChartPropsMixin,
@@ -390,7 +392,49 @@ module.exports = createReactClass({
       width: props.width,
       height: props.height,
       title: props.title
-    }, React.createElement('g', { transform: trans, className: props.className }, dataSeries, React.createElement(XAxis, {
+    }, React.createElement('g', { transform: trans, className: props.className }, React.createElement(XGrid, {
+      xAxisClassName: 'rd3-areachart-xaxis',
+      xScale: xScale,
+      xAxisTickValues: props.xAxisTickValues,
+      xAxisTickInterval: props.xAxisTickInterval,
+      xAxisTickCount: props.xAxisTickCount,
+      xAxisLabel: props.xAxisLabel,
+      xAxisLabelOffset: props.xAxisLabelOffset,
+      tickFormatting: props.xAxisFormatter,
+      tickStroke: props.xAxisTickStroke,
+      tickTextStroke: props.xAxisTickTextStroke,
+      xOrient: props.xOrient,
+      yOrient: yOrient,
+      margins: svgMargins,
+      width: innerWidth,
+      height: innerHeight,
+      horizontalChart: props.horizontal,
+      gridVertical: props.gridVertical,
+      gridVerticalStroke: props.gridVerticalStroke,
+      gridVerticalStrokeWidth: props.gridVerticalStrokeWidth,
+      gridVerticalStrokeDash: props.gridVerticalStrokeDash
+    }), React.createElement(YGrid, {
+      yAxisClassName: 'rd3-areachart-yaxis',
+      yScale: yScale,
+      yAxisTickValues: props.yAxisTickValues,
+      yAxisTickInterval: props.yAxisTickInterval,
+      yAxisTickCount: props.yAxisTickCount,
+      yAxisLabel: props.yAxisLabel,
+      yAxisLabelOffset: props.yAxisLabelOffset,
+      tickFormatting: props.yAxisFormatter,
+      tickStroke: props.yAxisTickStroke,
+      tickTextStroke: props.yAxisTickTextStroke,
+      xOrient: props.xOrient,
+      yOrient: yOrient,
+      margins: svgMargins,
+      width: innerWidth,
+      height: props.height,
+      horizontalChart: props.horizontal,
+      gridHorizontal: props.gridHorizontal,
+      gridHorizontalStroke: props.gridHorizontalStroke,
+      gridHorizontalStrokeWidth: props.gridHorizontalStrokeWidth,
+      gridHorizontalStrokeDash: props.gridHorizontalStrokeDash
+    }), dataSeries, React.createElement(XAxis, {
       xAxisClassName: 'rd3-areachart-xaxis',
       xScale: xScale,
       xAxisTickValues: props.xAxisTickValues,
@@ -625,6 +669,8 @@ var DataSeries = require('./DataSeries');
 var _require = require('../common'),
     Chart = _require.Chart,
     XAxis = _require.XAxis,
+    XGrid = _require.XGrid,
+    YGrid = _require.YGrid,
     YAxis = _require.YAxis,
     Tooltip = _require.Tooltip;
 
@@ -771,7 +817,46 @@ module.exports = createReactClass({
       height: props.height,
       title: props.title,
       shouldUpdate: !this.state.changeState
-    }, React.createElement('g', { transform: trans, className: props.chartClassName }, React.createElement(DataSeries, {
+    }, React.createElement('g', { transform: trans, className: props.chartClassName }, React.createElement(XGrid, {
+      xAxisClassName: props.xAxisClassName,
+      xAxisTickValues: props.xAxisTickValues,
+      xAxisLabel: props.xAxisLabel,
+      xAxisLabelOffset: props.xAxisLabelOffset,
+      xScale: xScale,
+      margins: svgMargins,
+      tickFormatting: props.xAxisFormatter,
+      tickStroke: props.yAxisTickStroke,
+      tickTextStroke: props.yAxisTickTextStroke,
+      width: innerWidth,
+      height: innerHeight,
+      horizontalChart: props.horizontal,
+      xOrient: props.xOrient,
+      yOrient: yOrient,
+      gridVertical: props.gridVertical,
+      gridVerticalStroke: props.gridVerticalStroke,
+      gridVerticalStrokeWidth: props.gridVerticalStrokeWidth,
+      gridVerticalStrokeDash: props.gridVerticalStrokeDash
+    }), React.createElement(YGrid, {
+      yAxisClassName: props.yAxisClassName,
+      yAxisTickValues: props.yAxisTickValues,
+      yAxisLabel: props.yAxisLabel,
+      yAxisLabelOffset: props.yAxisLabelOffset,
+      yScale: yScale,
+      margins: svgMargins,
+      yAxisTickCount: props.yAxisTickCount,
+      tickFormatting: props.yAxisFormatter,
+      tickStroke: props.xAxisTickStroke,
+      tickTextStroke: props.xAxisTickTextStroke,
+      width: innerWidth,
+      height: innerHeight,
+      horizontalChart: props.horizontal,
+      xOrient: props.xOrient,
+      yOrient: yOrient,
+      gridHorizontal: props.gridHorizontal,
+      gridHorizontalStroke: props.gridHorizontalStroke,
+      gridHorizontalStrokeWidth: props.gridHorizontalStrokeWidth,
+      gridHorizontalStrokeDash: props.gridHorizontalStrokeDash
+    }), React.createElement(DataSeries, {
       yScale: yScale,
       xScale: xScale,
       margins: svgMargins,
@@ -1046,7 +1131,9 @@ var DataSeries = require('./DataSeries');
 var _require = require('../common'),
     Chart = _require.Chart,
     XAxis = _require.XAxis,
-    YAxis = _require.YAxis;
+    YAxis = _require.YAxis,
+    XGrid = _require.XGrid,
+    YGrid = _require.YGrid;
 
 var _require2 = require('../mixins'),
     ViewBoxMixin = _require2.ViewBoxMixin,
@@ -1148,7 +1235,52 @@ module.exports = createReactClass({
       height: props.height,
       margins: props.margins,
       title: props.title
-    }, React.createElement('g', { transform: trans, className: props.className }, dataSeries, React.createElement(XAxis, {
+    }, React.createElement('g', { transform: trans, className: props.className }, React.createElement(XGrid, {
+      xAxisClassName: props.xAxisClassName,
+      xAxisTickValues: props.xAxisTickValues,
+      xAxisTickCount: props.xAxisTickCount,
+      xAxisTickInterval: props.xAxisTickInterval,
+      xAxisOffset: props.xAxisOffset,
+      xScale: scales.xScale,
+      xAxisLabel: props.xAxisLabel,
+      xAxisLabelOffset: props.xAxisLabelOffset,
+      tickFormatting: props.xAxisFormatter,
+      tickStroke: props.xAxisTickStroke,
+      tickTextStroke: props.xAxisTickTextStroke,
+      xOrient: props.xOrient,
+      yOrient: yOrient,
+      data: props.data,
+      margins: svgMargins,
+      width: innerWidth,
+      height: innerHeight,
+      horizontalChart: props.horizontal,
+      stroke: props.axesColor,
+      gridVertical: props.gridVertical,
+      gridVerticalStroke: props.gridVerticalStroke,
+      gridVerticalStrokeDash: props.gridVerticalStrokeDash
+    }), React.createElement(YGrid, {
+      yAxisClassName: props.yAxisClassName,
+      yScale: scales.yScale,
+      yAxisTickValues: props.yAxisTickValues,
+      yAxisTickCount: props.yAxisTickCount,
+      yAxisOffset: props.yAxisOffset,
+      yAxisLabel: props.yAxisLabel,
+      yAxisLabelOffset: props.yAxisLabelOffset,
+      tickFormatting: props.yAxisFormatter,
+      tickStroke: props.yAxisTickStroke,
+      tickTextStroke: props.yAxisTickTextStroke,
+      xOrient: props.xOrient,
+      yOrient: yOrient,
+      margins: svgMargins,
+      width: innerWidth,
+      height: innerHeight,
+      horizontalChart: props.horizontal,
+      stroke: props.axesColor,
+      gridHorizontal: props.gridHorizontal,
+      gridHorizontalStroke: props.gridHorizontalStroke,
+      gridHorizontalStrokeWidth: props.gridHorizontalStrokeWidth,
+      gridHorizontalStrokeDash: props.gridVerticalStrokeDash
+    }), dataSeries, React.createElement(XAxis, {
       xAxisClassName: props.xAxisClassName,
       xScale: scales.xScale,
       xAxisTickValues: props.xAxisTickValues,
@@ -1164,11 +1296,7 @@ module.exports = createReactClass({
       margins: svgMargins,
       width: innerWidth,
       height: innerHeight,
-      horizontalChart: props.horizontal,
-      gridVertical: props.gridVertical,
-      gridVerticalStroke: props.gridVerticalStroke,
-      gridVerticalStrokeWidth: props.gridVerticalStrokeWidth,
-      gridVerticalStrokeDash: props.gridVerticalStrokeDash
+      horizontalChart: props.horizontal
     }), React.createElement(YAxis, {
       yAxisClassName: props.yAxisClassName,
       yScale: scales.yScale,
@@ -1185,11 +1313,7 @@ module.exports = createReactClass({
       margins: svgMargins,
       width: innerWidth,
       height: props.height,
-      horizontalChart: props.horizontal,
-      gridHorizontal: props.gridHorizontal,
-      gridHorizontalStroke: props.gridHorizontalStroke,
-      gridHorizontalStrokeWidth: props.gridHorizontalStrokeWidth,
-      gridHorizontalStrokeDash: props.gridHorizontalStrokeDash
+      horizontalChart: props.horizontal
     })));
   }
 });
@@ -1654,7 +1778,7 @@ module.exports = createReactClass({
         // fill={props.fill}
       }, fill: 'none',
       stroke: '#000000',
-      'stroke-width': '0.5'
+      strokeWidth: '0.5'
 
       // stroke={props.stroke}
       // strokeWidth={props.strokeWidth}
@@ -1889,7 +2013,7 @@ module.exports = createReactClass({
           shapeRendering: 'crispEdges',
           opacity: '1',
           stroke: props.tickStroke,
-          'stroke-width': '0.5'
+          strokeWidth: '0.5'
         },
         x2: x2,
         y2: y2
@@ -2052,6 +2176,90 @@ module.exports = createReactClass({
     return React.createElement('g', {
       className: props.xAxisClassName,
       transform: t
+    }, React.createElement(AxisLine, _extends({
+      scale: props.xScale,
+      stroke: props.stroke,
+      orient: props.xOrient,
+      outerTickSize: props.tickSize
+    }, props)), React.createElement(Label, {
+      horizontalChart: props.horizontalChart,
+      label: props.xAxisLabel,
+      offset: props.xAxisLabelOffset,
+      orient: props.xOrient,
+      margins: props.margins,
+      width: props.width
+    }));
+  }
+});
+
+},{"./AxisLine":"/home/robson/projetos/rd3/src/common/axes/AxisLine.jsx","./AxisTicks":"/home/robson/projetos/rd3/src/common/axes/AxisTicks.jsx","./Label":"/home/robson/projetos/rd3/src/common/axes/Label.jsx"}],"/home/robson/projetos/rd3/src/common/axes/XGrid.jsx":[function(require,module,exports){
+'use strict';
+
+var PropTypes = window.PropTypes;
+var React = window.React;
+var createReactClass = window.createReactClass;
+var d3 = window.d3;
+var AxisTicks = require('./AxisTicks');
+var AxisLine = require('./AxisLine');
+var Label = require('./Label');
+
+module.exports = createReactClass({
+
+  displayName: 'XGrid',
+
+  propTypes: {
+    fill: PropTypes.string,
+    height: PropTypes.number.isRequired,
+    width: PropTypes.number.isRequired,
+    horizontalChart: PropTypes.bool,
+    stroke: PropTypes.string,
+    strokeWidth: PropTypes.string,
+    tickStroke: PropTypes.string,
+    tickTextStroke: PropTypes.string,
+    xAxisClassName: PropTypes.string,
+    xAxisLabel: PropTypes.string,
+    xAxisTickValues: PropTypes.array,
+    xAxisOffset: PropTypes.number,
+    xScale: PropTypes.func.isRequired,
+    xOrient: PropTypes.oneOf(['top', 'bottom']),
+    yOrient: PropTypes.oneOf(['left', 'right']),
+    gridVertical: PropTypes.bool,
+    gridVerticalStroke: PropTypes.string,
+    gridVerticalStrokeWidth: PropTypes.number,
+    gridVerticalStrokeDash: PropTypes.string
+  },
+
+  getDefaultProps: function getDefaultProps() {
+    return {
+      fill: 'none',
+      stroke: 'none',
+      strokeWidth: '1',
+      tickStroke: '#000',
+      xAxisClassName: 'rd3-x-axis',
+      xAxisLabel: '',
+      xAxisLabelOffset: 10,
+      xAxisOffset: 0,
+      xOrient: 'bottom',
+      yOrient: 'left'
+    };
+  },
+  render: function render() {
+    var props = this.props;
+
+    var t = 'translate(0 ,' + (props.xAxisOffset + props.height) + ')';
+
+    var tickArguments = void 0;
+    if (typeof props.xAxisTickCount !== 'undefined') {
+      tickArguments = [props.xAxisTickCount];
+    }
+
+    if (typeof props.xAxisTickInterval !== 'undefined') {
+      // tickArguments = [d3.time[props.xAxisTickInterval.unit], props.xAxisTickInterval.interval];
+    }
+
+    return React.createElement('g', {
+      className: props.xAxisClassName,
+      transform: t
     }, React.createElement(AxisTicks, {
       tickValues: props.xAxisTickValues,
       tickFormatting: props.tickFormatting,
@@ -2069,18 +2277,6 @@ module.exports = createReactClass({
       gridVerticalStroke: props.gridVerticalStroke,
       gridVerticalStrokeWidth: props.gridVerticalStrokeWidth,
       gridVerticalStrokeDash: props.gridVerticalStrokeDash
-    }), React.createElement(AxisLine, _extends({
-      scale: props.xScale,
-      stroke: props.stroke,
-      orient: props.xOrient,
-      outerTickSize: props.tickSize
-    }, props)), React.createElement(Label, {
-      horizontalChart: props.horizontalChart,
-      label: props.xAxisLabel,
-      offset: props.xAxisLabelOffset,
-      orient: props.xOrient,
-      margins: props.margins,
-      width: props.width
     }));
   }
 });
@@ -2102,13 +2298,100 @@ var PropTypes = window.PropTypes;
 var createReactClass = window.createReactClass;
 var React = window.React;
 var d3 = window.d3;
-var AxisTicks = require('./AxisTicks');
 var AxisLine = require('./AxisLine');
 var Label = require('./Label');
 
 module.exports = createReactClass({
 
   displayName: 'YAxis',
+
+  propTypes: {
+    fill: PropTypes.string,
+    stroke: PropTypes.string,
+    strokeWidth: PropTypes.string,
+    tickStroke: PropTypes.string,
+    tickTextStroke: PropTypes.string,
+    width: PropTypes.number.isRequired,
+    height: PropTypes.number.isRequired,
+    horizontalChart: PropTypes.bool,
+    yAxisClassName: PropTypes.string,
+    yAxisLabel: PropTypes.string,
+    yAxisOffset: PropTypes.number,
+    yAxisTickValues: PropTypes.array,
+    xOrient: PropTypes.oneOf(['top', 'bottom']),
+    yOrient: PropTypes.oneOf(['left', 'right']),
+    yScale: PropTypes.func.isRequired,
+    gridVertical: PropTypes.bool,
+    gridVerticalStroke: PropTypes.string,
+    gridVerticalStrokeWidth: PropTypes.number,
+    gridVerticalStrokeDash: PropTypes.string
+  },
+
+  getDefaultProps: function getDefaultProps() {
+    return {
+      fill: 'none',
+      stroke: '#000',
+      strokeWidth: '1',
+      tickStroke: '#000',
+      yAxisClassName: 'rd3-y-axis',
+      yAxisLabel: '',
+      yAxisOffset: 0,
+      xOrient: 'bottom',
+      yOrient: 'left'
+    };
+  },
+  render: function render() {
+    var props = this.props;
+
+    var t = void 0;
+    if (props.yOrient === 'right') {
+      t = 'translate(' + (props.yAxisOffset + props.width) + ', 0)';
+    } else {
+      t = 'translate(' + props.yAxisOffset + ', 0)';
+    }
+
+    var tickArguments = void 0;
+    if (props.yAxisTickCount) {
+      tickArguments = [props.yAxisTickCount];
+    }
+
+    if (props.yAxisTickInterval) {
+      tickArguments = [d3.time[props.yAxisTickInterval.unit], props.yAxisTickInterval.interval];
+    }
+
+    return React.createElement('g', {
+      className: props.yAxisClassName,
+      transform: t
+    }, React.createElement(AxisLine, _extends({
+      orient: props.yOrient,
+      outerTickSize: props.tickSize,
+      scale: props.yScale,
+      stroke: props.stroke
+    }, props)), React.createElement(Label, {
+      height: props.height,
+      horizontalChart: props.horizontalChart,
+      label: props.yAxisLabel,
+      margins: props.margins,
+      offset: props.yAxisLabelOffset,
+      orient: props.yOrient
+    }));
+  }
+});
+
+},{"./AxisLine":"/home/robson/projetos/rd3/src/common/axes/AxisLine.jsx","./Label":"/home/robson/projetos/rd3/src/common/axes/Label.jsx"}],"/home/robson/projetos/rd3/src/common/axes/YGrid.jsx":[function(require,module,exports){
+'use strict';
+
+var PropTypes = window.PropTypes;
+var createReactClass = window.createReactClass;
+var React = window.React;
+var d3 = window.d3;
+var AxisTicks = require('./AxisTicks');
+var AxisLine = require('./AxisLine');
+var Label = require('./Label');
+
+module.exports = createReactClass({
+
+  displayName: 'YGrid',
 
   propTypes: {
     fill: PropTypes.string,
@@ -2184,18 +2467,6 @@ module.exports = createReactClass({
       gridHorizontalStroke: props.gridHorizontalStroke,
       gridHorizontalStrokeWidth: props.gridHorizontalStrokeWidth,
       gridHorizontalStrokeDash: props.gridHorizontalStrokeDash
-    }), React.createElement(AxisLine, _extends({
-      orient: props.yOrient,
-      outerTickSize: props.tickSize,
-      scale: props.yScale,
-      stroke: props.stroke
-    }, props)), React.createElement(Label, {
-      height: props.height,
-      horizontalChart: props.horizontalChart,
-      label: props.yAxisLabel,
-      margins: props.margins,
-      offset: props.yAxisLabelOffset,
-      orient: props.yOrient
     }));
   }
 });
@@ -2205,8 +2476,10 @@ module.exports = createReactClass({
 
 exports.XAxis = require('./XAxis');
 exports.YAxis = require('./YAxis');
+exports.XGrid = require('./XGrid');
+exports.YGrid = require('./YGrid');
 
-},{"./XAxis":"/home/robson/projetos/rd3/src/common/axes/XAxis.jsx","./YAxis":"/home/robson/projetos/rd3/src/common/axes/YAxis.jsx"}],"/home/robson/projetos/rd3/src/common/charts/BasicChart.jsx":[function(require,module,exports){
+},{"./XAxis":"/home/robson/projetos/rd3/src/common/axes/XAxis.jsx","./XGrid":"/home/robson/projetos/rd3/src/common/axes/XGrid.jsx","./YAxis":"/home/robson/projetos/rd3/src/common/axes/YAxis.jsx","./YGrid":"/home/robson/projetos/rd3/src/common/axes/YGrid.jsx"}],"/home/robson/projetos/rd3/src/common/charts/BasicChart.jsx":[function(require,module,exports){
 'use strict';
 
 var PropTypes = window.PropTypes;
@@ -2428,6 +2701,8 @@ exports.LegendChart = require('./LegendChart');
 
 exports.XAxis = require('./axes').XAxis;
 exports.YAxis = require('./axes').YAxis;
+exports.XGrid = require('./axes').XGrid;
+exports.YGrid = require('./axes').YGrid;
 exports.Chart = require('./charts').Chart;
 exports.LegendChart = require('./charts').LegendChart;
 exports.Legend = require('./Legend');
@@ -2612,6 +2887,8 @@ var _require = require('../common'),
     Chart = _require.Chart,
     XAxis = _require.XAxis,
     YAxis = _require.YAxis,
+    XGrid = _require.XGrid,
+    YGrid = _require.YGrid,
     Tooltip = _require.Tooltip;
 
 var DataSeries = require('./DataSeries');
@@ -2691,7 +2968,52 @@ module.exports = createReactClass({
       height: props.height,
       title: props.title,
       shouldUpdate: !this.state.changeState
-    }, React.createElement('g', { transform: trans, className: props.className }, React.createElement(DataSeries, {
+    }, React.createElement('g', { transform: trans, className: props.className }, React.createElement(XGrid, {
+      xAxisClassName: props.xAxisClassName,
+      xAxisTickValues: props.xAxisTickValues,
+      xAxisTickCount: props.xAxisTickCount,
+      xAxisTickInterval: props.xAxisTickInterval,
+      xAxisOffset: props.xAxisOffset,
+      xScale: scales.xScale,
+      xAxisLabel: props.xAxisLabel,
+      xAxisLabelOffset: props.xAxisLabelOffset,
+      tickFormatting: props.xAxisFormatter,
+      tickStroke: props.xAxisTickStroke,
+      tickTextStroke: props.xAxisTickTextStroke,
+      xOrient: props.xOrient,
+      yOrient: yOrient,
+      data: props.data,
+      margins: svgMargins,
+      width: innerWidth,
+      height: innerHeight,
+      horizontalChart: props.horizontal,
+      stroke: props.axesColor,
+      gridVertical: props.gridVertical,
+      gridVerticalStroke: props.gridVerticalStroke,
+      gridVerticalStrokeDash: props.gridVerticalStrokeDash
+    }), React.createElement(YGrid, {
+      yAxisClassName: props.yAxisClassName,
+      yScale: scales.yScale,
+      yAxisTickValues: props.yAxisTickValues,
+      yAxisTickCount: props.yAxisTickCount,
+      yAxisOffset: props.yAxisOffset,
+      yAxisLabel: props.yAxisLabel,
+      yAxisLabelOffset: props.yAxisLabelOffset,
+      tickFormatting: props.yAxisFormatter,
+      tickStroke: props.yAxisTickStroke,
+      tickTextStroke: props.yAxisTickTextStroke,
+      xOrient: props.xOrient,
+      yOrient: yOrient,
+      margins: svgMargins,
+      width: innerWidth,
+      height: innerHeight,
+      horizontalChart: props.horizontal,
+      stroke: props.axesColor,
+      gridHorizontal: props.gridHorizontal,
+      gridHorizontalStroke: props.gridHorizontalStroke,
+      gridHorizontalStrokeWidth: props.gridHorizontalStrokeWidth,
+      gridHorizontalStrokeDash: props.gridHorizontalStrokeDash
+    }), React.createElement(DataSeries, {
       xScale: scales.xScale,
       yScale: scales.yScale,
       xAccessor: props.xAccessor,
@@ -3599,6 +3921,8 @@ var _require = require('../common'),
     Chart = _require.Chart,
     XAxis = _require.XAxis,
     YAxis = _require.YAxis,
+    XGrid = _require.XGrid,
+    YGrid = _require.YGrid,
     Tooltip = _require.Tooltip;
 
 var DataSeries = require('./DataSeries');
@@ -3682,7 +4006,52 @@ module.exports = createReactClass({
     }, React.createElement('g', {
       className: props.className,
       transform: trans
-    }, React.createElement(DataSeries, {
+    }, React.createElement(XGrid, {
+      xAxisClassName: props.xAxisClassName,
+      xAxisTickValues: props.xAxisTickValues,
+      xAxisTickCount: props.xAxisTickCount,
+      xAxisTickInterval: props.xAxisTickInterval,
+      xAxisOffset: props.xAxisOffset,
+      xScale: scales.xScale,
+      xAxisLabel: props.xAxisLabel,
+      xAxisLabelOffset: props.xAxisLabelOffset,
+      tickFormatting: props.xAxisFormatter,
+      tickStroke: props.xAxisTickStroke,
+      tickTextStroke: props.xAxisTickTextStroke,
+      xOrient: props.xOrient,
+      yOrient: yOrient,
+      data: props.data,
+      margins: svgMargins,
+      width: innerWidth,
+      height: innerHeight,
+      horizontalChart: props.horizontal,
+      stroke: props.axesColor,
+      gridVertical: props.gridVertical,
+      gridVerticalStroke: props.gridVerticalStroke,
+      gridVerticalStrokeDash: props.gridVerticalStrokeDash
+    }), React.createElement(YGrid, {
+      yAxisClassName: props.yAxisClassName,
+      yScale: scales.yScale,
+      yAxisTickValues: props.yAxisTickValues,
+      yAxisTickCount: props.yAxisTickCount,
+      yAxisOffset: props.yAxisOffset,
+      yAxisLabel: props.yAxisLabel,
+      yAxisLabelOffset: props.yAxisLabelOffset,
+      tickFormatting: props.yAxisFormatter,
+      tickStroke: props.yAxisTickStroke,
+      tickTextStroke: props.yAxisTickTextStroke,
+      xOrient: props.xOrient,
+      yOrient: yOrient,
+      margins: svgMargins,
+      width: innerWidth,
+      height: innerHeight,
+      horizontalChart: props.horizontal,
+      stroke: props.axesColor,
+      gridHorizontal: props.gridHorizontal,
+      gridHorizontalStroke: props.gridHorizontalStroke,
+      gridHorizontalStrokeWidth: props.gridHorizontalStrokeWidth,
+      gridHorizontalStrokeDash: props.gridHorizontalStrokeDash
+    }), React.createElement(DataSeries, {
       circleRadius: props.circleRadius,
       colors: props.colors,
       colorAccessor: props.colorAccessor,

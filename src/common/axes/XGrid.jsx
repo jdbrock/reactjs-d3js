@@ -10,7 +10,7 @@ const Label = require('./Label');
 
 module.exports = createReactClass({
 
-  displayName: 'XAxis',
+  displayName: 'XGrid',
 
   propTypes: {
     fill: PropTypes.string,
@@ -68,21 +68,25 @@ module.exports = createReactClass({
         className={props.xAxisClassName}
         transform={t}
       >
-        <AxisLine
+        <AxisTicks
+          tickValues={props.xAxisTickValues}
+          tickFormatting={props.tickFormatting}
+          tickArguments={tickArguments}
+          tickStroke={props.tickStroke}
+          tickTextStroke={props.tickTextStroke}
+          innerTickSize={props.tickSize}
           scale={props.xScale}
-          stroke={props.stroke}
           orient={props.xOrient}
-          outerTickSize={props.tickSize}
-          {...props}
-        />
-        <Label
-          horizontalChart={props.horizontalChart}
-          label={props.xAxisLabel}
-          offset={props.xAxisLabelOffset}
-          orient={props.xOrient}
-          margins={props.margins}
+          orient2nd={props.yOrient}
+          height={props.height}
           width={props.width}
+          horizontalChart={props.horizontalChart}
+          gridVertical={props.gridVertical}
+          gridVerticalStroke={props.gridVerticalStroke}
+          gridVerticalStrokeWidth={props.gridVerticalStrokeWidth}
+          gridVerticalStrokeDash={props.gridVerticalStrokeDash}
         />
+
       </g>
     );
   },

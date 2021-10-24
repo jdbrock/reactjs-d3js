@@ -63,7 +63,7 @@ module.exports = createReactClass({
         // fill={props.fill}
         fill='none'
         stroke='#000000'
-        stroke-width='0.5'
+        strokeWidth='0.5'
 
         // stroke={props.stroke}
         // strokeWidth={props.strokeWidth}

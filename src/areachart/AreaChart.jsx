@@ -6,7 +6,7 @@ const createReactClass = require('create-react-class');
 
 const d3 = require('d3');
 const DataSeries = require('./DataSeries');
-const { Chart, XAxis, YAxis } = require('../common');
+const { Chart, XAxis, YAxis, XGrid, YGrid } = require('../common');
 const { CartesianChartPropsMixin, DefaultAccessorsMixin, ViewBoxMixin } = require('../mixins');
 
 module.exports = createReactClass({
@@ -134,6 +134,50 @@ module.exports = createReactClass({
         title={props.title}
       >
         <g transform={trans} className={props.className}>
+        <XGrid
+            xAxisClassName="rd3-areachart-xaxis"
+            xScale={xScale}
+            xAxisTickValues={props.xAxisTickValues}
+            xAxisTickInterval={props.xAxisTickInterval}
+            xAxisTickCount={props.xAxisTickCount}
+            xAxisLabel={props.xAxisLabel}
+            xAxisLabelOffset={props.xAxisLabelOffset}
+            tickFormatting={props.xAxisFormatter}
+            tickStroke={props.xAxisTickStroke}
+            tickTextStroke={props.xAxisTickTextStroke}
+            xOrient={props.xOrient}
+            yOrient={yOrient}
+            margins={svgMargins}
+            width={innerWidth}
+            height={innerHeight}
+            horizontalChart={props.horizontal}
+            gridVertical={props.gridVertical}
+            gridVerticalStroke={props.gridVerticalStroke}
+            gridVerticalStrokeWidth={props.gridVerticalStrokeWidth}
+            gridVerticalStrokeDash={props.gridVerticalStrokeDash}
+          />
+          <YGrid
+            yAxisClassName="rd3-areachart-yaxis"
+            yScale={yScale}
+            yAxisTickValues={props.yAxisTickValues}
+            yAxisTickInterval={props.yAxisTickInterval}
+            yAxisTickCount={props.yAxisTickCount}
+            yAxisLabel={props.yAxisLabel}
+            yAxisLabelOffset={props.yAxisLabelOffset}
+            tickFormatting={props.yAxisFormatter}
+            tickStroke={props.yAxisTickStroke}
+            tickTextStroke={props.yAxisTickTextStroke}
+            xOrient={props.xOrient}
+            yOrient={yOrient}
+            margins={svgMargins}
+            width={innerWidth}
+            height={props.height}
+            horizontalChart={props.horizontal}
+            gridHorizontal={props.gridHorizontal}
+            gridHorizontalStroke={props.gridHorizontalStroke}
+            gridHorizontalStrokeWidth={props.gridHorizontalStrokeWidth}
+            gridHorizontalStrokeDash={props.gridHorizontalStrokeDash}
+          />
           {dataSeries}
           <XAxis
             xAxisClassName="rd3-areachart-xaxis"
