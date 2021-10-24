@@ -2461,7 +2461,7 @@ module.exports = createReactClass({
       return props.xScale(xAccessor(d));
     }).y(function (d) {
       return props.yScale(yAccessor(d));
-    }).curve(d3.curveBasis);
+    }).curve(d3.curveMonotoneX);
 
     if (this._isDate(props.data[0].values[0], xAccessor)) {
       interpolatePath.x(function (d) {
@@ -2500,8 +2500,8 @@ module.exports = createReactClass({
       var vnode = polygon;
       // debugger;
 
-      cx = props.xScale(point.x);
-      cy = props.yScale(point.y);
+      cx = props.xScale(point.coord.x);
+      cy = props.yScale(point.coord.y);
 
       circleFill = props.colors(props.colorAccessor(vnode, point.seriesIndex));
 
@@ -2514,8 +2514,8 @@ module.exports = createReactClass({
         circleRadius: props.circleRadius,
         onMouseOver: props.onMouseOver,
         dataPoint: {
-          xValue: point.x,
-          yValue: point.y,
+          xValue: point.coord.x,
+          yValue: point.coord.y,
           seriesName: point.series.name
         }
       });
@@ -2603,7 +2603,7 @@ module.exports = createReactClass({
   getDefaultProps: function getDefaultProps() {
     return {
       colors: d3.scaleOrdinal(d3.schemeCategory10),
-      circleRadius: 0,
+      circleRadius: 3,
       className: 'rd3-linechart',
       hoverAnimation: true,
       margins: { top: 10, right: 20, bottom: 50, left: 45 },

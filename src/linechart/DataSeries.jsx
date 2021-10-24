@@ -46,7 +46,7 @@ module.exports = createReactClass({
     const interpolatePath = d3.line()
         .x((d) => props.xScale(xAccessor(d)))
         .y((d) => props.yScale(yAccessor(d)))
-        .curve(d3.curveBasis);
+        .curve(d3.curveMonotoneX);
 
 
     if (this._isDate(props.data[0].values[0], xAccessor)) {
@@ -84,8 +84,8 @@ module.exports = createReactClass({
       const vnode = polygon;
       // debugger;
 
-      cx = props.xScale(point.x);
-      cy = props.yScale(point.y);
+      cx = props.xScale(point.coord.x);
+      cy = props.yScale(point.coord.y);
 
       circleFill = props.colors(props.colorAccessor(vnode, point.seriesIndex));
 
@@ -99,8 +99,8 @@ module.exports = createReactClass({
           circleRadius={props.circleRadius}
           onMouseOver={props.onMouseOver}
           dataPoint={{
-            xValue: point.x,
-            yValue: point.y,
+            xValue: point.coord.x,
+            yValue: point.coord.y,
             seriesName: point.series.name,
           }}
         />
