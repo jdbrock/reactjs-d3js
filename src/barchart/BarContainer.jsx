@@ -34,7 +34,7 @@ module.exports = createReactClass({
 
   _animateBar() {
     const rect = findDOMNode(this).getBoundingClientRect();
-    this.props.onMouseOver.call(this, rect.right, rect.top, this.props.dataPoint);
+    this.props.onMouseOver.call(this, rect.right, rect.top, this.props.datapoint);
     this.setState({
       fill: shade(this.props.fill, 0.2),
     });
@@ -53,9 +53,9 @@ module.exports = createReactClass({
     return (
       <Bar
         {...props}
-        fill={this.props.fill}
-        // handleMouseOver={props.hoverAnimation ? this._animateBar : null}
-        // handleMouseLeave={props.hoverAnimation ? this._restoreBar : null}
+        fill={this.state.fill}
+        handleMouseOver={props.hoverAnimation ? this._animateBar : null}
+        handleMouseLeave={props.hoverAnimation ? this._restoreBar : null}
       />
     );
   },
