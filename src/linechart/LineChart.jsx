@@ -4,7 +4,7 @@ const PropTypes = require('prop-types');
 const React = require('react');
 const createReactClass = require('create-react-class');
 
-const { Chart, XAxis, YAxis, Tooltip } = require('../common');
+const { Chart, XAxis, YAxis, XGrid, YGrid, Tooltip } = require('../common');
 const DataSeries = require('./DataSeries');
 const utils = require('../utils');
 const {
@@ -88,6 +88,55 @@ module.exports = createReactClass({
           shouldUpdate={!this.state.changeState}
         >
           <g transform={trans} className={props.className}>
+            <XGrid
+              xAxisClassName={props.xAxisClassName}
+              xAxisTickValues={props.xAxisTickValues}
+              xAxisTickCount={props.xAxisTickCount}
+              xAxisTickInterval={props.xAxisTickInterval}
+              xAxisOffset={props.xAxisOffset}
+              xScale={scales.xScale}
+              xAxisLabel={props.xAxisLabel}
+              xAxisLabelOffset={props.xAxisLabelOffset}
+              tickFormatting={props.xAxisFormatter}
+              tickStroke={props.xAxisTickStroke}
+              tickTextStroke={props.xAxisTickTextStroke}
+              xOrient={props.xOrient}
+              yOrient={yOrient}
+              data={props.data}
+              margins={svgMargins}
+              width={innerWidth}
+              height={innerHeight}
+              horizontalChart={props.horizontal}
+              stroke={props.axesColor}
+              gridVertical={props.gridVertical}
+              gridVerticalStroke={props.gridVerticalStroke}
+              gridVerticalStrokeDash={props.gridVerticalStrokeDash}
+            />
+            <YGrid
+              yAxisClassName={props.yAxisClassName}
+              yScale={scales.yScale}
+              yAxisTickValues={props.yAxisTickValues}
+              yAxisTickCount={props.yAxisTickCount}
+              yAxisOffset={props.yAxisOffset}
+              yAxisLabel={props.yAxisLabel}
+              yAxisLabelOffset={props.yAxisLabelOffset}
+              tickFormatting={props.yAxisFormatter}
+              tickStroke={props.yAxisTickStroke}
+              tickTextStroke={props.yAxisTickTextStroke}
+              xOrient={props.xOrient}
+              yOrient={yOrient}
+              margins={svgMargins}
+              width={innerWidth}
+              height={innerHeight}
+              horizontalChart={props.horizontal}
+              stroke={props.axesColor}
+              gridHorizontal={props.gridHorizontal}
+              gridHorizontalStroke={props.gridHorizontalStroke}
+              gridHorizontalStrokeWidth={props.gridHorizontalStrokeWidth}
+              gridHorizontalStrokeDash={props.gridHorizontalStrokeDash}
+            />
+
+
             <DataSeries
               xScale={scales.xScale}
               yScale={scales.yScale}

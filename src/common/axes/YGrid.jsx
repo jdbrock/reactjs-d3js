@@ -4,12 +4,13 @@ const PropTypes = require('prop-types');
 const createReactClass = require('create-react-class');
 const React = require('react');
 const d3 = require('d3');
+const AxisTicks = require('./AxisTicks');
 const AxisLine = require('./AxisLine');
 const Label = require('./Label');
 
 module.exports = createReactClass({
 
-  displayName: 'YAxis',
+  displayName: 'YGrid',
 
   propTypes: {
     fill: PropTypes.string,
@@ -71,21 +72,25 @@ module.exports = createReactClass({
         className={props.yAxisClassName}
         transform={t}
       >
-        <AxisLine
+        <AxisTicks
+          innerTickSize={props.tickSize}
           orient={props.yOrient}
-          outerTickSize={props.tickSize}
+          orient2nd={props.xOrient}
+          tickArguments={tickArguments}
+          tickFormatting={props.tickFormatting}
+          tickStroke={props.tickStroke}
+          tickTextStroke={props.tickTextStroke}
+          tickValues={props.yAxisTickValues}
           scale={props.yScale}
-          stroke={props.stroke}
-          {...props}
-        />
-        <Label
           height={props.height}
+          width={props.width}
           horizontalChart={props.horizontalChart}
-          label={props.yAxisLabel}
-          margins={props.margins}
-          offset={props.yAxisLabelOffset}
-          orient={props.yOrient}
+          gridHorizontal={props.gridHorizontal}
+          gridHorizontalStroke={props.gridHorizontalStroke}
+          gridHorizontalStrokeWidth={props.gridHorizontalStrokeWidth}
+          gridHorizontalStrokeDash={props.gridHorizontalStrokeDash}
         />
+
       </g>
     );
   },

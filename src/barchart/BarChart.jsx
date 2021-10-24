@@ -6,7 +6,7 @@ const createReactClass = require('create-react-class');
 
 const d3 = require('d3');
 const DataSeries = require('./DataSeries');
-const { Chart, XAxis, YAxis, Tooltip } = require('../common');
+const { Chart, XAxis, XGrid, YGrid, YAxis, Tooltip } = require('../common');
 const {
   CartesianChartPropsMixin,
   DefaultAccessorsMixin,
@@ -134,7 +134,48 @@ module.exports = createReactClass({
           shouldUpdate={!this.state.changeState}
         >
           <g transform={trans} className={props.chartClassName}>
-          <DataSeries
+            <XGrid
+              xAxisClassName={props.xAxisClassName}
+              xAxisTickValues={props.xAxisTickValues}
+              xAxisLabel={props.xAxisLabel}
+              xAxisLabelOffset={props.xAxisLabelOffset}
+              xScale={xScale}
+              margins={svgMargins}
+              tickFormatting={props.xAxisFormatter}
+              tickStroke={props.yAxisTickStroke}
+              tickTextStroke={props.yAxisTickTextStroke}
+              width={innerWidth}
+              height={innerHeight}
+              horizontalChart={props.horizontal}
+              xOrient={props.xOrient}
+              yOrient={yOrient}
+              gridVertical={props.gridVertical}
+              gridVerticalStroke={props.gridVerticalStroke}
+              gridVerticalStrokeWidth={props.gridVerticalStrokeWidth}
+              gridVerticalStrokeDash={props.gridVerticalStrokeDash}
+            />
+            <YGrid
+              yAxisClassName={props.yAxisClassName}
+              yAxisTickValues={props.yAxisTickValues}
+              yAxisLabel={props.yAxisLabel}
+              yAxisLabelOffset={props.yAxisLabelOffset}
+              yScale={yScale}
+              margins={svgMargins}
+              yAxisTickCount={props.yAxisTickCount}
+              tickFormatting={props.yAxisFormatter}
+              tickStroke={props.xAxisTickStroke}
+              tickTextStroke={props.xAxisTickTextStroke}
+              width={innerWidth}
+              height={innerHeight}
+              horizontalChart={props.horizontal}
+              xOrient={props.xOrient}
+              yOrient={yOrient}
+              gridHorizontal={props.gridHorizontal}
+              gridHorizontalStroke={props.gridHorizontalStroke}
+              gridHorizontalStrokeWidth={props.gridHorizontalStrokeWidth}
+              gridHorizontalStrokeDash={props.gridHorizontalStrokeDash}
+            />
+            <DataSeries
               yScale={yScale}
               xScale={xScale}
               margins={svgMargins}
@@ -194,6 +235,8 @@ module.exports = createReactClass({
               gridVerticalStrokeWidth={props.gridVerticalStrokeWidth}
               gridVerticalStrokeDash={props.gridVerticalStrokeDash}
             />
+
+
 
           </g>
         </Chart>

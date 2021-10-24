@@ -363,7 +363,7 @@ const Demos = createReactClass({
               gridHorizontal
               gridVertical
               gridHorizontalStrokeDash
-              gridVerticalStrokeDash
+              gridVerticalStrokeDash=''
             />
           </div>
           <div className="col-md-6">

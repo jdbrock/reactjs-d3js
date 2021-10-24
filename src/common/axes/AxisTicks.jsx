@@ -214,7 +214,7 @@ module.exports = createReactClass({
                 shapeRendering: 'crispEdges',
                 opacity: '1',
                 stroke: props.tickStroke,
-                'stroke-width': '0.5',
+                strokeWidth: '0.5',
               }}
               x2={x2}
               y2={y2}

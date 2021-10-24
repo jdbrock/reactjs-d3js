@@ -7,7 +7,7 @@ const createReactClass = require('create-react-class');
 const d3 = require('d3');
 const utils = require('../utils');
 const DataSeries = require('./DataSeries');
-const { Chart, XAxis, YAxis } = require('../common');
+const { Chart, XAxis, YAxis, XGrid, YGrid } = require('../common');
 const { ViewBoxMixin, CartesianChartPropsMixin } = require('../mixins');
 
 module.exports = createReactClass({
@@ -98,6 +98,53 @@ module.exports = createReactClass({
         title={props.title}
       >
         <g transform={trans} className={props.className}>
+            <XGrid
+              xAxisClassName={props.xAxisClassName}
+              xAxisTickValues={props.xAxisTickValues}
+              xAxisTickCount={props.xAxisTickCount}
+              xAxisTickInterval={props.xAxisTickInterval}
+              xAxisOffset={props.xAxisOffset}
+              xScale={scales.xScale}
+              xAxisLabel={props.xAxisLabel}
+              xAxisLabelOffset={props.xAxisLabelOffset}
+              tickFormatting={props.xAxisFormatter}
+              tickStroke={props.xAxisTickStroke}
+              tickTextStroke={props.xAxisTickTextStroke}
+              xOrient={props.xOrient}
+              yOrient={yOrient}
+              data={props.data}
+              margins={svgMargins}
+              width={innerWidth}
+              height={innerHeight}
+              horizontalChart={props.horizontal}
+              stroke={props.axesColor}
+              gridVertical={props.gridVertical}
+              gridVerticalStroke={props.gridVerticalStroke}
+              gridVerticalStrokeDash={props.gridVerticalStrokeDash}
+            />
+            <YGrid
+              yAxisClassName={props.yAxisClassName}
+              yScale={scales.yScale}
+              yAxisTickValues={props.yAxisTickValues}
+              yAxisTickCount={props.yAxisTickCount}
+              yAxisOffset={props.yAxisOffset}
+              yAxisLabel={props.yAxisLabel}
+              yAxisLabelOffset={props.yAxisLabelOffset}
+              tickFormatting={props.yAxisFormatter}
+              tickStroke={props.yAxisTickStroke}
+              tickTextStroke={props.yAxisTickTextStroke}
+              xOrient={props.xOrient}
+              yOrient={yOrient}
+              margins={svgMargins}
+              width={innerWidth}
+              height={innerHeight}
+              horizontalChart={props.horizontal}
+              stroke={props.axesColor}
+              gridHorizontal={props.gridHorizontal}
+              gridHorizontalStroke={props.gridHorizontalStroke}
+              gridHorizontalStrokeWidth={props.gridHorizontalStrokeWidth}
+              gridHorizontalStrokeDash={props.gridVerticalStrokeDash}
+            />
           {dataSeries}
           <XAxis
             xAxisClassName={props.xAxisClassName}
@@ -116,10 +163,6 @@ module.exports = createReactClass({
             width={innerWidth}
             height={innerHeight}
             horizontalChart={props.horizontal}
-            gridVertical={props.gridVertical}
-            gridVerticalStroke={props.gridVerticalStroke}
-            gridVerticalStrokeWidth={props.gridVerticalStrokeWidth}
-            gridVerticalStrokeDash={props.gridVerticalStrokeDash}
           />
           <YAxis
             yAxisClassName={props.yAxisClassName}
@@ -138,10 +181,6 @@ module.exports = createReactClass({
             width={innerWidth}
             height={props.height}
             horizontalChart={props.horizontal}
-            gridHorizontal={props.gridHorizontal}
-            gridHorizontalStroke={props.gridHorizontalStroke}
-            gridHorizontalStrokeWidth={props.gridHorizontalStrokeWidth}
-            gridHorizontalStrokeDash={props.gridHorizontalStrokeDash}
           />
         </g>
       </Chart>
