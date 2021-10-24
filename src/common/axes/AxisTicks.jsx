@@ -45,8 +45,8 @@ module.exports = createReactClass({
       gridVertical: false,
       gridHorizontalStroke: '#D8D7D7',
       gridVerticalStroke: '#D8D7D7',
-      gridHorizontalStrokeWidth: 0.6,
-      gridVerticalStrokeWidth: 0.6,
+      gridHorizontalStrokeWidth: 0.4,
+      gridVerticalStrokeWidth: 0.4,
       gridHorizontalStrokeDash: '5, 5',
       gridVerticalStrokeDash: '5, 5',
     };
@@ -214,6 +214,7 @@ module.exports = createReactClass({
                 shapeRendering: 'crispEdges',
                 opacity: '1',
                 stroke: props.tickStroke,
+                'stroke-width': '0.5',
               }}
               x2={x2}
               y2={y2}

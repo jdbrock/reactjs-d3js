@@ -69,6 +69,8 @@ var Demos = createReactClass({
     });
   },
   render: function render() {
+    var _React$createElement;
+
     var lineData = [{
       name: 'series1',
       values: [{ x: 0, y: 20 }, { x: 1, y: 30 }, { x: 2, y: 10 }, { x: 3, y: 5 }, { x: 4, y: 8 }, { x: 5, y: 15 }, { x: 6, y: 10 }],
@@ -128,8 +130,14 @@ var Demos = createReactClass({
       gridHorizontal: true
     })), React.createElement('div', { className: 'col-md-6' }, React.createElement('pre', { ref: 'block' }, React.createElement('code', { className: 'js' }, 'var lineData = [\n  {\n    name: "series1",\n    values: [ { x: 0, y: 20 }, ..., { x: 24, y: 10 } ],\n    strokeWidth: 3,\n    strokeDashArray: "5,5",\n  },\n  ....\n  {\n    name: "series2",\n    values: [ { x: 70, y: 82 }, ..., { x: 76, y: 82 } ]\n  }\n];')), React.createElement('pre', { ref: 'block' }, React.createElement('code', { className: 'html' }, '<LineChart\n  legend={true}\n  data={lineData}\n  width=\'100%\'\n  height={400}\n  viewBoxObject={{\n    x: 0,\n    y: 0,\n    width: 500,\n    height: 400\n  }}\n  title="Line Chart"\n  yAxisLabel="Altitude"\n  xAxisLabel="Elapsed Time (sec)"\n  domain={{x: [,10], y: [-10,]}}\n  gridHorizontal={true}\n/>')))), React.createElement('div', { className: 'row' }, React.createElement('hr', null)), React.createElement('div', { className: 'row' }, React.createElement('div', { className: 'col-md-6' }, React.createElement(ScatterChart, {
       data: scatterData,
-      width: 500,
+      width: '100%',
       height: 400,
+      viewBoxObject: {
+        x: 0,
+        y: 0,
+        width: 500,
+        height: 400
+      },
       title: 'Scatter Chart',
       domain: { x: [,], y: [,] }
     })), React.createElement('div', { className: 'col-md-6' }, React.createElement('pre', { ref: 'block' }, '__proto__: Object', React.createElement('code', { className: 'js' }, 'var scatterData = [\n  {\n    name: "series1",\n    values: [ { x: 0, y: 20 }, ..__proto__: Object\n., { x: 24, y: 10 } ]\n  },\n  ....\n  {\n    name: "series3",\n    values: [ { x: 70, y: 82 }, ..., { x: 76, y: 82 } ]\n  }\n];')), React.createElement('pre', { ref: 'block' }, React.createElement('code', { className: 'html' }, '<ScatterChart\n  data={scatterData}\n  width={500}\n  height={400}\n  domain={{y: [-15,], y: [-15,]}}\n  title="Scatter Chart"\n/>')))), React.createElement('div', { className: 'row' }, React.createElement('hr', null)), React.createElement('div', { className: 'row' }, React.createElement('div', { className: 'col-md-6' }, React.createElement(AreaChart, {
@@ -153,22 +161,48 @@ var Demos = createReactClass({
         return d[1];
       }
       // domain={{ y: [, 60] }}
+      , gridHorizontal: true,
+      gridVertical: true,
+      gridHorizontalStrokeDash: '',
+      gridVerticalStrokeDash: ''
     })), React.createElement('div', { className: 'col-md-6' }, React.createElement('pre', { ref: 'block' }, React.createElement('code', { className: 'js' }, 'var areaData = [\n  {\n    name: "series1",\n    values: [ { x: [object Date], y: 20.5 }, ..., { x: [object Date], y: 4.2 } ]\n  },\n  ...\n  {\n    name: "series2",\n    values: [ { x: [object Date], y: 3.2 }, ..., { x: [object Date], y: 11.2 } ]\n  }\n];')), React.createElement('pre', { ref: 'block' }, React.createElement('code', { className: 'html' }, '<AreaChart\n  data={areaData}\n  width="100%"\n  height={300}\n  viewBoxObject={{\n    x: 0,\n    y: 0,\n    height: 400,\n    width: 500\n  }}\n  domain={{y: [,60]}}\n  xAxisTickInterval={{unit: \'year\', interval: 2}}\n  title="Area Chart"\n/>')))), React.createElement('div', { className: 'row' }, React.createElement('hr', null)), React.createElement('div', { className: 'row' }, React.createElement('div', { className: 'col-md-6' }, React.createElement(CandlestickChart, {
       data: this.state.ohlcData,
-      width: 500,
+      width: '100%',
       height: 400,
+      viewBoxObject: {
+        x: 0,
+        y: 0,
+        width: 500,
+        height: 400
+      },
       yAxisOffset: -10,
       title: 'Candlestick Chart',
-      domain: { y: [400, 500] }
-    })), React.createElement('div', { className: 'col-md-6' }, React.createElement('pre', { ref: 'block' }, React.createElement('code', { className: 'js' }, 'var ohlcData = [\n  {\n    name: "AAPL",\n    values: [ { x: [object Date], open: 451.69, high: 456.23, low: 435, close: 439.88 },\n              { x: [object Date], open: 437.82, high: 453.21, low: 435.86 , close: 449.83 },\n              ...\n            ]\n  }\n];')), React.createElement('pre', { ref: 'block' }, React.createElement('code', { className: 'html' }, '<CandlestickChart\n  data={ohlcData}\n  width={500}\n  height={400}\n  xAxisTickInterval={{unit: \'month\', interval: 1}}\n  yAxisOffset={-10}\n  title="Candlestick Chart"\n  domain={{y:[400, 500]}}\n/>')))), React.createElement('div', { className: 'row' }, React.createElement('hr', null)), React.createElement('div', { className: 'row' }, React.createElement('div', { className: 'col-md-6' }, React.createElement(BarChart, {
+
+      gridHorizontal: true,
+      gridVertical: true,
+      gridHorizontalStrokeDash: true,
+      gridVerticalStrokeDash: true
+    })), React.createElement('div', { className: 'col-md-6' }, React.createElement('pre', { ref: 'block' }, React.createElement('code', { className: 'js' }, 'var ohlcData = [\n  {\n    name: "AAPL",\n    values: [ { x: [object Date], open: 451.69, high: 456.23, low: 435, close: 439.88 },\n              { x: [object Date], open: 437.82, high: 453.21, low: 435.86 , close: 449.83 },\n              ...\n            ]\n  }\n];')), React.createElement('pre', { ref: 'block' }, React.createElement('code', { className: 'html' }, '<CandlestickChart\n  data={ohlcData}\n  width={500}\n  height={400}\n  xAxisTickInterval={{unit: \'month\', interval: 1}}\n  yAxisOffset={-10}\n  title="Candlestick Chart"\n  domain={{y:[400, 500]}}\n/>')))), React.createElement('div', { className: 'row' }, React.createElement('hr', null)), React.createElement('div', { className: 'row' }, React.createElement('div', { className: 'col-md-6' }, React.createElement(BarChart, (_React$createElement = {
       data: barData,
       grouped: true,
-      width: 500,
-      height: 300,
-      title: 'Bar Chart',
-      yAxisLabel: 'Label',
-      xAxisLabel: 'Value'
-    })), React.createElement('div', { className: 'col-md-6' }, React.createElement('pre', { ref: 'block' }, React.createElement('code', { className: 'js' }, 'var barData = [\n  {\n    "name": "Series A",\n    "values": [\n      { "x": 1, "y":  91},\n      ...\n  },\n  {\n    "name": "Series B",\n     "values": [ ... ]\n  }\n  ...\n];')), React.createElement('pre', { ref: 'block' }, React.createElement('code', { className: 'html' }, '<BarChart\n  data={barData}\n  width={500}\n  height={200}\n  fill={\'#3182bd\'}\n  title=\'Bar Chart\'\n  yAxisLabel=\'Label\'\n  xAxisLabel=\'Value\'\n/>'))), React.createElement('div', { className: 'row' }, React.createElement('h3', { className: 'page-header' }, 'reactjs-d3js: Single series charts'))), React.createElement('div', { className: 'row' }, React.createElement('div', { className: 'col-md-6' }, React.createElement(PieChart, { data: pieData, width: 450, height: 400, radius: 110, innerRadius: 20, sectorBorderColor: 'white', title: 'Pie Chart' })), React.createElement('div', { className: 'col-md-6' }, React.createElement('pre', { ref: 'block' }, React.createElement('code', { className: 'js' }, 'var pieData = [\n  {label: \'Margarita\', value: 20.0},\n  {label: \'John\', value: 55.0},\n  {label: \'Tim\', value: 25.0 }\n];')), React.createElement('pre', { ref: 'block' }, React.createElement('code', { className: 'html' }, '<PieChart\n  data={pieData}\n  width={400}\n  height={400}\n  radius={100}\n  innerRadius={20}\n  sectorBorderColor="white"\n  title="Pie Chart"\n/>')))), React.createElement('div', { className: 'row' }, React.createElement('hr', null)), React.createElement('div', { className: 'row' }, React.createElement('div', { className: 'col-md-6' }, React.createElement(Treemap, {
+      width: '100%',
+      height: 400,
+      viewBoxObject: {
+        x: 0,
+        y: 0,
+        width: 500,
+        height: 400
+      },
+      title: 'Scatter Chart',
+      domain: { x: [,], y: [,] }
+    }, _defineProperty(_React$createElement, 'title', 'Bar Chart'), _defineProperty(_React$createElement, 'yAxisLabel', 'Label'), _defineProperty(_React$createElement, 'xAxisLabel', 'Value'), _defineProperty(_React$createElement, 'gridHorizontal', true), _defineProperty(_React$createElement, 'gridVertical', true), _React$createElement))), React.createElement('div', { className: 'col-md-6' }, React.createElement('pre', { ref: 'block' }, React.createElement('code', { className: 'js' }, 'var barData = [\n  {\n    "name": "Series A",\n    "values": [\n      { "x": 1, "y":  91},\n      ...\n  },\n  {\n    "name": "Series B",\n     "values": [ ... ]\n  }\n  ...\n];')), React.createElement('pre', { ref: 'block' }, React.createElement('code', { className: 'html' }, '<BarChart\n  data={barData}\n  width={500}\n  height={200}\n  fill={\'#3182bd\'}\n  title=\'Bar Chart\'\n  yAxisLabel=\'Label\'\n  xAxisLabel=\'Value\'\n/>'))), React.createElement('div', { className: 'row' }, React.createElement('h3', { className: 'page-header' }, 'reactjs-d3js: Single series charts'))), React.createElement('div', { className: 'row' }, React.createElement('div', { className: 'col-md-6' }, React.createElement(PieChart, {
+      data: pieData,
+      width: 450,
+      height: 400,
+      radius: 110,
+      innerRadius: 20,
+      sectorBorderColor: 'white',
+      title: 'Pie Chart' })), React.createElement('div', { className: 'col-md-6' }, React.createElement('pre', { ref: 'block' }, React.createElement('code', { className: 'js' }, 'var pieData = [\n  {label: \'Margarita\', value: 20.0},\n  {label: \'John\', value: 55.0},\n  {label: \'Tim\', value: 25.0 }\n];')), React.createElement('pre', { ref: 'block' }, React.createElement('code', { className: 'html' }, '<PieChart\n  data={pieData}\n  width={400}\n  height={400}\n  radius={100}\n  innerRadius={20}\n  sectorBorderColor="white"\n  title="Pie Chart"\n/>')))), React.createElement('div', { className: 'row' }, React.createElement('hr', null)), React.createElement('div', { className: 'row' }, React.createElement('div', { className: 'col-md-6' }, React.createElement(Treemap, {
       width: 450,
       height: 250,
       title: 'Treemap',
@@ -356,7 +390,7 @@ module.exports = createReactClass({
       width: props.width,
       height: props.height,
       title: props.title
-    }, React.createElement('g', { transform: trans, className: props.className }, React.createElement(XAxis, {
+    }, React.createElement('g', { transform: trans, className: props.className }, dataSeries, React.createElement(XAxis, {
       xAxisClassName: 'rd3-areachart-xaxis',
       xScale: xScale,
       xAxisTickValues: props.xAxisTickValues,
@@ -398,7 +432,7 @@ module.exports = createReactClass({
       gridHorizontalStroke: props.gridHorizontalStroke,
       gridHorizontalStrokeWidth: props.gridHorizontalStrokeWidth,
       gridHorizontalStrokeDash: props.gridHorizontalStrokeDash
-    }), dataSeries));
+    })));
   }
 });
 
@@ -737,7 +771,25 @@ module.exports = createReactClass({
       height: props.height,
       title: props.title,
       shouldUpdate: !this.state.changeState
-    }, React.createElement('g', { transform: trans, className: props.chartClassName }, React.createElement(YAxis, {
+    }, React.createElement('g', { transform: trans, className: props.chartClassName }, React.createElement(DataSeries, {
+      yScale: yScale,
+      xScale: xScale,
+      margins: svgMargins,
+      _data: _data,
+      series: series,
+      width: innerWidth,
+      height: innerHeight,
+      grouped: props.grouped,
+      colors: props.colors,
+      colorAccessor: props.colorAccessor,
+      hoverAnimation: props.hoverAnimation,
+      valuesAccessor: props.valuesAccessor,
+      xAccessorBar: props.xAccessorBar,
+      yAccessorBar: props.yAccessorBar,
+      y0Accessor: props.y0Accessor,
+      onMouseOver: this.onMouseOver,
+      onMouseLeave: this.onMouseLeave
+    }), React.createElement(YAxis, {
       yAxisClassName: props.yAxisClassName,
       yAxisTickValues: props.yAxisTickValues,
       yAxisLabel: props.yAxisLabel,
@@ -776,24 +828,6 @@ module.exports = createReactClass({
       gridVerticalStroke: props.gridVerticalStroke,
       gridVerticalStrokeWidth: props.gridVerticalStrokeWidth,
       gridVerticalStrokeDash: props.gridVerticalStrokeDash
-    }), React.createElement(DataSeries, {
-      yScale: yScale,
-      xScale: xScale,
-      margins: svgMargins,
-      _data: _data,
-      series: series,
-      width: innerWidth,
-      height: innerHeight,
-      grouped: props.grouped,
-      colors: props.colors,
-      colorAccessor: props.colorAccessor,
-      hoverAnimation: props.hoverAnimation,
-      valuesAccessor: props.valuesAccessor,
-      xAccessorBar: props.xAccessorBar,
-      yAccessorBar: props.yAccessorBar,
-      y0Accessor: props.y0Accessor,
-      onMouseOver: this.onMouseOver,
-      onMouseLeave: this.onMouseLeave
     }))), props.showTooltip ? React.createElement(Tooltip, this.state.tooltip) : null);
   }
 });
@@ -1114,7 +1148,7 @@ module.exports = createReactClass({
       height: props.height,
       margins: props.margins,
       title: props.title
-    }, React.createElement('g', { transform: trans, className: props.className }, React.createElement(XAxis, {
+    }, React.createElement('g', { transform: trans, className: props.className }, dataSeries, React.createElement(XAxis, {
       xAxisClassName: props.xAxisClassName,
       xScale: scales.xScale,
       xAxisTickValues: props.xAxisTickValues,
@@ -1156,7 +1190,7 @@ module.exports = createReactClass({
       gridHorizontalStroke: props.gridHorizontalStroke,
       gridHorizontalStrokeWidth: props.gridHorizontalStrokeWidth,
       gridHorizontalStrokeDash: props.gridHorizontalStrokeDash
-    }), dataSeries));
+    })));
   }
 });
 
@@ -1616,10 +1650,11 @@ module.exports = createReactClass({
     return React.createElement('path', {
       className: 'domain',
       d: d,
-      style: { shapeRendering: 'crispEdges' },
-      fill: props.fill,
+      style: { shapeRendering: 'crispEdges'
+        // fill={props.fill}
+      }, fill: 'none',
       stroke: '#000000',
-      strokeWidth: '1'
+      'stroke-width': '0.5'
 
       // stroke={props.stroke}
       // strokeWidth={props.strokeWidth}
@@ -1684,8 +1719,8 @@ module.exports = createReactClass({
       gridVertical: false,
       gridHorizontalStroke: '#D8D7D7',
       gridVerticalStroke: '#D8D7D7',
-      gridHorizontalStrokeWidth: 1,
-      gridVerticalStrokeWidth: 1,
+      gridHorizontalStrokeWidth: 0.4,
+      gridVerticalStrokeWidth: 0.4,
       gridHorizontalStrokeDash: '5, 5',
       gridVerticalStrokeDash: '5, 5'
     };
@@ -1853,7 +1888,8 @@ module.exports = createReactClass({
         style: {
           shapeRendering: 'crispEdges',
           opacity: '1',
-          stroke: props.tickStroke
+          stroke: props.tickStroke,
+          'stroke-width': '0.5'
         },
         x2: x2,
         y2: y2
@@ -2655,9 +2691,23 @@ module.exports = createReactClass({
       height: props.height,
       title: props.title,
       shouldUpdate: !this.state.changeState
-    }, React.createElement('g', { transform: trans, className: props.className }, React.createElement(XAxis, {
+    }, React.createElement('g', { transform: trans, className: props.className }, React.createElement(DataSeries, {
+      xScale: scales.xScale,
+      yScale: scales.yScale,
+      xAccessor: props.xAccessor,
+      yAccessor: props.yAccessor,
+      hoverAnimation: props.hoverAnimation,
+      circleRadius: props.circleRadius,
+      data: props.data,
+      value: allValues,
+      interpolationType: props.interpolationType,
+      colors: props.colors,
+      colorAccessor: props.colorAccessor,
+      width: innerWidth,
+      height: innerHeight,
+      onMouseOver: this.onMouseOver
+    }), React.createElement(XAxis, {
       xAxisClassName: props.xAxisClassName,
-      strokeWidth: props.xAxisStrokeWidth,
       xAxisTickValues: props.xAxisTickValues,
       xAxisTickCount: props.xAxisTickCount,
       xAxisTickInterval: props.xAxisTickInterval,
@@ -2678,11 +2728,9 @@ module.exports = createReactClass({
       stroke: props.axesColor,
       gridVertical: props.gridVertical,
       gridVerticalStroke: props.gridVerticalStroke,
-      gridVerticalStrokeWidth: props.gridVerticalStrokeWidth,
       gridVerticalStrokeDash: props.gridVerticalStrokeDash
     }), React.createElement(YAxis, {
       yAxisClassName: props.yAxisClassName,
-      strokeWidth: props.yAxisStrokeWidth,
       yScale: scales.yScale,
       yAxisTickValues: props.yAxisTickValues,
       yAxisTickCount: props.yAxisTickCount,
@@ -2703,21 +2751,6 @@ module.exports = createReactClass({
       gridHorizontalStroke: props.gridHorizontalStroke,
       gridHorizontalStrokeWidth: props.gridHorizontalStrokeWidth,
       gridHorizontalStrokeDash: props.gridHorizontalStrokeDash
-    }), React.createElement(DataSeries, {
-      xScale: scales.xScale,
-      yScale: scales.yScale,
-      xAccessor: props.xAccessor,
-      yAccessor: props.yAccessor,
-      hoverAnimation: props.hoverAnimation,
-      circleRadius: props.circleRadius,
-      data: props.data,
-      value: allValues,
-      interpolationType: props.interpolationType,
-      colors: props.colors,
-      colorAccessor: props.colorAccessor,
-      width: innerWidth,
-      height: innerHeight,
-      onMouseOver: this.onMouseOver
     }))), props.showTooltip ? React.createElement(Tooltip, this.state.tooltip) : null);
   }
 });
@@ -3587,9 +3620,7 @@ module.exports = createReactClass({
     hoverAnimation: PropTypes.bool,
     margins: PropTypes.object,
     xAxisClassName: PropTypes.string,
-    xAxisStrokeWidth: PropTypes.number,
-    yAxisClassName: PropTypes.string,
-    yAxisStrokeWidth: PropTypes.number
+    yAxisClassName: PropTypes.string
   },
 
   mixins: [CartesianChartPropsMixin, DefaultAccessorsMixin, ViewBoxMixin, TooltipMixin],
@@ -3602,9 +3633,7 @@ module.exports = createReactClass({
       hoverAnimation: true,
       margins: { top: 10, right: 20, bottom: 50, left: 45 },
       xAxisClassName: 'rd3-scatterchart-xaxis',
-      xAxisStrokeWidth: 1,
-      yAxisClassName: 'rd3-scatterchart-yaxis',
-      yAxisStrokeWidth: 1
+      yAxisClassName: 'rd3-scatterchart-yaxis'
     };
   },
 
@@ -3653,55 +3682,7 @@ module.exports = createReactClass({
     }, React.createElement('g', {
       className: props.className,
       transform: trans
-    }, React.createElement(XAxis, {
-      data: data,
-      height: innerHeight,
-      horizontalChart: props.horizontal,
-      margins: svgMargins,
-      stroke: props.axesColor,
-      strokeWidth: props.xAxisStrokeWidth.toString(),
-      tickFormatting: props.xAxisFormatter,
-      tickStroke: props.xAxisTickStroke,
-      tickTextStroke: props.xAxisTickTextStroke,
-      width: innerWidth,
-      xAxisClassName: props.xAxisClassName,
-      xAxisLabel: props.xAxisLabel,
-      xAxisLabelOffset: props.xAxisLabelOffset,
-      xAxisOffset: props.xAxisOffset,
-      xAxisTickInterval: props.xAxisTickInterval,
-      xAxisTickValues: props.xAxisTickValues,
-      xOrient: props.xOrient,
-      yOrient: yOrient,
-      xScale: xScale,
-      gridVertical: props.gridVertical,
-      gridVerticalStroke: props.gridVerticalStroke,
-      gridVerticalStrokeWidth: props.gridVerticalStrokeWidth,
-      gridVerticalStrokeDash: props.gridVerticalStrokeDash
-    }), React.createElement(YAxis, {
-      data: data,
-      width: innerWidth,
-      height: innerHeight,
-      horizontalChart: props.horizontal,
-      margins: svgMargins,
-      stroke: props.axesColor,
-      strokeWidth: props.yAxisStrokeWidth.toString(),
-      tickFormatting: props.yAxisFormatter,
-      tickStroke: props.yAxisTickStroke,
-      tickTextStroke: props.yAxisTickTextStroke,
-      yAxisClassName: props.yAxisClassName,
-      yAxisLabel: props.yAxisLabel,
-      yAxisLabelOffset: props.yAxisLabelOffset,
-      yAxisOffset: props.yAxisOffset,
-      yAxisTickValues: props.yAxisTickValues,
-      yAxisTickCount: props.yAxisTickCount,
-      yScale: yScale,
-      xOrient: props.xOrient,
-      yOrient: yOrient,
-      gridHorizontal: props.gridHorizontal,
-      gridHorizontalStroke: props.gridHorizontalStroke,
-      gridHorizontalStrokeWidth: props.gridHorizontalStrokeWidth,
-      gridHorizontalStrokeDash: props.gridHorizontalStrokeDash
-    }), React.createElement(DataSeries, {
+    }, React.createElement(DataSeries, {
       circleRadius: props.circleRadius,
       colors: props.colors,
       colorAccessor: props.colorAccessor,
@@ -3718,6 +3699,50 @@ module.exports = createReactClass({
       },
       yScale: yScale,
       onMouseOver: this.onMouseOver
+    }), React.createElement(XAxis, {
+      data: data,
+      height: innerHeight,
+      horizontalChart: props.horizontal,
+      margins: svgMargins,
+      stroke: props.axesColor,
+      tickFormatting: props.xAxisFormatter,
+      tickStroke: props.xAxisTickStroke,
+      tickTextStroke: props.xAxisTickTextStroke,
+      width: innerWidth,
+      xAxisClassName: props.xAxisClassName,
+      xAxisLabel: props.xAxisLabel,
+      xAxisLabelOffset: props.xAxisLabelOffset,
+      xAxisOffset: props.xAxisOffset,
+      xAxisTickInterval: props.xAxisTickInterval,
+      xAxisTickValues: props.xAxisTickValues,
+      xOrient: props.xOrient,
+      yOrient: yOrient,
+      xScale: xScale,
+      gridVertical: props.gridVertical,
+      gridVerticalStroke: props.gridVerticalStroke,
+      gridVerticalStrokeDash: props.gridVerticalStrokeDash
+    }), React.createElement(YAxis, {
+      data: data,
+      width: innerWidth,
+      height: innerHeight,
+      horizontalChart: props.horizontal,
+      margins: svgMargins,
+      stroke: props.axesColor,
+      tickFormatting: props.yAxisFormatter,
+      tickStroke: props.yAxisTickStroke,
+      tickTextStroke: props.yAxisTickTextStroke,
+      yAxisClassName: props.yAxisClassName,
+      yAxisLabel: props.yAxisLabel,
+      yAxisLabelOffset: props.yAxisLabelOffset,
+      yAxisOffset: props.yAxisOffset,
+      yAxisTickValues: props.yAxisTickValues,
+      yAxisTickCount: props.yAxisTickCount,
+      yScale: yScale,
+      xOrient: props.xOrient,
+      yOrient: yOrient,
+      gridHorizontal: props.gridHorizontal,
+      gridHorizontalStroke: props.gridHorizontalStroke,
+      gridHorizontalStrokeDash: props.gridHorizontalStrokeDash
     }))), props.showTooltip ? React.createElement(Tooltip, this.state.tooltip) : null);
   }
 });

@@ -60,9 +60,10 @@ module.exports = createReactClass({
         className="domain"
         d={d}
         style={{ shapeRendering: 'crispEdges' }}
-        fill={props.fill}
+        // fill={props.fill}
+        fill='none'
         stroke='#000000'
-        strokeWidth='1'
+        stroke-width='0.5'
 
         // stroke={props.stroke}
         // strokeWidth={props.strokeWidth}

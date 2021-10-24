@@ -24,9 +24,7 @@ module.exports = createReactClass({
     hoverAnimation: PropTypes.bool,
     margins: PropTypes.object,
     xAxisClassName: PropTypes.string,
-    xAxisStrokeWidth: PropTypes.number,
     yAxisClassName: PropTypes.string,
-    yAxisStrokeWidth: PropTypes.number,
   },
 
   mixins: [
@@ -44,9 +42,7 @@ module.exports = createReactClass({
       hoverAnimation: true,
       margins: { top: 10, right: 20, bottom: 50, left: 45 },
       xAxisClassName: 'rd3-scatterchart-xaxis',
-      xAxisStrokeWidth: 1,
       yAxisClassName: 'rd3-scatterchart-yaxis',
-      yAxisStrokeWidth: 1,
     };
   },
 
@@ -96,13 +92,26 @@ module.exports = createReactClass({
             className={props.className}
             transform={trans}
           >
+            <DataSeries
+              circleRadius={props.circleRadius}
+              colors={props.colors}
+              colorAccessor={props.colorAccessor}
+              data={allValues}
+              height={innerHeight}
+              hoverAnimation={props.hoverAnimation}
+              width={innerWidth}
+              xAccessor={(coord) => coord.x}
+              xScale={xScale}
+              yAccessor={(coord) => coord.y}
+              yScale={yScale}
+              onMouseOver={this.onMouseOver}
+            />
             <XAxis
               data={data}
               height={innerHeight}
               horizontalChart={props.horizontal}
               margins={svgMargins}
               stroke={props.axesColor}
-              strokeWidth={props.xAxisStrokeWidth.toString()}
               tickFormatting={props.xAxisFormatter}
               tickStroke={props.xAxisTickStroke}
               tickTextStroke={props.xAxisTickTextStroke}
@@ -118,7 +127,6 @@ module.exports = createReactClass({
               xScale={xScale}
               gridVertical={props.gridVertical}
               gridVerticalStroke={props.gridVerticalStroke}
-              gridVerticalStrokeWidth={props.gridVerticalStrokeWidth}
               gridVerticalStrokeDash={props.gridVerticalStrokeDash}
             />
             <YAxis
@@ -128,7 +136,6 @@ module.exports = createReactClass({
               horizontalChart={props.horizontal}
               margins={svgMargins}
               stroke={props.axesColor}
-              strokeWidth={props.yAxisStrokeWidth.toString()}
               tickFormatting={props.yAxisFormatter}
               tickStroke={props.yAxisTickStroke}
               tickTextStroke={props.yAxisTickTextStroke}
@@ -143,23 +150,9 @@ module.exports = createReactClass({
               yOrient={yOrient}
               gridHorizontal={props.gridHorizontal}
               gridHorizontalStroke={props.gridHorizontalStroke}
-              gridHorizontalStrokeWidth={props.gridHorizontalStrokeWidth}
               gridHorizontalStrokeDash={props.gridHorizontalStrokeDash}
             />
-            <DataSeries
-              circleRadius={props.circleRadius}
-              colors={props.colors}
-              colorAccessor={props.colorAccessor}
-              data={allValues}
-              height={innerHeight}
-              hoverAnimation={props.hoverAnimation}
-              width={innerWidth}
-              xAccessor={(coord) => coord.x}
-              xScale={xScale}
-              yAccessor={(coord) => coord.y}
-              yScale={yScale}
-              onMouseOver={this.onMouseOver}
-            />
+
           </g>
         </Chart>
         {(props.showTooltip ? <Tooltip {...this.state.tooltip} /> : null)}
