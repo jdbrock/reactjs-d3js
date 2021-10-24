@@ -626,9 +626,7 @@ module.exports = createReactClass({
     height: PropTypes.number,
     x: PropTypes.number,
     y: PropTypes.number,
-    className: PropTypes.string,
-    handleMouseOver: PropTypes.func,
-    handleMouseLeave: PropTypes.func
+    className: PropTypes.string
   },
 
   getDefaultProps: function getDefaultProps() {
@@ -641,9 +639,7 @@ module.exports = createReactClass({
     return React.createElement('rect', _extends({
       className: 'rd3-barchart-bar'
     }, this.props, {
-      fill: this.props.fill,
-      onMouseOver: this.props.handleMouseOver,
-      onMouseLeave: this.props.handleMouseLeave
+      fill: this.props.fill
     }));
   }
 });
@@ -978,10 +974,24 @@ module.exports = createReactClass({
   render: function render() {
     var props = this.props;
 
+    // animation controller
+    var handleMouseOver = void 0;
+    var handleMouseLeave = void 0;
+    if (props.hoverAnimation) {
+      handleMouseOver = this._animateArea;
+      handleMouseLeave = this._restoreArea;
+    } else {
+      handleMouseOver = handleMouseLeave = null;
+    }
+
     return React.createElement(Bar, _extends({}, props, {
-      fill: this.state.fill,
-      handleMouseOver: props.hoverAnimation ? this._animateBar : null,
-      handleMouseLeave: props.hoverAnimation ? this._restoreBar : null
+      fill: this.state.fill
+      // onMouseOver={handleMouseOver}
+      // onMouseLeave={handleMouseLeave}
+
+
+      , onMouseOver: props.hoverAnimation ? this._animateBar : null,
+      onMouseLeave: props.hoverAnimation ? this._restoreBar : null
     }));
   }
 });
