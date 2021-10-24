@@ -134,6 +134,25 @@ module.exports = createReactClass({
           shouldUpdate={!this.state.changeState}
         >
           <g transform={trans} className={props.chartClassName}>
+          <DataSeries
+              yScale={yScale}
+              xScale={xScale}
+              margins={svgMargins}
+              _data={_data}
+              series={series}
+              width={innerWidth}
+              height={innerHeight}
+              grouped={props.grouped}
+              colors={props.colors}
+              colorAccessor={props.colorAccessor}
+              hoverAnimation={props.hoverAnimation}
+              valuesAccessor={props.valuesAccessor}
+              xAccessorBar={props.xAccessorBar}
+              yAccessorBar={props.yAccessorBar}
+              y0Accessor={props.y0Accessor}
+              onMouseOver={this.onMouseOver}
+              onMouseLeave={this.onMouseLeave}
+            />
             <YAxis
               yAxisClassName={props.yAxisClassName}
               yAxisTickValues={props.yAxisTickValues}
@@ -175,25 +194,7 @@ module.exports = createReactClass({
               gridVerticalStrokeWidth={props.gridVerticalStrokeWidth}
               gridVerticalStrokeDash={props.gridVerticalStrokeDash}
             />
-            <DataSeries
-              yScale={yScale}
-              xScale={xScale}
-              margins={svgMargins}
-              _data={_data}
-              series={series}
-              width={innerWidth}
-              height={innerHeight}
-              grouped={props.grouped}
-              colors={props.colors}
-              colorAccessor={props.colorAccessor}
-              hoverAnimation={props.hoverAnimation}
-              valuesAccessor={props.valuesAccessor}
-              xAccessorBar={props.xAccessorBar}
-              yAccessorBar={props.yAccessorBar}
-              y0Accessor={props.y0Accessor}
-              onMouseOver={this.onMouseOver}
-              onMouseLeave={this.onMouseLeave}
-            />
+
           </g>
         </Chart>
         {(props.showTooltip ? <Tooltip {...this.state.tooltip} /> : null)}

@@ -88,9 +88,24 @@ module.exports = createReactClass({
           shouldUpdate={!this.state.changeState}
         >
           <g transform={trans} className={props.className}>
+            <DataSeries
+              xScale={scales.xScale}
+              yScale={scales.yScale}
+              xAccessor={props.xAccessor}
+              yAccessor={props.yAccessor}
+              hoverAnimation={props.hoverAnimation}
+              circleRadius={props.circleRadius}
+              data={props.data}
+              value={allValues}
+              interpolationType={props.interpolationType}
+              colors={props.colors}
+              colorAccessor={props.colorAccessor}
+              width={innerWidth}
+              height={innerHeight}
+              onMouseOver={this.onMouseOver}
+            />
             <XAxis
               xAxisClassName={props.xAxisClassName}
-              strokeWidth={props.xAxisStrokeWidth}
               xAxisTickValues={props.xAxisTickValues}
               xAxisTickCount={props.xAxisTickCount}
               xAxisTickInterval={props.xAxisTickInterval}
@@ -111,12 +126,10 @@ module.exports = createReactClass({
               stroke={props.axesColor}
               gridVertical={props.gridVertical}
               gridVerticalStroke={props.gridVerticalStroke}
-              gridVerticalStrokeWidth={props.gridVerticalStrokeWidth}
               gridVerticalStrokeDash={props.gridVerticalStrokeDash}
             />
             <YAxis
               yAxisClassName={props.yAxisClassName}
-              strokeWidth={props.yAxisStrokeWidth}
               yScale={scales.yScale}
               yAxisTickValues={props.yAxisTickValues}
               yAxisTickCount={props.yAxisTickCount}
@@ -138,22 +151,7 @@ module.exports = createReactClass({
               gridHorizontalStrokeWidth={props.gridHorizontalStrokeWidth}
               gridHorizontalStrokeDash={props.gridHorizontalStrokeDash}
             />
-            <DataSeries
-              xScale={scales.xScale}
-              yScale={scales.yScale}
-              xAccessor={props.xAccessor}
-              yAccessor={props.yAccessor}
-              hoverAnimation={props.hoverAnimation}
-              circleRadius={props.circleRadius}
-              data={props.data}
-              value={allValues}
-              interpolationType={props.interpolationType}
-              colors={props.colors}
-              colorAccessor={props.colorAccessor}
-              width={innerWidth}
-              height={innerHeight}
-              onMouseOver={this.onMouseOver}
-            />
+
           </g>
         </Chart>
         {(props.showTooltip ? <Tooltip {...this.state.tooltip} /> : null)}

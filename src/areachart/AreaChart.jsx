@@ -134,6 +134,7 @@ module.exports = createReactClass({
         title={props.title}
       >
         <g transform={trans} className={props.className}>
+          {dataSeries}
           <XAxis
             xAxisClassName="rd3-areachart-xaxis"
             xScale={xScale}
@@ -178,7 +179,6 @@ module.exports = createReactClass({
             gridHorizontalStrokeWidth={props.gridHorizontalStrokeWidth}
             gridHorizontalStrokeDash={props.gridHorizontalStrokeDash}
           />
-          {dataSeries}
         </g>
       </Chart>
     );
