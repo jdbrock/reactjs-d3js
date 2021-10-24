@@ -223,8 +223,14 @@ const Demos = createReactClass({
           <div className="col-md-6">
             <ScatterChart
               data={scatterData}
-              width={500}
+              width="100%"
               height={400}
+              viewBoxObject={{
+                x: 0,
+                y: 0,
+                width: 500,
+                height: 400
+              }}
               title="Scatter Chart"
               domain={{ x: [, ], y: [, ] }}
             />
@@ -288,6 +294,10 @@ const Demos = createReactClass({
               }
               yAccessor={(d) => d[1]}
               // domain={{ y: [, 60] }}
+              gridHorizontal
+              gridVertical
+              gridHorizontalStrokeDash=""
+              gridVerticalStrokeDash=""
             />
           </div>
           <div className="col-md-6">
@@ -339,11 +349,21 @@ const Demos = createReactClass({
           <div className="col-md-6">
             <CandlestickChart
               data={this.state.ohlcData}
-              width={500}
+              width="100%"
               height={400}
+              viewBoxObject={{
+                x: 0,
+                y: 0,
+                width: 500,
+                height: 400
+              }}
               yAxisOffset={-10}
               title="Candlestick Chart"
-              domain={{ y: [400, 500] }}
+
+              gridHorizontal
+              gridVertical
+              gridHorizontalStrokeDash
+              gridVerticalStrokeDash
             />
           </div>
           <div className="col-md-6">
@@ -391,11 +411,21 @@ const Demos = createReactClass({
             <BarChart
                 data={barData}
                 grouped={true}
-                width={500}
-                height={300}
+                width="100%"
+                height={400}
+                viewBoxObject={{
+                  x: 0,
+                  y: 0,
+                  width: 500,
+                  height: 400
+                }}
+                title="Scatter Chart"
+                domain={{ x: [, ], y: [, ] }}
                 title="Bar Chart"
                 yAxisLabel="Label"
                 xAxisLabel="Value"
+                gridHorizontal={true}
+                gridVertical={true}
             />
           </div>
           <div className="col-md-6">
@@ -438,7 +468,14 @@ const Demos = createReactClass({
         </div>
         <div className="row">
           <div className="col-md-6">
-            <PieChart data={pieData} width={450} height={400} radius={110} innerRadius={20} sectorBorderColor="white" title="Pie Chart" />
+            <PieChart
+            data={pieData}
+            width={450}
+            height={400}
+            radius={110}
+            innerRadius={20}
+            sectorBorderColor="white"
+            title="Pie Chart" />
           </div>
           <div className="col-md-6">
             <pre ref="block">
