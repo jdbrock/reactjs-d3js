@@ -62,15 +62,28 @@ function bundler(entry) {
   return config.production ? bundler : watchify(bundler);
 }
 
+
+
+function transpile_src(){
+  // replacement for jsx --harmony -x jsx src build/cjs && jsx --harmony src build/cjs
+  const npmAssets = gulp.src(['src/**/*.js', 'src/**/*.jsx'])
+        .pipe(babel({ presets: ['es2015', 'react'] }))
+        .pipe(gulp.dest('build/cjs'));
+  // replacement for cp *.md build/cjs && cp .npmignore build/cjs
+  const misc = gulp.src(['*.md', '.npmignore'])
+        .pipe(gulp.dest('build/cjs'));
+  return merge(npmAssets, misc);
+};
+
+
 function compileJS(entry) {
   const w = bundler(entry);
-
   if (!config.production) {
     w.on('update', (e) => {
       const updateStart = Date.now();
 
-      bundleShare(w);
-      console.log('file changed %s', e);
+      async () => bundleShare(w);
+      transpile_src()
     });
   }
 
@@ -116,27 +129,30 @@ gulp.task('minified', gulp.series('clean:build', () => {
     ;
 }));
 
-gulp.task('build', gulp.series('minified', 'docs'));
-gulp.task('watch', gulp.series('clean:build', serve));
 
 
 gulp.task('copymisc', (cb) => {
   // replacement for jsx --harmony -x jsx src build/cjs && jsx --harmony src build/cjs
   const npmAssets = gulp.src(['src/**/*.js', 'src/**/*.jsx'])
-        .pipe(babel({ presets: ['es2015', 'react'] }))
-        .pipe(gulp.dest('build/cjs'));
+  .pipe(babel({ presets: ['es2015', 'react'] }))
+  .pipe(gulp.dest('build/cjs'));
 
   // replacement for cp *.md build/cjs && cp .npmignore build/cjs
   const misc = gulp.src(['*.md', '.npmignore'])
-        .pipe(gulp.dest('build/cjs'));
+  .pipe(gulp.dest('build/cjs'));
 
   return merge(npmAssets, misc);
 });
 
 
+gulp.task('build', gulp.series('minified', 'docs'));
+gulp.task('watch', gulp.series('clean:build', 'copymisc', serve));
+
+
 // gulp.task('build', gulp.series('minified', 'docs'));
 
-gulp.task('release', gulp.series('copymisc', 'minified', (cb) => {
+// gulp.task('release', gulp.series('copymisc', 'minified', (cb) => {
+  gulp.task('release', gulp.series('copymisc', (cb) => {
   const fs = require('fs');
   const Handlebars = require('handlebars');
   const path = require('path');
