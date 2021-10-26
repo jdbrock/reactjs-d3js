@@ -2,6 +2,7 @@
 
 const PropTypes = require('prop-types');
 const React = require('react');
+const d3 = require('d3');
 const createReactClass = require('create-react-class');
 
 const { Chart, XAxis, YAxis, XGrid, YGrid, Tooltip } = require('../common');
