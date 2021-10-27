@@ -711,8 +711,6 @@ module.exports = createReactClass({
   getDefaultProps: function getDefaultProps() {
     return {
       chartClassName: 'rd3-barchart',
-      // colors: d3.scaleOrdinal(d3.schemeGnBu[9].reverse()),
-      // colors: d3.scaleSequential(d3.interpolateBlues),
       hoverAnimation: true,
       margins: { top: 10, right: 20, bottom: 40, left: 45 },
       rangeRoundBandsPadding: 0.25,
@@ -830,10 +828,13 @@ module.exports = createReactClass({
       margins: props.margins,
       colors: this.state.color.colors,
       colorAccessor: this.state.color.accessor,
+      colorsDomain: colorsDomain,
       width: props.width,
       height: props.height,
       title: props.title,
-      shouldUpdate: !this.state.changeState
+      shouldUpdate: !this.state.changeState,
+      series: series,
+      legendStyle: props.legendStyle
     }, React.createElement('g', { transform: trans, className: props.chartClassName }, React.createElement(XGrid, {
       xAxisClassName: props.xAxisClassName,
       xAxisTickValues: props.xAxisTickValues,
@@ -1552,35 +1553,58 @@ module.exports = createReactClass({
         return idx;
       },
       itemClassName: 'rd3-legend-item',
-      text: '#000'
+      text: '#000',
+      legendStyle: {
+        textStyle: {
+          fontSize: '50%',
+          verticalAlign: 'top'
+        },
+        bulletStyle: {
+          lineHeight: '60%',
+          fontSize: '200%'
+        }
+      }
     };
   },
   render: function render() {
     var props = this.props;
 
-    var textStyle = {
-      color: 'black',
-      fontSize: '50%',
-      verticalAlign: 'top'
-    };
+    // debugger;
 
+    var textStyle = props.legendStyle.textStyle;
     var legendItems = [];
 
-    props.data.forEach(function (series, idx) {
-      var itemStyle = {
-        color: props.colors(props.colorAccessor(series, idx)),
-        lineHeight: '60%',
-        fontSize: '200%'
-      };
+    /* TODO - Legado !!!
+      Deixar a entrada de dados flat para todos os graficos.
+    */
+    if (props.series !== undefined) {
 
-      legendItems.push(React.createElement('li', {
-        key: idx,
-        className: props.itemClassName,
-        style: itemStyle
-      }, React.createElement('span', {
-        style: textStyle
-      }, series.name)));
-    });
+      props.series.map(function (serie, idx) {
+        var itemStyle = Object.assign({}, props.legendStyle.bulletStyle);
+        itemStyle.color = props.colors(props.colorAccessor(props.colorsDomain, idx));
+
+        legendItems.push(React.createElement('li', {
+          key: idx,
+          className: props.itemClassName,
+          style: itemStyle
+        }, React.createElement('span', {
+          style: textStyle
+        }, serie)));
+      });
+    } else {
+      props.data.forEach(function (series, idx) {
+        var itemStyle = Object.assign({}, props.legendStyle.bulletStyle);
+        itemStyle.color = props.colors(props.colorAccessor(series, idx));
+
+        legendItems.push(React.createElement('li', {
+          key: idx,
+          className: props.itemClassName,
+          style: itemStyle
+        }, React.createElement('span', {
+          style: textStyle
+        }, series.name)));
+      });
+    }
 
     var topMargin = props.margins.top;
 
@@ -1596,7 +1620,7 @@ module.exports = createReactClass({
     return React.createElement('ul', {
       className: props.className,
       style: legendBlockStyle
-    }, legendItems);
+    }, legendItems.reverse());
   }
 });
 
@@ -2145,7 +2169,9 @@ module.exports = createReactClass({
       textAnchor: props.textAnchor,
       transform: transform,
       y: y,
-      x: x
+      x: x,
+      style: { 'font-size': '1.4em' }
+
     }, props.label);
   }
 });
@@ -2707,9 +2733,12 @@ module.exports = createReactClass({
         colors: props.colors,
         colorAccessor: props.colorAccessor,
         data: props.data,
+        colorsDomain: props.colorsDomain,
         legendPosition: props.legendPosition,
         margins: props.margins,
-        width: props.sideOffset
+        width: props.sideOffset,
+        series: props.series,
+        legendStyle: props.legendStyle
       });
     }
 
@@ -2727,7 +2756,6 @@ module.exports = createReactClass({
   },
   _renderChart: function _renderChart() {
     var props = this.props;
-
     return React.createElement('svg', {
       className: props.svgClassName,
       height: '100%',
@@ -2741,26 +2769,25 @@ module.exports = createReactClass({
     return React.createElement('div', {
       className: props.className,
       style: { width: props.width, height: props.height }
-    }, this._renderTitle(), React.createElement('div', { style: { display: 'table', width: '100%', height: '100%' } }, React.createElement('div', { style: { display: 'table-cell', width: '100%', height: '100%' } }, this._renderChart()), React.createElement('div', { style: { display: 'table-cell', width: props.sideOffset, verticalAlign: 'top' } }, this._renderLegend())));
+    }, this._renderTitle(), React.createElement('div', { style: { display: 'flex' } }, React.createElement('div', { style: { width: props.width, height: props.height } }, this._renderChart()), React.createElement('div', { style: { 'align-self': 'center' } }, this._renderLegend())));
   }
 });
 
 },{"../Legend":"/home/robson/projetos/rd3/src/common/Legend.jsx"}],"/home/robson/projetos/rd3/src/common/charts/index.js":[function(require,module,exports){
 'use strict';
 
-exports.BasicChart = require('./BasicChart');
 exports.Chart = require('./Chart');
-exports.LegendChart = require('./LegendChart');
 
-},{"./BasicChart":"/home/robson/projetos/rd3/src/common/charts/BasicChart.jsx","./Chart":"/home/robson/projetos/rd3/src/common/charts/Chart.jsx","./LegendChart":"/home/robson/projetos/rd3/src/common/charts/LegendChart.jsx"}],"/home/robson/projetos/rd3/src/common/index.js":[function(require,module,exports){
+},{"./Chart":"/home/robson/projetos/rd3/src/common/charts/Chart.jsx"}],"/home/robson/projetos/rd3/src/common/index.js":[function(require,module,exports){
 'use strict';
 
 exports.XAxis = require('./axes').XAxis;
 exports.YAxis = require('./axes').YAxis;
 exports.XGrid = require('./axes').XGrid;
 exports.YGrid = require('./axes').YGrid;
+
 exports.Chart = require('./charts').Chart;
-exports.LegendChart = require('./charts').LegendChart;
+
 exports.Legend = require('./Legend');
 exports.Tooltip = require('./Tooltip');
 exports.Voronoi = require('./Voronoi');

@@ -28,26 +28,57 @@ module.exports = createReactClass({
       colorAccessor: (d, idx) => idx,
       itemClassName: 'rd3-legend-item',
       text: '#000',
-    };
+      legendStyle: {
+                textStyle:{
+                  fontSize: '50%',
+                  verticalAlign: 'top',
+                },
+                bulletStyle:{
+                  lineHeight: '60%',
+                  fontSize: '200%',
+                }
+              }
+    }
   },
 
   render() {
     const props = this.props;
 
-    const textStyle = {
-      color: 'black',
-      fontSize: '50%',
-      verticalAlign: 'top',
-    };
+    // debugger;
 
+    const textStyle = props.legendStyle.textStyle;
     const legendItems = [];
 
+
+    /* TODO - Legado !!!
+      Deixar a entrada de dados flat para todos os graficos.
+    */
+    if (props.series !== undefined){
+
+    props.series.map( (serie, idx) => {
+      let itemStyle = Object.assign({},props.legendStyle.bulletStyle)
+      itemStyle.color = props.colors(props.colorAccessor(props.colorsDomain, idx));
+
+      legendItems.push(
+        <li
+          key={idx}
+          className={props.itemClassName}
+          style={itemStyle}
+        >
+          <span
+            style={textStyle}
+          >
+            {serie}
+          </span>
+        </li>
+      );
+
+    })
+
+  }else{
     props.data.forEach((series, idx) => {
-      const itemStyle = {
-        color: props.colors(props.colorAccessor(series, idx)),
-        lineHeight: '60%',
-        fontSize: '200%',
-      };
+      let itemStyle = Object.assign({},props.legendStyle.bulletStyle)
+      itemStyle.color = props.colors(props.colorAccessor(series, idx));
 
       legendItems.push(
         <li
@@ -63,6 +94,8 @@ module.exports = createReactClass({
         </li>
       );
     });
+  }
+
 
     const topMargin = props.margins.top;
 
@@ -80,7 +113,7 @@ module.exports = createReactClass({
         className={props.className}
         style={legendBlockStyle}
       >
-        {legendItems}
+        {legendItems.reverse()}
       </ul>
     );
   },

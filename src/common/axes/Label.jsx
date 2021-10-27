@@ -65,6 +65,8 @@ module.exports = createReactClass({
         transform={transform}
         y={y}
         x={x}
+        style={{'font-size':'1.4em'}}
+
       >
         {props.label}
       </text>
