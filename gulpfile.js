@@ -82,8 +82,7 @@ function compileJS(entry) {
     w.on('update', (e) => {
       const updateStart = Date.now();
 
-      async () => bundleShare(w);
-      transpile_src()
+      bundleShare(w);
     });
   }
 
@@ -91,6 +90,7 @@ function compileJS(entry) {
   w.on('time', (time) => {
     if (!config.production) {
       console.log('Bundle updated in %s ms', time);
+      transpile_src()
       browserSync.reload();
     }
   })

@@ -9,7 +9,8 @@ module.exports = {
   propTypes: {
     axesColor: PropTypes.string,
     colors: PropTypes.func,
-    colorAccessor: PropTypes.func,
+    colorAccessorSequential: PropTypes.func,
+    colorAccessorOrdinal: PropTypes.func,
     data: PropTypes.array.isRequired,
     height: PropTypes.oneOfType([
       PropTypes.string,
@@ -53,7 +54,8 @@ module.exports = {
     return {
       axesColor: '#000',
       // colors: d3.scaleOrdinal(d3.schemeCategory10),
-      colorAccessor: (d, idx) => idx,
+      colorAccessorSequential: (d, idx) => d[idx],
+      colorAccessorOrdinal: (d, idx) => idx,
       height: 200,
       horizontal: false,
       legend: false,
