@@ -89,6 +89,8 @@ module.exports = createReactClass({
           gridHorizontalStroke={props.gridHorizontalStroke}
           gridHorizontalStrokeWidth={props.gridHorizontalStrokeWidth}
           gridHorizontalStrokeDash={props.gridHorizontalStrokeDash}
+          gridTxtRotate={props.gridTxtRotate}
+          gridTranslate={props.gridTranslate}
         />
 
       </g>
