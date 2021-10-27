@@ -83,32 +83,20 @@ const Demos = createReactClass({
       }
     ];
 
+
+
     const barData = [
-      {
-        name: 'Series A',
-        values: [
-          { x: 1, y: 91 },
-          { x: 2, y: 290 },
-          { x: 3, y: -25 },
+          {name: 'Series A', x: 1, y: 91 },
+          {name: 'Series A', x: 2, y: 290 },
+          {name: 'Series A', x: 3, y: -25 },
+          {name: 'Series B', x: 1, y: 9 },
+          {name: 'Series B', x: 2, y: 49 },
+          {name: 'Series B', x: 3, y: -20 },
+          {name: 'Series C', x: 1, y: 14 },
+          {name: 'Series C', x: 2, y: 77 },
+          {name: 'Series C', x: 3, y: -70 }
         ]
-      },
-      {
-        name: 'Series B',
-        values: [
-          { x: 1, y: 9 },
-          { x: 2, y: 49 },
-          { x: 3, y: -20 },
-        ]
-      },
-      {
-        name: 'Series C',
-        values: [
-          { x: 1, y: 14 },
-          { x: 2, y: 77 },
-          { x: 3, y: -70 },
-        ]
-      }
-    ];
+
 
     const pieData = [{ label: 'Margarita', value: 20.0 }, { label: 'John', value: 55.0 }, { label: 'Tim', value: 25.0 }];
 

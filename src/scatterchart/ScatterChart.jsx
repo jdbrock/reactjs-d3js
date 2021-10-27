@@ -78,7 +78,7 @@ module.exports = createReactClass({
       <span onMouseLeave={this.onMouseLeave}>
         <Chart
           colors={props.colors}
-          colorAccessor={props.colorAccessor}
+          colorAccessor={props.colorAccessorOrdinal}
           data={data}
           height={props.height}
           legend={props.legend}
@@ -144,7 +144,7 @@ module.exports = createReactClass({
             <DataSeries
               circleRadius={props.circleRadius}
               colors={props.colors}
-              colorAccessor={props.colorAccessor}
+              colorAccessor={props.colorAccessorOrdinal}
               data={allValues}
               height={innerHeight}
               hoverAnimation={props.hoverAnimation}

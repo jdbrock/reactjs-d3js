@@ -84,16 +84,7 @@ var Demos = createReactClass({
       values: [{ x: 0, y: 0 }, { x: 1, y: 5 }, { x: 2, y: 8 }, { x: 3, y: 2 }, { x: 4, y: 6 }, { x: 5, y: 4 }, { x: 6, y: 2 }]
     }];
 
-    var barData = [{
-      name: 'Series A',
-      values: [{ x: 1, y: 91 }, { x: 2, y: 290 }, { x: 3, y: -25 }]
-    }, {
-      name: 'Series B',
-      values: [{ x: 1, y: 9 }, { x: 2, y: 49 }, { x: 3, y: -20 }]
-    }, {
-      name: 'Series C',
-      values: [{ x: 1, y: 14 }, { x: 2, y: 77 }, { x: 3, y: -70 }]
-    }];
+    var barData = [{ name: 'Series A', x: 1, y: 91 }, { name: 'Series A', x: 2, y: 290 }, { name: 'Series A', x: 3, y: -25 }, { name: 'Series B', x: 1, y: 9 }, { name: 'Series B', x: 2, y: 49 }, { name: 'Series B', x: 3, y: -20 }, { name: 'Series C', x: 1, y: 14 }, { name: 'Series C', x: 2, y: 77 }, { name: 'Series C', x: 3, y: -70 }];
 
     var pieData = [{ label: 'Margarita', value: 20.0 }, { label: 'John', value: 55.0 }, { label: 'Tim', value: 25.0 }];
 
@@ -371,7 +362,7 @@ module.exports = createReactClass({
     var dataSeries = layers.map(function (d, idx) {
       return React.createElement(DataSeries, {
         key: idx,
-        fill: props.colors(props.colorAccessor(d, idx))
+        fill: props.colors(props.colorAccessorOrdinal(d, idx))
         // seriesName={d.name}
         , index: idx,
         xScale: xScale,
@@ -651,6 +642,16 @@ module.exports = createReactClass({
 },{}],"/home/robson/projetos/rd3/src/barchart/BarChart.jsx":[function(require,module,exports){
 'use strict';
 
+function _toConsumableArray(arr) {
+  if (Array.isArray(arr)) {
+    for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) {
+      arr2[i] = arr[i];
+    }return arr2;
+  } else {
+    return Array.from(arr);
+  }
+}
+
 function _defineProperty(obj, key, value) {
   if (key in obj) {
     Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });
@@ -700,7 +701,9 @@ module.exports = createReactClass({
     title: PropTypes.string,
     xAxisClassName: PropTypes.string,
     yAxisClassName: PropTypes.string,
-    yAxisTickCount: PropTypes.number
+    yAxisTickCount: PropTypes.number,
+    xIsDate: PropTypes.bool,
+    color: PropTypes.object
   },
 
   mixins: [CartesianChartPropsMixin, DefaultAccessorsMixin, ViewBoxMixin, TooltipMixin],
@@ -708,7 +711,8 @@ module.exports = createReactClass({
   getDefaultProps: function getDefaultProps() {
     return {
       chartClassName: 'rd3-barchart',
-      colors: d3.scaleOrdinal(d3.schemeGnBu[9].reverse()),
+      // colors: d3.scaleOrdinal(d3.schemeGnBu[9].reverse()),
+      // colors: d3.scaleSequential(d3.interpolateBlues),
       hoverAnimation: true,
       margins: { top: 10, right: 20, bottom: 40, left: 45 },
       rangeRoundBandsPadding: 0.25,
@@ -722,7 +726,17 @@ module.exports = createReactClass({
       },
       xAxisClassName: 'rd3-barchart-xaxis',
       yAxisClassName: 'rd3-barchart-yaxis',
-      yAxisTickCount: 4
+      yAxisTickCount: 4,
+      xIsDate: false,
+      color: { acessor: null, colors: null }
+    };
+  },
+  getInitialState: function getInitialState() {
+    return {
+      color: {
+        accessor: this.props.color.accessor === 'Sequential' ? this.props.colorAccessorSequential : this.props.colorAccessorOrdinal,
+        colors: this.props.color.colors || d3.scaleOrdinal(d3.schemeGnBu[9].reverse())
+      }
     };
   },
   _getLabels: function _getLabels(firstSeries) {
@@ -754,29 +768,26 @@ module.exports = createReactClass({
       return null;
     }
 
-    /*
-    mudar a orientacao do array pq vem errado
-    https://stackoverflow.com/questions/17428587/transposing-a-2d-array-in-javascript
-    Para chegar nisso
-    https://github.com/d3/d3-shape/blob/v3.0.1/README.md#stack
-    Isso funciona:
-    */
-
     var _array = props.data;
-    var data = [];
+    var dataDict = {};
 
     _array.map(function (elem, idxE) {
-      elem.values.map(function (v, idxV) {
-        if (typeof data[idxV] === 'undefined') {
-          data[idxV] = _defineProperty({ 'x': v.x }, elem['name'], v.y);
-        } else {
-          data[idxV][[elem['name']]] = v.y;
-        }
-      });
+      var bar = void 0;
+      props.xIsDate ? bar = new Date(elem.x) : bar = elem.x;
+      if (typeof dataDict[bar] === 'undefined') {
+        dataDict[bar] = _defineProperty({ 'x': bar }, elem.name, +elem.y);
+      } else {
+        dataDict[bar][elem.name] = +elem.y;
+      }
     });
-    var series = props.data.map(function (item) {
+    var data = Object.keys(dataDict).map(function (key) {
+      return dataDict[key];
+    });
+
+    var series = new Set(props.data.map(function (item) {
       return item.name;
-    });
+    }));
+    series = Array.from(series);
     var _data = this._stack(series)(data);
 
     var _getDimensions = this.getDimensions(),
@@ -806,13 +817,19 @@ module.exports = createReactClass({
     })];
     var yScale = d3.scaleLinear().range([innerHeight, 0]).domain(yDomain);
 
+    var origArray = [].concat(_toConsumableArray(Array(data.length).keys()));
+    var colorsDomain = void 0;
+    this.props.color.accessor === 'Sequential' ? colorsDomain = origArray.map(function (x) {
+      return x / data.length;
+    }) : colorsDomain = series;
+
     return React.createElement('span', null, React.createElement(Chart, {
       viewBox: this.getViewBox(),
       legend: props.legend,
       data: props.data,
       margins: props.margins,
-      colors: props.colors,
-      colorAccessor: props.colorAccessor,
+      colors: this.state.color.colors,
+      colorAccessor: this.state.color.accessor,
       width: props.width,
       height: props.height,
       title: props.title,
@@ -865,8 +882,9 @@ module.exports = createReactClass({
       width: innerWidth,
       height: innerHeight,
       grouped: props.grouped,
-      colors: props.colors,
-      colorAccessor: props.colorAccessor,
+      colors: this.state.color.colors,
+      colorsDomain: colorsDomain,
+      colorAccessor: this.state.color.accessor,
       hoverAnimation: props.hoverAnimation,
       valuesAccessor: props.valuesAccessor,
       xAccessorBar: props.xAccessorBar,
@@ -1035,6 +1053,7 @@ module.exports = createReactClass({
     var _props2 = this.props,
         colors = _props2.colors,
         colorAccessor = _props2.colorAccessor,
+        colorsDomain = _props2.colorsDomain,
         grouped = _props2.grouped,
         series = _props2.series,
         xScale = _props2.xScale,
@@ -1051,7 +1070,7 @@ module.exports = createReactClass({
       width: xScale.bandwidth(),
       x: xScale(this.props.xAccessorBar(segment)),
       y: this.props.yAccessorBar(segment) >= 0 ? y : y - barHeight,
-      fill: this.props.colors(this.props.colorAccessor(series, seriesIdx)),
+      fill: this.props.colors(this.props.colorAccessor(colorsDomain, seriesIdx)),
       hoverAnimation: this.props.hoverAnimation,
       onMouseOver: this.props.onMouseOver,
       onMouseLeave: this.props.onMouseLeave,
@@ -2881,6 +2900,7 @@ module.exports = createReactClass({
 
 var PropTypes = window.PropTypes;
 var React = window.React;
+var d3 = window.d3;
 var createReactClass = window.createReactClass;
 
 var _require = require('../common'),
@@ -2963,7 +2983,7 @@ module.exports = createReactClass({
       data: props.data,
       margins: props.margins,
       colors: props.colors,
-      colorAccessor: props.colorAccessor,
+      colorAccessor: props.colorAccessorOrdinal,
       width: props.width,
       height: props.height,
       title: props.title,
@@ -3024,7 +3044,7 @@ module.exports = createReactClass({
       value: allValues,
       interpolationType: props.interpolationType,
       colors: props.colors,
-      colorAccessor: props.colorAccessor,
+      colorAccessor: props.colorAccessorOrdinal,
       width: innerWidth,
       height: innerHeight,
       onMouseOver: this.onMouseOver
@@ -3222,7 +3242,8 @@ module.exports = {
   propTypes: {
     axesColor: PropTypes.string,
     colors: PropTypes.func,
-    colorAccessor: PropTypes.func,
+    colorAccessorSequential: PropTypes.func,
+    colorAccessorOrdinal: PropTypes.func,
     data: PropTypes.array.isRequired,
     height: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     horizontal: PropTypes.bool,
@@ -3260,7 +3281,10 @@ module.exports = {
     return {
       axesColor: '#000',
       // colors: d3.scaleOrdinal(d3.schemeCategory10),
-      colorAccessor: function colorAccessor(d, idx) {
+      colorAccessorSequential: function colorAccessorSequential(d, idx) {
+        return d[idx];
+      },
+      colorAccessorOrdinal: function colorAccessorOrdinal(d, idx) {
         return idx;
       },
       height: 200,
@@ -3915,6 +3939,7 @@ module.exports = createReactClass({
 
 var PropTypes = window.PropTypes;
 var React = window.React;
+var d3 = window.d3;
 var createReactClass = window.createReactClass;
 
 var _require = require('../common'),
@@ -3993,7 +4018,7 @@ module.exports = createReactClass({
 
     return React.createElement('span', { onMouseLeave: this.onMouseLeave }, React.createElement(Chart, {
       colors: props.colors,
-      colorAccessor: props.colorAccessor,
+      colorAccessor: props.colorAccessorOrdinal,
       data: data,
       height: props.height,
       legend: props.legend,
@@ -4054,7 +4079,7 @@ module.exports = createReactClass({
     }), React.createElement(DataSeries, {
       circleRadius: props.circleRadius,
       colors: props.colors,
-      colorAccessor: props.colorAccessor,
+      colorAccessor: props.colorAccessorOrdinal,
       data: allValues,
       height: innerHeight,
       hoverAnimation: props.hoverAnimation,

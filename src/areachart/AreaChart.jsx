@@ -109,7 +109,7 @@ module.exports = createReactClass({
     const dataSeries = layers.map((d, idx) => (
         <DataSeries
         key={idx}
-        fill={props.colors(props.colorAccessor(d, idx))}
+        fill={props.colors(props.colorAccessorOrdinal(d, idx))}
         // seriesName={d.name}
         index={idx}
         xScale={xScale}
