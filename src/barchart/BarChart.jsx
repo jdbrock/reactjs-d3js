@@ -148,10 +148,13 @@ module.exports = createReactClass({
           margins={props.margins}
           colors={this.state.color.colors}
           colorAccessor={this.state.color.accessor}
+          colorsDomain={colorsDomain}
           width={props.width}
           height={props.height}
           title={props.title}
           shouldUpdate={!this.state.changeState}
+          series={series}
+          legendStyle={props.legendStyle}
         >
           <g transform={trans} className={props.chartClassName}>
             <XGrid

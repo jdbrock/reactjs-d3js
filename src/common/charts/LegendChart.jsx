@@ -53,9 +53,12 @@ module.exports = createReactClass({
           colors={props.colors}
           colorAccessor={props.colorAccessor}
           data={props.data}
+          colorsDomain={props.colorsDomain}
           legendPosition={props.legendPosition}
           margins={props.margins}
           width={props.sideOffset}
+          series={props.series}
+          legendStyle={props.legendStyle}
         />
       );
     }
@@ -80,7 +83,6 @@ module.exports = createReactClass({
 
   _renderChart() {
     const props = this.props;
-
     return (
       <svg
         className={props.svgClassName}
@@ -102,14 +104,25 @@ module.exports = createReactClass({
         style={{ width: props.width, height: props.height }}
       >
         {this._renderTitle()}
-        <div style={{ display: 'table', width: '100%', height: '100%' }}>
+        {/* <div style={{ display: 'table', width: '100%', height: '100%' }}>
           <div style={{ display: 'table-cell', width: '100%', height: '100%' }}>
             {this._renderChart()}
           </div>
           <div style={{ display: 'table-cell', width: props.sideOffset, verticalAlign: 'top' }}>
             {this._renderLegend()}
           </div>
+        </div> */}
+
+
+        <div style={{ display: 'flex'}}>
+          <div style={{ width:  props.width, height: props.height  }}>
+            {this._renderChart()}
+          </div>
+          <div style={{'align-self':'center'}}>
+            {this._renderLegend()}
+          </div>
         </div>
+
       </div>
     );
   },
