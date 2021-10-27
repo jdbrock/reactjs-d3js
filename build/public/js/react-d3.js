@@ -773,7 +773,7 @@ module.exports = createReactClass({
 
     _array.map(function (elem, idxE) {
       var bar = void 0;
-      props.xIsDate ? bar = new Date(elem.x) : bar = elem.x;
+      props.xIsDate ? bar = new Date(elem.x).toLocaleDateString() : bar = elem.x;
       if (typeof dataDict[bar] === 'undefined') {
         dataDict[bar] = _defineProperty({ 'x': bar }, elem.name, +elem.y);
       } else {
@@ -852,7 +852,9 @@ module.exports = createReactClass({
       gridVertical: props.gridVertical,
       gridVerticalStroke: props.gridVerticalStroke,
       gridVerticalStrokeWidth: props.gridVerticalStrokeWidth,
-      gridVerticalStrokeDash: props.gridVerticalStrokeDash
+      gridVerticalStrokeDash: props.gridVerticalStrokeDash,
+      gridTxtRotate: props.gridTxtRotate,
+      gridTranslate: props.gridTranslate
     }), React.createElement(YGrid, {
       yAxisClassName: props.yAxisClassName,
       yAxisTickValues: props.yAxisTickValues,
@@ -872,7 +874,9 @@ module.exports = createReactClass({
       gridHorizontal: props.gridHorizontal,
       gridHorizontalStroke: props.gridHorizontalStroke,
       gridHorizontalStrokeWidth: props.gridHorizontalStrokeWidth,
-      gridHorizontalStrokeDash: props.gridHorizontalStrokeDash
+      gridHorizontalStrokeDash: props.gridHorizontalStrokeDash,
+      gridTxtRotate: props.gridTxtRotate,
+      gridTranslate: props.gridTranslate
     }), React.createElement(DataSeries, {
       yScale: yScale,
       xScale: xScale,
@@ -907,11 +911,7 @@ module.exports = createReactClass({
       height: innerHeight,
       horizontalChart: props.horizontal,
       xOrient: props.xOrient,
-      yOrient: yOrient,
-      gridHorizontal: props.gridHorizontal,
-      gridHorizontalStroke: props.gridHorizontalStroke,
-      gridHorizontalStrokeWidth: props.gridHorizontalStrokeWidth,
-      gridHorizontalStrokeDash: props.gridHorizontalStrokeDash
+      yOrient: yOrient
     }), React.createElement(XAxis, {
       xAxisClassName: props.xAxisClassName,
       xAxisTickValues: props.xAxisTickValues,
@@ -926,11 +926,7 @@ module.exports = createReactClass({
       height: innerHeight,
       horizontalChart: props.horizontal,
       xOrient: props.xOrient,
-      yOrient: yOrient,
-      gridVertical: props.gridVertical,
-      gridVerticalStroke: props.gridVerticalStroke,
-      gridVerticalStrokeWidth: props.gridVerticalStrokeWidth,
-      gridVerticalStrokeDash: props.gridVerticalStrokeDash
+      yOrient: yOrient
     }))), props.showTooltip ? React.createElement(Tooltip, this.state.tooltip) : null);
   }
 });
@@ -1848,7 +1844,8 @@ module.exports = createReactClass({
     gridHorizontalStrokeWidth: PropTypes.number,
     gridVerticalStrokeWidth: PropTypes.number,
     gridHorizontalStrokeDash: PropTypes.string,
-    gridVerticalStrokeDash: PropTypes.string
+    gridVerticalStrokeDash: PropTypes.string,
+    gridTxtRotate: PropTypes.object
   },
   getDefaultProps: function getDefaultProps() {
     return {
@@ -1865,13 +1862,25 @@ module.exports = createReactClass({
       gridHorizontalStrokeWidth: 0.4,
       gridVerticalStrokeWidth: 0.4,
       gridHorizontalStrokeDash: '5, 5',
-      gridVerticalStrokeDash: '5, 5'
+      gridVerticalStrokeDash: '5, 5',
+      gridTxtRotate: {
+        top: null,
+        right: null,
+        bottom: null,
+        left: null
+      },
+      gridTranslate: {
+        text: { x: 0, y: 0 },
+        line: { x: 0, y: 0 }
+      }
     };
   },
   render: function render() {
     var props = this.props;
-
     var tr = void 0;
+    var trText = void 0;
+    var gridTranslate = void 0;
+    var gridTxtRotate = void 0;
     var textAnchor = void 0;
     var textTransform = void 0;
     var tickFormat = void 0;
@@ -1919,20 +1928,16 @@ module.exports = createReactClass({
     // Still working on this
     // Ticks and lines are not fully aligned
     // in some orientations
+    var adjustedScaleTransTxtX = function adjustedScaleTransTxtX(tick) {
+      return adjustedScale(tick) + props.gridTranslate.text.x;
+    };
+
     switch (props.orient) {
       case 'top':
         tr = function tr(tick) {
           return 'translate(' + adjustedScale(tick) + ',0)';
         };
-        textAnchor = 'middle';
-        y2 = props.innerTickSize * sign;
-        y1 = tickSpacing * sign;
-        dy = sign < 0 ? '0em' : '.71em';
-        x2grid = 0;
-        y2grid = -props.height;
-        break;
-      case 'bottom':
-        tr = function tr(tick) {
+        trText = function trText(tick) {
           return 'translate(' + adjustedScale(tick) + ',0)';
         };
         textAnchor = 'middle';
@@ -1941,9 +1946,28 @@ module.exports = createReactClass({
         dy = sign < 0 ? '0em' : '.71em';
         x2grid = 0;
         y2grid = -props.height;
+        gridTxtRotate = props.gridTxtRotate.top;
+        break;
+      case 'bottom':
+        tr = function tr(tick) {
+          return 'translate(' + adjustedScale(tick) + ',0)';
+        };
+        trText = function trText(tick) {
+          return 'translate(' + adjustedScaleTransTxtX(tick) + ',' + props.gridTranslate.text.y + ')';
+        };
+        textAnchor = 'middle';
+        y2 = props.innerTickSize * sign;
+        y1 = tickSpacing * sign;
+        dy = sign < 0 ? '0em' : '.71em';
+        x2grid = 0;
+        y2grid = -props.height;
+        gridTxtRotate = props.gridTxtRotate.bottom;
         break;
       case 'left':
         tr = function tr(tick) {
+          return 'translate(0,' + adjustedScale(tick) + ')';
+        };
+        trText = function trText(tick) {
           return 'translate(0,' + adjustedScale(tick) + ')';
         };
         textAnchor = 'end';
@@ -1952,9 +1976,13 @@ module.exports = createReactClass({
         dy = '.32em';
         x2grid = props.width;
         y2grid = 0;
+        gridTxtRotate = props.gridTxtRotate.left;
         break;
       case 'right':
         tr = function tr(tick) {
+          return 'translate(0,' + adjustedScale(tick) + ')';
+        };
+        trText = function trText(tick) {
           return 'translate(0,' + adjustedScale(tick) + ')';
         };
         textAnchor = 'start';
@@ -1963,6 +1991,7 @@ module.exports = createReactClass({
         dy = '.32em';
         x2grid = -props.width;
         y2grid = 0;
+        gridTxtRotate = props.gridTxtRotate.right;
         break;
       default:
         break;
@@ -2036,12 +2065,16 @@ module.exports = createReactClass({
         },
         x2: x2,
         y2: y2
-      }), React.createElement('text', _extends({
+      }));
+    }), ticks.map(function (tick, idx) {
+      return React.createElement('g', { className: 'tickText', transform: trText(tick) }, React.createElement('text', _extends({
         strokeWidth: '0.01',
         dy: dy, x: x1, y: y1,
         style: { stroke: props.tickTextStroke, fill: props.tickTextStroke },
         textAnchor: textAnchor
-      }, optionalTextProps), ('' + tickFormat(tick)).split('\n').map(function (tickLabel, index) {
+      }, optionalTextProps, {
+        transform: gridTxtRotate
+      }), ('' + tickFormat(tick)).split('\n').map(function (tickLabel, index) {
         return React.createElement('tspan', { x: x1 || 0, dy: dy, key: index }, tickLabel);
       })));
     }));
@@ -2295,7 +2328,9 @@ module.exports = createReactClass({
       gridVertical: props.gridVertical,
       gridVerticalStroke: props.gridVerticalStroke,
       gridVerticalStrokeWidth: props.gridVerticalStrokeWidth,
-      gridVerticalStrokeDash: props.gridVerticalStrokeDash
+      gridVerticalStrokeDash: props.gridVerticalStrokeDash,
+      gridTxtRotate: props.gridTxtRotate,
+      gridTranslate: props.gridTranslate
     }));
   }
 });
@@ -2485,7 +2520,9 @@ module.exports = createReactClass({
       gridHorizontal: props.gridHorizontal,
       gridHorizontalStroke: props.gridHorizontalStroke,
       gridHorizontalStrokeWidth: props.gridHorizontalStrokeWidth,
-      gridHorizontalStrokeDash: props.gridHorizontalStrokeDash
+      gridHorizontalStrokeDash: props.gridHorizontalStrokeDash,
+      gridTxtRotate: props.gridTxtRotate,
+      gridTranslate: props.gridTranslate
     }));
   }
 });

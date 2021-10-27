@@ -47,8 +47,6 @@ module.exports = createReactClass({
   getDefaultProps() {
     return {
       chartClassName: 'rd3-barchart',
-      // colors: d3.scaleOrdinal(d3.schemeGnBu[9].reverse()),
-      // colors: d3.scaleSequential(d3.interpolateBlues),
       hoverAnimation: true,
       margins: { top: 10, right: 20, bottom: 40, left: 45 },
       rangeRoundBandsPadding: 0.25,
@@ -108,7 +106,7 @@ module.exports = createReactClass({
 
     _array.map( (elem, idxE) => {
         let bar;
-        props.xIsDate ? bar = new Date(elem.x) : bar = elem.x;
+        props.xIsDate ? bar = new Date(elem.x).toLocaleDateString() : bar = elem.x;
         if (typeof dataDict[bar] === 'undefined'){
           dataDict[bar] = {'x':bar, [elem.name]:+elem.y}
         }else{
@@ -175,6 +173,8 @@ module.exports = createReactClass({
               gridVerticalStroke={props.gridVerticalStroke}
               gridVerticalStrokeWidth={props.gridVerticalStrokeWidth}
               gridVerticalStrokeDash={props.gridVerticalStrokeDash}
+              gridTxtRotate={props.gridTxtRotate}
+              gridTranslate={props.gridTranslate}
             />
             <YGrid
               yAxisClassName={props.yAxisClassName}
@@ -196,6 +196,8 @@ module.exports = createReactClass({
               gridHorizontalStroke={props.gridHorizontalStroke}
               gridHorizontalStrokeWidth={props.gridHorizontalStrokeWidth}
               gridHorizontalStrokeDash={props.gridHorizontalStrokeDash}
+              gridTxtRotate={props.gridTxtRotate}
+              gridTranslate={props.gridTranslate}
             />
             <DataSeries
               yScale={yScale}
@@ -233,10 +235,6 @@ module.exports = createReactClass({
               horizontalChart={props.horizontal}
               xOrient={props.xOrient}
               yOrient={yOrient}
-              gridHorizontal={props.gridHorizontal}
-              gridHorizontalStroke={props.gridHorizontalStroke}
-              gridHorizontalStrokeWidth={props.gridHorizontalStrokeWidth}
-              gridHorizontalStrokeDash={props.gridHorizontalStrokeDash}
             />
             <XAxis
               xAxisClassName={props.xAxisClassName}
@@ -253,10 +251,6 @@ module.exports = createReactClass({
               horizontalChart={props.horizontal}
               xOrient={props.xOrient}
               yOrient={yOrient}
-              gridVertical={props.gridVertical}
-              gridVerticalStroke={props.gridVerticalStroke}
-              gridVerticalStrokeWidth={props.gridVerticalStrokeWidth}
-              gridVerticalStrokeDash={props.gridVerticalStrokeDash}
             />
 
 

@@ -32,6 +32,7 @@ module.exports = createReactClass({
     gridVerticalStrokeWidth: PropTypes.number,
     gridHorizontalStrokeDash: PropTypes.string,
     gridVerticalStrokeDash: PropTypes.string,
+    gridTxtRotate:PropTypes.object,
   },
   getDefaultProps() {
     return {
@@ -49,13 +50,25 @@ module.exports = createReactClass({
       gridVerticalStrokeWidth: 0.4,
       gridHorizontalStrokeDash: '5, 5',
       gridVerticalStrokeDash: '5, 5',
+      gridTxtRotate:{
+                      top:null,
+                      right:null,
+                      bottom:null,
+                      left:null
+                    },
+      gridTranslate:{
+                      text:{x:0, y:0},
+                      line:{x:0, y:0}
+                    },
     };
   },
 
   render() {
     const props = this.props;
-
     let tr;
+    let trText;
+    let gridTranslate;
+    let gridTxtRotate;
     let textAnchor;
     let textTransform;
     let tickFormat;
@@ -96,47 +109,55 @@ module.exports = createReactClass({
 
     const adjustedScale = scale.bandwidth ? d => scale(d) + scale.bandwidth() / 2 : scale;
 
-
-
     // Still working on this
     // Ticks and lines are not fully aligned
     // in some orientations
+    const adjustedScaleTransTxtX = (tick) => adjustedScale(tick) + props.gridTranslate.text.x;
+
     switch (props.orient) {
       case 'top':
         tr = (tick) => `translate(${adjustedScale(tick)},0)`;
+        trText = (tick) => `translate(${adjustedScale(tick)},0)`;
         textAnchor = 'middle';
         y2 = props.innerTickSize * sign;
         y1 = tickSpacing * sign;
         dy = sign < 0 ? '0em' : '.71em';
         x2grid = 0;
         y2grid = -props.height;
+        gridTxtRotate = props.gridTxtRotate.top;
         break;
       case 'bottom':
         tr = (tick) => `translate(${adjustedScale(tick)},0)`;
+        trText = (tick) => `translate(${adjustedScaleTransTxtX(tick)},${props.gridTranslate.text.y})`;
         textAnchor = 'middle';
         y2 = props.innerTickSize * sign;
         y1 = tickSpacing * sign;
         dy = sign < 0 ? '0em' : '.71em';
         x2grid = 0;
         y2grid = -props.height;
+        gridTxtRotate = props.gridTxtRotate.bottom;
         break;
       case 'left':
         tr = (tick) => `translate(0,${adjustedScale(tick)})`;
+        trText = (tick) => `translate(0,${adjustedScale(tick)})`;
         textAnchor = 'end';
         x2 = props.innerTickSize * -sign;
         x1 = tickSpacing * -sign;
         dy = '.32em';
         x2grid = props.width;
         y2grid = 0;
+        gridTxtRotate = props.gridTxtRotate.left;
         break;
       case 'right':
         tr = (tick) => `translate(0,${adjustedScale(tick)})`;
+        trText = (tick) => `translate(0,${adjustedScale(tick)})`;
         textAnchor = 'start';
         x2 = props.innerTickSize * -sign;
         x1 = tickSpacing * -sign;
         dy = '.32em';
         x2grid = -props.width;
         y2grid = 0;
+        gridTxtRotate = props.gridTxtRotate.right;
         break;
       default:
         break;
@@ -219,12 +240,18 @@ module.exports = createReactClass({
               x2={x2}
               y2={y2}
             />
+          </g>
+        ))
+      }
+      {ticks.map((tick, idx) => (
+        <g className="tickText" transform={trText(tick)} >
             <text
               strokeWidth="0.01"
               dy={dy} x={x1} y={y1}
               style={{ stroke: props.tickTextStroke, fill: props.tickTextStroke }}
               textAnchor={textAnchor}
               {...optionalTextProps}
+              transform={gridTxtRotate}
             >
               {`${tickFormat(tick)}`.split('\n').map((tickLabel, index) => (
                   <tspan x={x1 || 0} dy={dy} key={index}>
@@ -232,9 +259,8 @@ module.exports = createReactClass({
                   </tspan>
               ))}
             </text>
-          </g>
-        ))
-      }
+            </g>
+            ))}
     </g>
     );
   },
