@@ -14,8 +14,6 @@ module.exports = createReactClass({
     x: PropTypes.number,
     y: PropTypes.number,
     className: PropTypes.string,
-    handleMouseOver: PropTypes.func,
-    handleMouseLeave: PropTypes.func,
   },
 
   getDefaultProps() {
@@ -31,8 +29,6 @@ module.exports = createReactClass({
         className="rd3-barchart-bar"
         {...this.props}
         fill={this.props.fill}
-        onMouseOver={this.props.handleMouseOver}
-        onMouseLeave={this.props.handleMouseLeave}
       />
     );
   },
