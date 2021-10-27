@@ -35,7 +35,11 @@ module.exports = createReactClass({
     xAxisClassName: PropTypes.string,
     yAxisClassName: PropTypes.string,
     yAxisTickCount: PropTypes.number,
+    xIsDate: PropTypes.bool,
+    color: PropTypes.object,
   },
+
+
 
 
   mixins: [CartesianChartPropsMixin, DefaultAccessorsMixin, ViewBoxMixin, TooltipMixin],
@@ -43,7 +47,8 @@ module.exports = createReactClass({
   getDefaultProps() {
     return {
       chartClassName: 'rd3-barchart',
-      colors: d3.scaleOrdinal(d3.schemeGnBu[9].reverse()),
+      // colors: d3.scaleOrdinal(d3.schemeGnBu[9].reverse()),
+      // colors: d3.scaleSequential(d3.interpolateBlues),
       hoverAnimation: true,
       margins: { top: 10, right: 20, bottom: 40, left: 45 },
       rangeRoundBandsPadding: 0.25,
@@ -54,8 +59,23 @@ module.exports = createReactClass({
       xAxisClassName: 'rd3-barchart-xaxis',
       yAxisClassName: 'rd3-barchart-yaxis',
       yAxisTickCount: 4,
+      xIsDate: false,
+      color: {acessor:null, colors:null}
     };
   },
+
+
+  getInitialState() {
+    return {
+      color: {
+        accessor: this.props.color.accessor === 'Sequential'
+                    ? this.props.colorAccessorSequential
+                    : this.props.colorAccessorOrdinal,
+        colors: this.props.color.colors ||  d3.scaleOrdinal(d3.schemeGnBu[9].reverse())
+      }
+    }
+  },
+
 
   _getLabels(firstSeries) {
     // we only need first series to get all the labels
@@ -83,41 +103,43 @@ module.exports = createReactClass({
       return null;
     }
 
-
-    /*
-    mudar a orientacao do array pq vem errado
-    https://stackoverflow.com/questions/17428587/transposing-a-2d-array-in-javascript
-    Para chegar nisso
-    https://github.com/d3/d3-shape/blob/v3.0.1/README.md#stack
-    Isso funciona:
-    */
-
     const _array = props.data
-    const data = []
+    const dataDict = {}
 
     _array.map( (elem, idxE) => {
-      elem.values.map( (v, idxV) => {
-        if (typeof data[idxV] === 'undefined'){
-          data[idxV] = {'x':v.x, [elem['name']]: v.y}
-        } else{
-          data[idxV][[elem['name']]] = v.y
+        let bar;
+        props.xIsDate ? bar = new Date(elem.x) : bar = elem.x;
+        if (typeof dataDict[bar] === 'undefined'){
+          dataDict[bar] = {'x':bar, [elem.name]:+elem.y}
+        }else{
+          dataDict[bar][elem.name] = +elem.y
         }
-      })
     })
-    const series = props.data.map((item) => item.name);
+    const data = Object.keys(dataDict).map(function(key){
+        return dataDict[key];
+    });
+
+    let series = new Set(props.data.map((item) => item.name));
+    series = Array.from(series);
     const _data = this._stack(series)(data);
     const { innerHeight, innerWidth, trans, svgMargins } = this.getDimensions();
 
     const xScale = d3.scaleBand()
-                      .domain(data.map(d => d.x))
-                      .paddingInner(0.1)
-                      .paddingOuter(0.1)
-                      .range([0, innerWidth])
+    .domain(data.map(d => d.x))
+    .paddingInner(0.1)
+    .paddingOuter(0.1)
+    .range([0, innerWidth])
 
     const minYDomain = Math.min(0, d3.min(_data, (d) => (d[1])))
     const maxYDomain = d3.max(_data, (d) => (d[1]))
     const yDomain = ([d3.min(_data, d => d3.min(d, d => d[1])), d3.max(_data, d => d3.max(d, d => d[1]))])
     const yScale = d3.scaleLinear().range([innerHeight, 0]).domain(yDomain);
+
+    const origArray = [...Array(data.length).keys()];
+    let colorsDomain;
+    this.props.color.accessor === 'Sequential'
+      ? colorsDomain = origArray.map(x => x / data.length)
+      : colorsDomain = series
 
     return (
       <span>
@@ -126,8 +148,8 @@ module.exports = createReactClass({
           legend={props.legend}
           data={props.data}
           margins={props.margins}
-          colors={props.colors}
-          colorAccessor={props.colorAccessor}
+          colors={this.state.color.colors}
+          colorAccessor={this.state.color.accessor}
           width={props.width}
           height={props.height}
           title={props.title}
@@ -184,8 +206,9 @@ module.exports = createReactClass({
               width={innerWidth}
               height={innerHeight}
               grouped={props.grouped}
-              colors={props.colors}
-              colorAccessor={props.colorAccessor}
+              colors={this.state.color.colors}
+              colorsDomain={colorsDomain}
+              colorAccessor={this.state.color.accessor}
               hoverAnimation={props.hoverAnimation}
               valuesAccessor={props.valuesAccessor}
               xAccessorBar={props.xAccessorBar}
