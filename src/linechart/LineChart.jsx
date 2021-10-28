@@ -34,7 +34,7 @@ module.exports = createReactClass({
       circleRadius: 3,
       className: 'rd3-linechart',
       hoverAnimation: true,
-      margins: { top: 10, right: 20, bottom: 50, left: 45 },
+      margins: { top: 70, right: 20, bottom: 60, left: 60 },
       xAxisClassName: 'rd3-linechart-xaxis',
       yAxisClassName: 'rd3-linechart-yaxis',
       data: [],

@@ -155,6 +155,8 @@ module.exports = createReactClass({
           shouldUpdate={!this.state.changeState}
           series={series}
           legendStyle={props.legendStyle}
+          background={props.background}
+          svgTitle={props.svgTitle}
         >
           <g transform={trans} className={props.chartClassName}>
             <XGrid
@@ -176,8 +178,7 @@ module.exports = createReactClass({
               gridVerticalStroke={props.gridVerticalStroke}
               gridVerticalStrokeWidth={props.gridVerticalStrokeWidth}
               gridVerticalStrokeDash={props.gridVerticalStrokeDash}
-              gridTxtRotate={props.gridTxtRotate}
-              gridTranslate={props.gridTranslate}
+              gridText={props.gridText}
             />
             <YGrid
               yAxisClassName={props.yAxisClassName}
@@ -199,8 +200,7 @@ module.exports = createReactClass({
               gridHorizontalStroke={props.gridHorizontalStroke}
               gridHorizontalStrokeWidth={props.gridHorizontalStrokeWidth}
               gridHorizontalStrokeDash={props.gridHorizontalStrokeDash}
-              gridTxtRotate={props.gridTxtRotate}
-              gridTranslate={props.gridTranslate}
+              gridText={props.gridText}
             />
             <DataSeries
               yScale={yScale}
