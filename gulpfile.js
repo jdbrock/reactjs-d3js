@@ -65,14 +65,15 @@ function bundler(entry) {
 
 
 function transpile_src(){
+
   // replacement for jsx --harmony -x jsx src build/cjs && jsx --harmony src build/cjs
   const npmAssets = gulp.src(['src/**/*.js', 'src/**/*.jsx'])
         .pipe(babel({ presets: ['es2015', 'react'] }))
         .pipe(gulp.dest('build/cjs'));
   // replacement for cp *.md build/cjs && cp .npmignore build/cjs
-  const misc = gulp.src(['*.md', '.npmignore'])
-        .pipe(gulp.dest('build/cjs'));
-  return merge(npmAssets, misc);
+  // const misc = gulp.src(['*.md', '.npmignore'])
+  //       .pipe(gulp.dest('build/cjs'));
+  return merge(npmAssets);
 };
 
 

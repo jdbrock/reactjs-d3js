@@ -41,6 +41,12 @@ module.exports = createReactClass({
       svgClassName: 'rd3-chart',
       titleClassName: 'rd3-chart-title',
       title: '',
+      svgTitle:{
+                title:'Title',
+                x:50,
+                y:50,
+                fontSize:'1.5em',
+              }
     };
   },
 
@@ -69,13 +75,19 @@ module.exports = createReactClass({
   _renderTitle() {
     const props = this.props;
 
+    const fontSize = props.svgTitle.fontSize;
+
+
     if (props.title !== '') {
       return (
-        <h4
-          className={props.titleClassName}
-        >
+          <text
+            text-anchor="middle"
+            y={props.svgTitle.y}
+            x={props.svgTitle.x}
+            style={{'font-size':fontSize}}
+          >
           {props.title}
-        </h4>
+          </text>
       );
     }
     return null;
@@ -90,6 +102,7 @@ module.exports = createReactClass({
         viewBox={props.viewBox}
         width="100%"
       >
+        {this._renderTitle()}
         {props.children}
       </svg>
     );
@@ -101,9 +114,8 @@ module.exports = createReactClass({
     return (
       <div
         className={props.className}
-        style={{ width: props.width, height: props.height }}
+        style={{ display: 'grid', width: props.width, height: props.height, background:props.background }}
       >
-        {this._renderTitle()}
         {/* <div style={{ display: 'table', width: '100%', height: '100%' }}>
           <div style={{ display: 'table-cell', width: '100%', height: '100%' }}>
             {this._renderChart()}
@@ -114,8 +126,9 @@ module.exports = createReactClass({
         </div> */}
 
 
-        <div style={{ display: 'flex'}}>
+        <div style={{ display: 'flex', 'align-items':'flex-end'}}>
           <div style={{ width:  props.width, height: props.height  }}>
+
             {this._renderChart()}
           </div>
           <div style={{'align-self':'center'}}>

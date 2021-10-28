@@ -24,6 +24,7 @@ module.exports = createReactClass({
       svgClassName: 'rd3-chart',
       titleClassName: 'rd3-chart-title',
       shouldUpdate: true,
+      background:null,
     };
   },
   shouldComponentUpdate(nextProps) {
