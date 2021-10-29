@@ -44,17 +44,11 @@ module.exports = createReactClass({
   },
 
   _renderBarContainer(segment, seriesIdx) {
-    // const { colors, colorAccessor, colorsDomain, grouped, series, xScale, yScale } = this.props;
-    const { color, colorsDomain, grouped, series, xScale, yScale } = this.props;
+    const { color, colorsAccessor, colorsDomain, grouped, series, xScale, yScale } = this.props;
     const barHeight = Math.abs(yScale(this.props.y0Accessor(segment)) - yScale(this.props.yAccessorBar(segment)));
     const yWidth = yScale(this.props.y0Accessor(segment) + this.props.yAccessorBar(segment));
     const y = grouped ? yScale(this.props.yAccessorBar(segment)) : yWidth;
     const key = this.props.series[seriesIdx] + segment.data.x +segment[1];
-
-    const colorAccessor = () => {return this.props.color.accessor === 'Sequential'
-                                  ? this.props.colorAccessorSequential
-                                  : this.props.colorAccessorOrdinal
-                                }
 
     return (
       <BarContainer
@@ -63,7 +57,7 @@ module.exports = createReactClass({
         width={xScale.bandwidth() }
         x={ xScale(this.props.xAccessorBar(segment)) }
         y={(this.props.yAccessorBar(segment) >= 0) ? y : y - barHeight}
-        fill={this.props.color.colors(colorAccessor()(colorsDomain, seriesIdx))}
+        fill={this.props.color.colors(colorsAccessor(colorsDomain, seriesIdx))}
         hoverAnimation={this.props.hoverAnimation}
         onMouseOver={this.props.onMouseOver}
         onMouseLeave={this.props.onMouseLeave}
