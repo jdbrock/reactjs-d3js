@@ -64,16 +64,18 @@ module.exports = createReactClass({
     if (props.legend) {
       return (
         <Legend
-          colors={props.colors}
-          colorAccessor={props.colorAccessor}
-          data={props.data}
-          colorsDomain={props.colorsDomain}
-          legendPosition={props.legendPosition}
-          margins={props.margins}
-          width={props.sideOffset}
-          series={props.series}
-          legendStyle={props.legendStyle}
-          svgLegend={props.svgLegend}
+          // colors={props.colors}
+          // colorAccessor={props.colorAccessor}
+          // data={props.data}
+          // colorsDomain={props.colorsDomain}
+          // legendPosition={props.legendPosition}
+          // margins={props.margins}
+          // width={props.sideOffset}
+          // series={props.series}
+          // legendStyle={props.legendStyle}
+          // svgLegend={props.svgLegend}
+          {...this.props}
+
         />
       );
     }
@@ -131,17 +133,6 @@ module.exports = createReactClass({
         className={props.className}
         style={{ display: 'grid', width: props.width, height: props.height, background:props.background }}
       >
-        {/* <div style={{ display: 'table', width: '100%', height: '100%' }}>
-          <div style={{ display: 'table-cell', width: '100%', height: '100%' }}>
-            {this._renderChart()}
-          </div>
-          <div style={{ display: 'table-cell', width: props.sideOffset, verticalAlign: 'top' }}>
-            {this._renderLegend()}
-          </div>
-        </div> */}
-
-
-
           <div style={{ display:'flex',  width:props.width, height:props.height  }}>
 
             {this._renderChart()}

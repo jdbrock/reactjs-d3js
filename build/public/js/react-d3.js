@@ -2760,18 +2760,18 @@ module.exports = createReactClass({
     var props = this.props;
 
     if (props.legend) {
-      return React.createElement(Legend, {
-        colors: props.colors,
-        colorAccessor: props.colorAccessor,
-        data: props.data,
-        colorsDomain: props.colorsDomain,
-        legendPosition: props.legendPosition,
-        margins: props.margins,
-        width: props.sideOffset,
-        series: props.series,
-        legendStyle: props.legendStyle,
-        svgLegend: props.svgLegend
-      });
+      return React.createElement(Legend
+      // colors={props.colors}
+      // colorAccessor={props.colorAccessor}
+      // data={props.data}
+      // colorsDomain={props.colorsDomain}
+      // legendPosition={props.legendPosition}
+      // margins={props.margins}
+      // width={props.sideOffset}
+      // series={props.series}
+      // legendStyle={props.legendStyle}
+      // svgLegend={props.svgLegend}
+      , this.props);
     }
 
     return null;
