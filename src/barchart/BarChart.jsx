@@ -58,20 +58,11 @@ module.exports = createReactClass({
       yAxisClassName: 'rd3-barchart-yaxis',
       yAxisTickCount: 4,
       xIsDate: false,
-      color: {acessor:null, colors:null}
-    };
-  },
-
-
-  getInitialState() {
-    return {
       color: {
-        accessor: this.props.color.accessor === 'Sequential'
-                    ? this.props.colorAccessorSequential
-                    : this.props.colorAccessorOrdinal,
-        colors: this.props.color.colors ||  d3.scaleOrdinal(d3.schemeGnBu[9].reverse())
+        accessor: 'Sequential',
+        colors: d3.scaleOrdinal(d3.schemeGnBu[9].reverse())
       }
-    }
+    };
   },
 
 
@@ -146,14 +137,15 @@ module.exports = createReactClass({
           legend={props.legend}
           data={props.data}
           margins={props.margins}
-          colors={this.state.color.colors}
-          colorAccessor={this.state.color.accessor}
+          color={this.props.color}
           colorsDomain={colorsDomain}
           width={props.width}
           height={props.height}
           title={props.title}
           shouldUpdate={!this.state.changeState}
           series={series}
+          svgLegend={props.svgLegend}
+          svgChart={props.svgChart}
           legendStyle={props.legendStyle}
           background={props.background}
           svgTitle={props.svgTitle}
@@ -211,9 +203,8 @@ module.exports = createReactClass({
               width={innerWidth}
               height={innerHeight}
               grouped={props.grouped}
-              colors={this.state.color.colors}
+              color={this.props.color}
               colorsDomain={colorsDomain}
-              colorAccessor={this.state.color.accessor}
               hoverAnimation={props.hoverAnimation}
               valuesAccessor={props.valuesAccessor}
               xAccessorBar={props.xAccessorBar}
