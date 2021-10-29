@@ -4,7 +4,7 @@ const PropTypes = require('prop-types');
 const React = require('react');
 const createReactClass = require('create-react-class');
 
-const { findDOMNode } = require('react-dom');
+const { ReactDOM } = require('react-dom');
 const shade = require('../utils').shade;
 const Arc = require('./Arc');
 
@@ -29,7 +29,7 @@ module.exports = createReactClass({
   },
 
   _animateArc() {
-    const rect = findDOMNode(this).getBoundingClientRect();
+    const rect = ReactDOM.findDOMNode(this).getBoundingClientRect();
     this.props.onMouseOver.call(this, rect.right, rect.top, this.props.dataPoint);
     this.setState({
       fill: shade(this.props.fill, 0.2),
