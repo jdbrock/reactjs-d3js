@@ -15,14 +15,8 @@ module.exports = createReactClass({
     fill: PropTypes.string,
     onMouseOver: PropTypes.func,
     onMouseLeave: PropTypes.func,
-    // dataPoint: PropTypes.any, // TODO: prop types?
   },
 
-  getDefaultProps() {
-    return {
-      fill: '#000000',
-    };
-  },
 
   getInitialState() {
     return {
@@ -63,7 +57,7 @@ module.exports = createReactClass({
     return (
       <Bar
         {...props}
-        fill={this.state.fill}
+        fill={this.props.fill}
         // onMouseOver={handleMouseOver}
         // onMouseLeave={handleMouseLeave}
 

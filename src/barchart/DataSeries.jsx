@@ -6,10 +6,15 @@ const createReactClass = require('create-react-class');
 
 const BarContainer = require('./BarContainer');
 
+const {
+  CartesianChartPropsMixin,
+} = require('../mixins');
+
+
 module.exports = createReactClass({
 
   displayName: 'DataSeries',
-
+  mixins: [CartesianChartPropsMixin],
   propTypes: {
     _data: PropTypes.array,
     series: PropTypes.array,
@@ -29,6 +34,8 @@ module.exports = createReactClass({
     yScale: PropTypes.any,
   },
 
+  mixins: [CartesianChartPropsMixin],
+
   _renderBarSeries() {
     const { _data, valuesAccessor } = this.props;
     return _data.map((layer, seriesIdx) => (
@@ -37,11 +44,17 @@ module.exports = createReactClass({
   },
 
   _renderBarContainer(segment, seriesIdx) {
-    const { colors, colorAccessor, colorsDomain, grouped, series, xScale, yScale } = this.props;
+    // const { colors, colorAccessor, colorsDomain, grouped, series, xScale, yScale } = this.props;
+    const { color, colorsDomain, grouped, series, xScale, yScale } = this.props;
     const barHeight = Math.abs(yScale(this.props.y0Accessor(segment)) - yScale(this.props.yAccessorBar(segment)));
     const yWidth = yScale(this.props.y0Accessor(segment) + this.props.yAccessorBar(segment));
     const y = grouped ? yScale(this.props.yAccessorBar(segment)) : yWidth;
     const key = this.props.series[seriesIdx] + segment.data.x +segment[1];
+
+    const colorAccessor = () => {return this.props.color.accessor === 'Sequential'
+                                  ? this.props.colorAccessorSequential
+                                  : this.props.colorAccessorOrdinal
+                                }
 
     return (
       <BarContainer
@@ -50,7 +63,7 @@ module.exports = createReactClass({
         width={xScale.bandwidth() }
         x={ xScale(this.props.xAccessorBar(segment)) }
         y={(this.props.yAccessorBar(segment) >= 0) ? y : y - barHeight}
-        fill={this.props.colors(this.props.colorAccessor(colorsDomain, seriesIdx))}
+        fill={this.props.color.colors(colorAccessor()(colorsDomain, seriesIdx))}
         hoverAnimation={this.props.hoverAnimation}
         onMouseOver={this.props.onMouseOver}
         onMouseLeave={this.props.onMouseLeave}
