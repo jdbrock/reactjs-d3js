@@ -72,6 +72,7 @@ module.exports = createReactClass({
         );
       })
     }else{
+      if (! props.color){ return []}
       props.data.forEach((series, idx) => {
         let itemStyle = Object.assign({},props.legendStyle.bulletStyle)
         itemStyle.color = props.color.colors(props.colorsAccessor(series, idx));
