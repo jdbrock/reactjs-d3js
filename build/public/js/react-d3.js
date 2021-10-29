@@ -808,9 +808,25 @@ module.exports = createReactClass({
 
     var origArray = [].concat(_toConsumableArray(Array(data.length).keys()));
     var colorsDomain = void 0;
-    this.props.color.accessor === 'Sequential' ? colorsDomain = origArray.map(function (x) {
-      return x / data.length;
-    }) : colorsDomain = series;
+    var colorsAccessor = void 0;
+    // this.props.color.accessor === 'Sequential'
+    //   ? colorsDomain = origArray.map(x => x / data.length)
+    //   : colorsDomain = series
+
+    if (this.props.color.accessor === 'Sequential') {
+      colorsDomain = origArray.map(function (x) {
+        return x / data.length;
+      });
+      colorsAccessor = this.props.colorAccessorSequential;
+    } else {
+      colorsDomain = series;
+      colorsAccessor = this.props.colorAccessorOrdinal;
+    }
+
+    // const colorAccessor = () => {return this.props.color.accessor === 'Sequential'
+    //                               ? this.props.colorAccessorSequential
+    //                               : this.props.colorAccessorOrdinal
+    //                             }
 
     return React.createElement('span', null, React.createElement(Chart, {
       viewBox: this.getViewBox(),
@@ -819,6 +835,7 @@ module.exports = createReactClass({
       margins: props.margins,
       color: this.props.color,
       colorsDomain: colorsDomain,
+      colorsAccessor: colorsAccessor,
       width: props.width,
       height: props.height,
       title: props.title,
@@ -881,6 +898,7 @@ module.exports = createReactClass({
       grouped: props.grouped,
       color: this.props.color,
       colorsDomain: colorsDomain,
+      colorsAccessor: colorsAccessor,
       hoverAnimation: props.hoverAnimation,
       valuesAccessor: props.valuesAccessor,
       xAccessorBar: props.xAccessorBar,
@@ -1058,11 +1076,9 @@ module.exports = createReactClass((_createReactClass = {
     });
   });
 }), _defineProperty(_createReactClass, '_renderBarContainer', function _renderBarContainer(segment, seriesIdx) {
-  var _this2 = this;
-
-  // const { colors, colorAccessor, colorsDomain, grouped, series, xScale, yScale } = this.props;
   var _props2 = this.props,
       color = _props2.color,
+      colorsAccessor = _props2.colorsAccessor,
       colorsDomain = _props2.colorsDomain,
       grouped = _props2.grouped,
       series = _props2.series,
@@ -1074,17 +1090,13 @@ module.exports = createReactClass((_createReactClass = {
   var y = grouped ? yScale(this.props.yAccessorBar(segment)) : yWidth;
   var key = this.props.series[seriesIdx] + segment.data.x + segment[1];
 
-  var colorAccessor = function colorAccessor() {
-    return _this2.props.color.accessor === 'Sequential' ? _this2.props.colorAccessorSequential : _this2.props.colorAccessorOrdinal;
-  };
-
   return React.createElement(BarContainer, {
     key: key,
     height: barHeight,
     width: xScale.bandwidth(),
     x: xScale(this.props.xAccessorBar(segment)),
     y: this.props.yAccessorBar(segment) >= 0 ? y : y - barHeight,
-    fill: this.props.color.colors(colorAccessor()(colorsDomain, seriesIdx)),
+    fill: this.props.color.colors(colorsAccessor(colorsDomain, seriesIdx)),
     hoverAnimation: this.props.hoverAnimation,
     onMouseOver: this.props.onMouseOver,
     onMouseLeave: this.props.onMouseLeave,
@@ -1563,10 +1575,6 @@ module.exports = createReactClass({
   getDefaultProps: function getDefaultProps() {
     return {
       className: 'rd3-legend',
-      color: d3.scaleOrdinal(d3.schemeCategory10),
-      colorAccessor: function colorAccessor(d, idx) {
-        return idx;
-      },
       itemClassName: 'rd3-legend-item',
       text: '#000',
       legendStyle: {
@@ -1597,21 +1605,22 @@ module.exports = createReactClass({
       var revColorsDomain = props.colorsDomain.reverse();
       props.series.reverse().map(function (serie, idx) {
         var itemStyle = Object.assign({}, props.legendStyle.bulletStyle);
-        itemStyle.color = props.colors(props.colorAccessor(revColorsDomain, idx));
+        itemStyle.color = props.color.colors(props.colorsAccessor(revColorsDomain, idx));
 
-        // console.log(idx , '-' , itemStyle.color)
+        console.log(idx, '-', itemStyle.color);
+        debugger;
 
         legendItems.push(React.createElement('g', null, React.createElement('circle', { cx: '30', cy: 10 + 12 * idx, r: '4', fill: itemStyle.color, id: 'circle' }), React.createElement('text', {
           x: '42',
           y: 14 + 12 * idx,
           style: { 'font-size': fontSize },
           'stroke-width': fontWeight
-        }, serie, ' -  ', itemStyle.color)));
+        }, serie)));
       });
     } else {
       props.data.forEach(function (series, idx) {
         var itemStyle = Object.assign({}, props.legendStyle.bulletStyle);
-        itemStyle.color = props.colors(props.colorAccessor(series, idx));
+        itemStyle.color = props.color.colors(props.colorsAccessor(series, idx));
 
         legendItems.push(React.createElement('g', null, React.createElement('circle', { cx: '30', cy: 10 + 12 * idx, r: '4', fill: itemStyle.color, id: 'circle' }), React.createElement('text', {
           x: '50',
@@ -1620,18 +1629,6 @@ module.exports = createReactClass({
         }, series.name)));
       });
     }
-
-    var topMargin = props.margins.top;
-
-    var legendBlockStyle = {
-      wordWrap: 'break-word',
-      width: props.width,
-      paddingLeft: 0,
-      marginBottom: 0,
-      marginTop: topMargin,
-      listStylePosition: 'inside'
-    };
-
     return legendItems;
   }
 });

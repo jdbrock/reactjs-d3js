@@ -24,8 +24,6 @@ module.exports = createReactClass({
   getDefaultProps() {
     return {
       className: 'rd3-legend',
-      color: d3.scaleOrdinal(d3.schemeCategory10),
-      colorAccessor: (d, idx) => idx,
       itemClassName: 'rd3-legend-item',
       text: '#000',
       legendStyle: {
@@ -53,15 +51,14 @@ module.exports = createReactClass({
       Deixar a entrada de dados flat para todos os graficos.
     */
 
-
-
    if (props.series !== undefined){
       const revColorsDomain = props.colorsDomain.reverse()
       props.series.reverse().map( (serie, idx) => {
         let itemStyle = Object.assign({},props.legendStyle.bulletStyle)
-        itemStyle.color = props.colors(props.colorAccessor(revColorsDomain, idx));
+        itemStyle.color = props.color.colors(props.colorsAccessor(revColorsDomain, idx));
 
-        // console.log(idx , '-' , itemStyle.color)
+        console.log(idx , '-' , itemStyle.color)
+        debugger
 
         legendItems.push(
           <g>
@@ -72,7 +69,7 @@ module.exports = createReactClass({
               style={{'font-size':fontSize}}
               stroke-width={fontWeight}
             >
-              {serie} -  {itemStyle.color}
+              {serie}
             </text>
           </g>
         );
@@ -80,7 +77,7 @@ module.exports = createReactClass({
     }else{
       props.data.forEach((series, idx) => {
         let itemStyle = Object.assign({},props.legendStyle.bulletStyle)
-        itemStyle.color = props.colors(props.colorAccessor(series, idx));
+        itemStyle.color = props.color.colors(props.colorsAccessor(series, idx));
 
         legendItems.push(
           <g>
@@ -96,19 +93,6 @@ module.exports = createReactClass({
         );
       });
     }
-
-
-    const topMargin = props.margins.top;
-
-    const legendBlockStyle = {
-      wordWrap: 'break-word',
-      width: props.width,
-      paddingLeft: 0,
-      marginBottom: 0,
-      marginTop: topMargin,
-      listStylePosition: 'inside',
-    };
-
     return (
         legendItems
     );

@@ -126,9 +126,24 @@ module.exports = createReactClass({
 
     const origArray = [...Array(data.length).keys()];
     let colorsDomain;
-    this.props.color.accessor === 'Sequential'
-      ? colorsDomain = origArray.map(x => x / data.length)
-      : colorsDomain = series
+    let colorsAccessor;
+    // this.props.color.accessor === 'Sequential'
+    //   ? colorsDomain = origArray.map(x => x / data.length)
+    //   : colorsDomain = series
+
+      if (this.props.color.accessor === 'Sequential'){
+          colorsDomain = origArray.map(x => x / data.length)
+          colorsAccessor = this.props.colorAccessorSequential
+      }else{
+          colorsDomain = series
+          colorsAccessor = this.props.colorAccessorOrdinal
+      }
+
+
+    // const colorAccessor = () => {return this.props.color.accessor === 'Sequential'
+    //                               ? this.props.colorAccessorSequential
+    //                               : this.props.colorAccessorOrdinal
+    //                             }
 
     return (
       <span>
@@ -139,6 +154,7 @@ module.exports = createReactClass({
           margins={props.margins}
           color={this.props.color}
           colorsDomain={colorsDomain}
+          colorsAccessor={colorsAccessor}
           width={props.width}
           height={props.height}
           title={props.title}
@@ -205,6 +221,7 @@ module.exports = createReactClass({
               grouped={props.grouped}
               color={this.props.color}
               colorsDomain={colorsDomain}
+              colorsAccessor={colorsAccessor}
               hoverAnimation={props.hoverAnimation}
               valuesAccessor={props.valuesAccessor}
               xAccessorBar={props.xAccessorBar}
