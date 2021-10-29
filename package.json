@@ -69,6 +69,7 @@
     "d3": "^7"
   },
   "scripts": {
+    "build": "gulp build",
     "pretest": "npm run lint",
     "test": "gulp test",
     "watch": "gulp watch",

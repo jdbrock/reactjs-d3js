@@ -212,7 +212,8 @@ function serve() {
   });
 
   config.production = false;
-  compileJS(['./docs/examples/main.js']);
+  // compileJS(['./docs/examples/main.js']);
+  compileJS(['./src/index.js']);
   /* TODO: This is not right */
   gulp.watch('dist/public/data/*', gulp.series=(copy));
   gulp.watch('dist/public/*.html', gulp.series(data), reload);
