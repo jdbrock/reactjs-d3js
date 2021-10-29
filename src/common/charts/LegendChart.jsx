@@ -46,7 +46,15 @@ module.exports = createReactClass({
                 x:50,
                 y:50,
                 fontSize:'1.5em',
-              }
+              },
+      svgLegend:{
+                position:{
+                    x:'85%',
+                    y:'20%'
+                }},
+      svgChart:{
+                  width:'95%'
+                }
     };
   },
 
@@ -65,6 +73,7 @@ module.exports = createReactClass({
           width={props.sideOffset}
           series={props.series}
           legendStyle={props.legendStyle}
+          svgLegend={props.svgLegend}
         />
       );
     }
@@ -96,14 +105,20 @@ module.exports = createReactClass({
   _renderChart() {
     const props = this.props;
     return (
+
       <svg
         className={props.svgClassName}
         height="100%"
         viewBox={props.viewBox}
         width="100%"
       >
-        {this._renderTitle()}
-        {props.children}
+        <svg viewBox={props.viewBox} width={props.svgChart.width}>
+          {this._renderTitle()}
+          {props.children}
+        </svg>
+        <svg x={props.svgLegend.position.x} y={props.svgLegend.position.y}>
+          {this._renderLegend()}
+        </svg>
       </svg>
     );
   },
@@ -126,15 +141,12 @@ module.exports = createReactClass({
         </div> */}
 
 
-        <div style={{ display: 'flex', 'align-items':'flex-end'}}>
-          <div style={{ width:  props.width, height: props.height  }}>
+
+          <div style={{ display:'flex',  width:props.width, height:props.height  }}>
 
             {this._renderChart()}
           </div>
-          <div style={{'align-self':'center'}}>
-            {this._renderLegend()}
-          </div>
-        </div>
+
 
       </div>
     );

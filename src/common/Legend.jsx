@@ -43,58 +43,59 @@ module.exports = createReactClass({
 
   render() {
     const props = this.props;
-
-    // debugger;
-
     const textStyle = props.legendStyle.textStyle;
     const legendItems = [];
 
+    const fontSize = props.legendStyle.textStyle.fontSize;
+    const fontWeight = props.legendStyle.textStyle.fontWeight;
 
     /* TODO - Legado !!!
       Deixar a entrada de dados flat para todos os graficos.
     */
-    if (props.series !== undefined){
 
-    props.series.map( (serie, idx) => {
-      let itemStyle = Object.assign({},props.legendStyle.bulletStyle)
-      itemStyle.color = props.colors(props.colorAccessor(props.colorsDomain, idx));
 
-      legendItems.push(
-        <li
-          key={idx}
-          className={props.itemClassName}
-          style={itemStyle}
-        >
-          <span
-            style={textStyle}
-          >
-            {serie}
-          </span>
-        </li>
-      );
 
-    })
+   if (props.series !== undefined){
+      const revColorsDomain = props.colorsDomain.reverse()
+      props.series.reverse().map( (serie, idx) => {
+        let itemStyle = Object.assign({},props.legendStyle.bulletStyle)
+        itemStyle.color = props.colors(props.colorAccessor(revColorsDomain, idx));
 
-  }else{
-    props.data.forEach((series, idx) => {
-      let itemStyle = Object.assign({},props.legendStyle.bulletStyle)
-      itemStyle.color = props.colors(props.colorAccessor(series, idx));
+        // console.log(idx , '-' , itemStyle.color)
 
-      legendItems.push(
-        <li
-          key={idx}
-          className={props.itemClassName}
-          style={itemStyle}
-        >
-          <span
-            style={textStyle}
-          >
-            {series.name}
-          </span>
-        </li>
-      );
-    });
-  }
+        legendItems.push(
+          <g>
+            <circle cx="30" cy={10 + 12 * idx} r="4" fill={itemStyle.color} id="circle"/>
+            <text
+              x="42"
+              y={14 + 12 * idx}
+              style={{'font-size':fontSize}}
+              stroke-width={fontWeight}
+            >
+              {serie} -  {itemStyle.color}
+            </text>
+          </g>
+        );
+      })
+    }else{
+      props.data.forEach((series, idx) => {
+        let itemStyle = Object.assign({},props.legendStyle.bulletStyle)
+        itemStyle.color = props.colors(props.colorAccessor(series, idx));
+
+        legendItems.push(
+          <g>
+            <circle cx="30" cy={10 + 12 * idx} r="4" fill={itemStyle.color} id="circle"/>
+            <text
+              x="50"
+              y={15 + 12 * idx}
+              style={{'font-size':'0.8em'}}
+            >
+              {series.name}
+            </text>
+          </g>
+        );
+      });
+    }
 
 
     const topMargin = props.margins.top;
@@ -109,12 +110,9 @@ module.exports = createReactClass({
     };
 
     return (
-      <ul
-        className={props.className}
-        style={legendBlockStyle}
-      >
-        {legendItems.reverse()}
-      </ul>
+        legendItems
     );
   },
 });
+
+
