@@ -954,13 +954,25 @@ var _extends = Object.assign || function (target) {
   }return target;
 };
 
+var _reactDom = window.ReactDOM;
+
+var ReactDOM = _interopRequireWildcard(_reactDom);
+
+function _interopRequireWildcard(obj) {
+  if (obj && obj.__esModule) {
+    return obj;
+  } else {
+    var newObj = {};if (obj != null) {
+      for (var key in obj) {
+        if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key];
+      }
+    }newObj.default = obj;return newObj;
+  }
+}
+
 var PropTypes = window.PropTypes;
 var React = window.React;
 var createReactClass = window.createReactClass;
-
-var _require = window.ReactDOM,
-    ReactDOM = _require.ReactDOM;
-
 var Bar = require('./Bar');
 var shade = require('../utils').shade;
 
@@ -1606,9 +1618,6 @@ module.exports = createReactClass({
       props.series.reverse().map(function (serie, idx) {
         var itemStyle = Object.assign({}, props.legendStyle.bulletStyle);
         itemStyle.color = props.color.colors(props.colorsAccessor(revColorsDomain, idx));
-
-        console.log(idx, '-', itemStyle.color);
-        debugger;
 
         legendItems.push(React.createElement('g', null, React.createElement('circle', { cx: '30', cy: 10 + 12 * idx, r: '4', fill: itemStyle.color, id: 'circle' }), React.createElement('text', {
           x: '42',
@@ -3248,13 +3257,25 @@ module.exports = createReactClass({
 },{}],"/home/robson/projetos/rd3/src/linechart/VoronoiCircleContainer.jsx":[function(require,module,exports){
 'use strict';
 
+var _reactDom = window.ReactDOM;
+
+var ReactDOM = _interopRequireWildcard(_reactDom);
+
+function _interopRequireWildcard(obj) {
+  if (obj && obj.__esModule) {
+    return obj;
+  } else {
+    var newObj = {};if (obj != null) {
+      for (var key in obj) {
+        if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key];
+      }
+    }newObj.default = obj;return newObj;
+  }
+}
+
 var PropTypes = window.PropTypes;
 var React = window.React;
 var createReactClass = window.createReactClass;
-
-var _require = window.ReactDOM,
-    ReactDOM = _require.ReactDOM;
-
 var shade = require('../utils').shade;
 var VoronoiCircle = require('./VoronoiCircle');
 
@@ -3720,13 +3741,25 @@ var _extends = Object.assign || function (target) {
   }return target;
 };
 
+var _reactDom = window.ReactDOM;
+
+var ReactDOM = _interopRequireWildcard(_reactDom);
+
+function _interopRequireWildcard(obj) {
+  if (obj && obj.__esModule) {
+    return obj;
+  } else {
+    var newObj = {};if (obj != null) {
+      for (var key in obj) {
+        if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key];
+      }
+    }newObj.default = obj;return newObj;
+  }
+}
+
 var PropTypes = window.PropTypes;
 var React = window.React;
 var createReactClass = window.createReactClass;
-
-var _require = window.ReactDOM,
-    ReactDOM = _require.ReactDOM;
-
 var shade = require('../utils').shade;
 var Arc = require('./Arc');
 

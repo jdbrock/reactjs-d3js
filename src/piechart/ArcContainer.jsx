@@ -1,10 +1,10 @@
 'use strict';
 
+import * as ReactDOM from 'react-dom'
+
 const PropTypes = require('prop-types');
 const React = require('react');
 const createReactClass = require('create-react-class');
-
-const { ReactDOM } = require('react-dom');
 const shade = require('../utils').shade;
 const Arc = require('./Arc');
 
