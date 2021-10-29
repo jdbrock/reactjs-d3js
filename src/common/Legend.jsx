@@ -57,9 +57,6 @@ module.exports = createReactClass({
         let itemStyle = Object.assign({},props.legendStyle.bulletStyle)
         itemStyle.color = props.color.colors(props.colorsAccessor(revColorsDomain, idx));
 
-        console.log(idx , '-' , itemStyle.color)
-        debugger
-
         legendItems.push(
           <g>
             <circle cx="30" cy={10 + 12 * idx} r="4" fill={itemStyle.color} id="circle"/>
