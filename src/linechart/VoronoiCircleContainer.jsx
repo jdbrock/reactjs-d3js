@@ -4,7 +4,7 @@ const PropTypes = require('prop-types');
 const React = require('react');
 const createReactClass = require('create-react-class');
 
-const { findDOMNode } = require('react-dom');
+const { ReactDOM } = require('react-dom');
 const shade = require('../utils').shade;
 const VoronoiCircle = require('./VoronoiCircle');
 
@@ -35,7 +35,7 @@ module.exports = createReactClass({
   },
 
   _animateCircle() {
-    const rect = findDOMNode(this).getElementsByTagName('circle')[0].getBoundingClientRect();
+    const rect = ReactDOM.findDOMNode(this).getElementsByTagName('circle')[0].getBoundingClientRect();
     this.props.onMouseOver.call(this, rect.right, rect.top, this.props.dataPoint);
     this.setState({
       circleRadius: this.props.circleRadius * (5 / 4),

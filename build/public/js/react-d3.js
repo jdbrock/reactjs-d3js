@@ -959,7 +959,7 @@ var React = window.React;
 var createReactClass = window.createReactClass;
 
 var _require = window.ReactDOM,
-    findDOMNode = _require.findDOMNode;
+    ReactDOM = _require.ReactDOM;
 
 var Bar = require('./Bar');
 var shade = require('../utils').shade;
@@ -981,7 +981,7 @@ module.exports = createReactClass({
     };
   },
   _animateBar: function _animateBar() {
-    var rect = findDOMNode(this).getBoundingClientRect();
+    var rect = ReactDOM.findDOMNode(this).getBoundingClientRect();
     this.props.onMouseOver.call(this, rect.right, rect.top, this.props.datapoint);
     this.setState({
       fill: shade(this.props.fill, 0.2)
@@ -3253,7 +3253,7 @@ var React = window.React;
 var createReactClass = window.createReactClass;
 
 var _require = window.ReactDOM,
-    findDOMNode = _require.findDOMNode;
+    ReactDOM = _require.ReactDOM;
 
 var shade = require('../utils').shade;
 var VoronoiCircle = require('./VoronoiCircle');
@@ -3283,7 +3283,7 @@ module.exports = createReactClass({
     };
   },
   _animateCircle: function _animateCircle() {
-    var rect = findDOMNode(this).getElementsByTagName('circle')[0].getBoundingClientRect();
+    var rect = ReactDOM.findDOMNode(this).getElementsByTagName('circle')[0].getBoundingClientRect();
     this.props.onMouseOver.call(this, rect.right, rect.top, this.props.dataPoint);
     this.setState({
       circleRadius: this.props.circleRadius * (5 / 4),
@@ -3725,7 +3725,7 @@ var React = window.React;
 var createReactClass = window.createReactClass;
 
 var _require = window.ReactDOM,
-    findDOMNode = _require.findDOMNode;
+    ReactDOM = _require.ReactDOM;
 
 var shade = require('../utils').shade;
 var Arc = require('./Arc');
@@ -3749,7 +3749,7 @@ module.exports = createReactClass({
     };
   },
   _animateArc: function _animateArc() {
-    var rect = findDOMNode(this).getBoundingClientRect();
+    var rect = ReactDOM.findDOMNode(this).getBoundingClientRect();
     this.props.onMouseOver.call(this, rect.right, rect.top, this.props.dataPoint);
     this.setState({
       fill: shade(this.props.fill, 0.2)
