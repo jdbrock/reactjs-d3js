@@ -1,5 +1,8 @@
 'use strict';
 
+import ChartContext from '../../ChartContext';
+
+
 const PropTypes = require('prop-types');
 const React = require('react');
 const createReactClass = require('create-react-class');
@@ -59,17 +62,22 @@ module.exports = createReactClass({
 
 
     return (
-      <text
-        strokeWidth={props.strokeWidth.toString()}
-        textAnchor={props.textAnchor}
-        transform={transform}
-        y={y}
-        x={x}
-        style={{'font-size':'1.4em'}}
+      <ChartContext.Consumer>
+        {context => (
+          <text
+            class= {context.chartStyle}
+            strokeWidth={props.strokeWidth.toString()}
+            textAnchor={props.textAnchor}
+            transform={transform}
+            y={y}
+            x={x}
+            style={{'font-size':'1.4em'}}
 
-      >
-        {props.label}
-      </text>
+          >
+            {props.label}
+          </text>
+        )}
+      </ChartContext.Consumer>
     );
   },
 });
