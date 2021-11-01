@@ -77,13 +77,13 @@ function transpile_src(){
 };
 
 
-function compileJS(entry) {
+function compileJS(entry, destFolder) {
   const w = bundler(entry);
   if (!config.production) {
     w.on('update', (e) => {
       const updateStart = Date.now();
 
-      bundleShare(w);
+      bundleShare(w, destFolder);
     });
   }
 
@@ -97,10 +97,10 @@ function compileJS(entry) {
   })
   .on('error', console.error.bind(console));
 
-  return bundleShare(w);
+  return bundleShare(w, destFolder);
 }
 
-function bundleShare(b) {
+function bundleShare(b, destFolder) {
   return b.bundle()
     .on('error', function (err) {
       console.log(chalk.red(err.toString()));
@@ -110,17 +110,19 @@ function bundleShare(b) {
     .pipe(buffer())
     .pipe(plugins.sourcemaps.init({ loadMaps: true }))
     .pipe(plugins.sourcemaps.write('./'))
-    .pipe(gulp.dest('./build/public/js'));
+    // .pipe(gulp.dest('./build/public/js'));
+    .pipe(gulp.dest(destFolder));
+
 }
 
 
-gulp.task('docs',  gulp.series('clean:build', () => merge(data(), html(), compileJS(['./docs/examples/main.js']))));
+gulp.task('docs',  gulp.series('clean:build', () => merge(data(), html(), compileJS(['./docs/examples/main.js'], 'build/public/js'))));
 
 gulp.task('minified', gulp.series('clean:build', () => {
   config.production = true;
   const gulpFilter = require('gulp-filter');
   const jsfilter = gulpFilter(['*.js']);
-  return compileJS(['./src/index.js'])
+  return compileJS(['./src/index.js'], 'build/public/js')
     .pipe(jsfilter)
     .pipe(plugins.rename({ extname: '.min.js' }))
     .pipe(plugins.sourcemaps.init({ loadMaps: true }))
@@ -212,8 +214,8 @@ function serve() {
   });
 
   config.production = false;
-  // compileJS(['./docs/examples/main.js']);
-  compileJS(['./src/index.js']);
+  compileJS(['./docs/examples/main.js'], 'build/public/js');
+  compileJS(['./src/index.js'], 'dist/public/js');
   /* TODO: This is not right */
   gulp.watch('dist/public/data/*', gulp.series=(copy));
   gulp.watch('dist/public/*.html', gulp.series(data), reload);
