@@ -1,4 +1,5 @@
 'use strict';
+import ChartContext from '../../ChartContext';
 
 const React = require('react');
 const PropTypes = require('prop-types');
@@ -39,7 +40,7 @@ module.exports = createReactClass({
       innerTickSize: 6,
       outerTickSize: 6,
       tickStroke: '#000',
-      tickPadding: 3,
+      tickPadding: 6,
       tickArguments: [10],
       tickValues: null,
       gridHorizontal: false,
@@ -70,6 +71,12 @@ module.exports = createReactClass({
 
   render() {
     const props = this.props;
+
+    /* Context */
+    this.contextType = ChartContext;
+    const { chartStyle }  = this.contextType._currentValue;
+
+
     let tr;
     let trText;
     let gridTextRotate;
@@ -138,7 +145,7 @@ module.exports = createReactClass({
         textAnchor = 'middle';
         y2 = props.innerTickSize * sign;
         y1 = tickSpacing * sign;
-        dy = sign < 0 ? '0em' : '.71em';
+        dy = sign < 0 ? '0em' : '.51em';
         x2grid = 0;
         y2grid = -props.height;
         gridTextRotate = props.gridText.rotate.bottom;
@@ -215,12 +222,9 @@ module.exports = createReactClass({
         && !((props.orient === 'left' || props.orient === 'right') && pos === props.height)
       ) {
         return (
-          <line style={{
-            strokeWidth: gridStrokeWidth,
-            shapeRendering: 'crispEdges',
-            stroke: gridStroke,
-            strokeDasharray: gridStrokeDashArray,
-          }} x2={x2grid} y2={y2grid}
+          <line
+          className = {`rd3-svg-grid-lines ${chartStyle && chartStyle}` }
+          x2={x2grid} y2={y2grid}
           />
         );
       }
@@ -240,12 +244,7 @@ module.exports = createReactClass({
           <g key={idx} className="tick" transform={tr(tick)} >
             {gridLine(adjustedScale(tick))}
             <line
-              style={{
-                shapeRendering: 'crispEdges',
-                opacity: '1',
-                stroke: props.tickStroke,
-                strokeWidth: '0.5',
-              }}
+              className = {`rd3-svg-grid-ticks ${chartStyle && chartStyle}` }
               x2={x2}
               y2={y2}
             />
@@ -263,7 +262,12 @@ module.exports = createReactClass({
               transform={gridTextRotate}
             >
               {`${tickFormat(tick)}`.split('\n').map((tickLabel, index) => (
-                  <tspan x={x1 || 0} dy={dy} key={index}>
+                  <tspan
+                    className= {`rd3-axis-text ${chartStyle && chartStyle}` }
+                   x={x1 || -4}
+                   dy={dy}
+                   key={index}
+                  >
                     {tickLabel}
                   </tspan>
               ))}

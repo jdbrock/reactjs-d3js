@@ -65,13 +65,13 @@ module.exports = createReactClass({
       <ChartContext.Consumer>
         {context => (
           <text
-            class= {context.chartStyle}
+            className= {`rd3-axis-labels ${context && context.chartStyle}` }
             strokeWidth={props.strokeWidth.toString()}
             textAnchor={props.textAnchor}
             transform={transform}
             y={y}
             x={x}
-            style={{'font-size':'1.4em'}}
+            // style={{'font-size':'1.4em'}}
 
           >
             {props.label}
