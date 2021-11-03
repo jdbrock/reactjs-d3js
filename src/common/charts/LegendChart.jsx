@@ -1,4 +1,5 @@
 'use strict';
+import ChartContext from '../../ChartContext';
 
 const PropTypes = require('prop-types');
 const React = require('react');
@@ -88,14 +89,18 @@ module.exports = createReactClass({
 
     const fontSize = props.svgTitle.fontSize;
 
+    /* Context */
+    this.contextType = ChartContext;
+    const { chartStyle }  = this.contextType._currentValue;
 
     if (props.title !== '') {
       return (
           <text
-            text-anchor="middle"
+            className= {`rd3-svg-title ${chartStyle && chartStyle}` }
+            textAnchor="middle"
             y={props.svgTitle.y}
             x={props.svgTitle.x}
-            style={{'font-size':fontSize}}
+            // style={{'font-size':fontSize}}
           >
           {props.title}
           </text>

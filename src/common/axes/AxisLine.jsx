@@ -1,5 +1,7 @@
 'use strict';
 
+import ChartContext from '../../ChartContext';
+
 const PropTypes = require('prop-types');
 const React = require('react');
 const createReactClass = require('create-react-class');
@@ -46,6 +48,10 @@ module.exports = createReactClass({
     const props = this.props;
     const sign = props.orient === 'top' || props.orient === 'left' ? -1 : 1;
 
+    /* Context */
+    this.contextType = ChartContext;
+    const { chartStyle }  = this.contextType._currentValue;
+
     const range = this._d3_scaleRange(props.scale);
 
     let d;
@@ -57,7 +63,8 @@ module.exports = createReactClass({
 
     return (
       <path
-        className="domain"
+        // className="domain"
+        className = {`rd3-axis-domain ${chartStyle && chartStyle}` }
         d={d}
         style={{ shapeRendering: 'crispEdges' }}
         // fill={props.fill}

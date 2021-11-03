@@ -1,4 +1,5 @@
 'use strict';
+import ChartContext from '../ChartContext';
 
 const PropTypes = require('prop-types');
 const React = require('react');
@@ -39,7 +40,15 @@ module.exports = createReactClass({
     }
   },
 
+
+
   render() {
+
+    /* Context */
+    this.contextType = ChartContext;
+    const { chartStyle }  = this.contextType._currentValue;
+
+
     const props = this.props;
     const textStyle = props.legendStyle.textStyle;
     const legendItems = [];
@@ -61,10 +70,11 @@ module.exports = createReactClass({
           <g>
             <circle cx="30" cy={10 + 12 * idx} r="4" fill={itemStyle.color} id="circle"/>
             <text
+              className= {`rd3-legend-text ${chartStyle && chartStyle}` }
               x="42"
               y={14 + 12 * idx}
-              style={{'font-size':fontSize}}
-              stroke-width={fontWeight}
+              // style={{'font-size':fontSize}}
+              // stroke-width={fontWeight}
             >
               {serie}
             </text>
@@ -81,9 +91,10 @@ module.exports = createReactClass({
           <g>
             <circle cx="30" cy={10 + 12 * idx} r="4" fill={itemStyle.color} id="circle"/>
             <text
+              className= {`rd3-legend-text ${chartStyle && chartStyle}` }
               x="50"
               y={15 + 12 * idx}
-              style={{'font-size':'0.8em'}}
+              // style={{'font-size':'0.8em'}}
             >
               {series.name}
             </text>
