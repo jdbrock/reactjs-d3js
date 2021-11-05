@@ -119,7 +119,7 @@ module.exports = createReactClass({
         viewBox={props.viewBox}
         width="100%"
       >
-        <svg viewBox={props.viewBox} width={props.svgChart.width}>
+        <svg viewBox={props.viewBox} width={props.svgChart.width} height={props.svgChart.height}>
           {this._renderTitle()}
           {props.children}
         </svg>

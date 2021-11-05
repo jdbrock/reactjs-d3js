@@ -13,7 +13,11 @@ module.exports = {
   getDefaultProps() {
     return {
       showTooltip: true,
-      tooltipFormat: (d) => String(d.yValue),
+      /* Sum */
+      // tooltipFormat: (d) => String( d.seriesName) + ':\n' + String( d.yValue),
+
+      /* Height */
+      tooltipFormat: (d) => String( d.seriesName) + ':\n' + String( d.height) ,
     };
   },
 

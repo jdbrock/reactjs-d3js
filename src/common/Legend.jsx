@@ -59,22 +59,19 @@ module.exports = createReactClass({
     /* TODO - Legado !!!
       Deixar a entrada de dados flat para todos os graficos.
     */
-
    if (props.series !== undefined){
-      const revColorsDomain = props.colorsDomain.reverse()
-      props.series.reverse().map( (serie, idx) => {
-        let itemStyle = Object.assign({},props.legendStyle.bulletStyle)
-        itemStyle.color = props.color.colors(props.colorsAccessor(revColorsDomain, idx));
+     props.series.map( (serie, idx) => {
+       let itemStyle = Object.assign({},props.legendStyle.bulletStyle)
+       itemStyle.color = props.color.colors(props.colorsAccessor(props.colorsDomain, idx));
 
+        const rev_idx = props.series.length - idx
         legendItems.push(
           <g>
-            <circle cx="30" cy={10 + 12 * idx} r="4" fill={itemStyle.color} id="circle"/>
+            <circle cx="30" cy={10 + 15 * rev_idx} r="4" fill={itemStyle.color} id="circle"/>
             <text
               className= {`rd3-legend-text ${chartStyle && chartStyle}` }
               x="42"
-              y={14 + 12 * idx}
-              // style={{'font-size':fontSize}}
-              // stroke-width={fontWeight}
+              y={14 + 15 * rev_idx}
             >
               {serie}
             </text>
@@ -87,13 +84,14 @@ module.exports = createReactClass({
         let itemStyle = Object.assign({},props.legendStyle.bulletStyle)
         itemStyle.color = props.color.colors(props.colorsAccessor(series, idx));
 
+        const rev_idx = props.series.length - idx
         legendItems.push(
           <g>
-            <circle cx="30" cy={10 + 12 * idx} r="4" fill={itemStyle.color} id="circle"/>
+            <circle cx="30" cy={10 + 15 * rev_idx} r="4" fill={itemStyle.color} id="circle"/>
             <text
               className= {`rd3-legend-text ${chartStyle && chartStyle}` }
               x="50"
-              y={15 + 12 * idx}
+              y={14 + 15 * rev_idx}
               // style={{'font-size':'0.8em'}}
             >
               {series.name}
@@ -103,7 +101,7 @@ module.exports = createReactClass({
       });
     }
     return (
-        legendItems
+      legendItems
     );
   },
 });
