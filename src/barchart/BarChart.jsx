@@ -60,7 +60,7 @@ module.exports = createReactClass({
       xIsDate: false,
       color: {
         accessor: 'Sequential',
-        colors: d3.scaleOrdinal(d3.schemeGnBu[9].reverse())
+        colors: d3.scaleOrdinal(d3.schemeGnBu[9])
       }
     };
   },
@@ -97,7 +97,8 @@ module.exports = createReactClass({
 
     _array.map( (elem, idxE) => {
         let bar;
-        props.xIsDate ? bar = new Date(elem.x).toLocaleDateString() : bar = elem.x;
+        /* TODO: have to cast from string to bool on the client */
+        props.xIsDate === "true" ? bar = new Date(elem.x).toLocaleDateString() : bar = elem.x;
         if (typeof dataDict[bar] === 'undefined'){
           dataDict[bar] = {'x':bar, [elem.name]:+elem.y}
         }else{
@@ -123,27 +124,24 @@ module.exports = createReactClass({
     const maxYDomain = d3.max(_data, (d) => (d[1]))
     const yDomain = ([d3.min(_data, d => d3.min(d, d => d[1])), d3.max(_data, d => d3.max(d, d => d[1]))])
     const yScale = d3.scaleLinear().range([innerHeight, 0]).domain(yDomain);
+    const maxYObjects = d3.max(data.map( d => Object.keys(d).length))
+    const origArray = [...Array(maxYObjects).keys()]
 
-    const origArray = [...Array(data.length).keys()];
     let colorsDomain;
     let colorsAccessor;
-    // this.props.color.accessor === 'Sequential'
-    //   ? colorsDomain = origArray.map(x => x / data.length)
-    //   : colorsDomain = series
-
-      if (this.props.color.accessor === 'Sequential'){
-          colorsDomain = origArray.map(x => x / data.length)
-          colorsAccessor = this.props.colorAccessorSequential
-      }else{
-          colorsDomain = series
-          colorsAccessor = this.props.colorAccessorOrdinal
-      }
 
 
-    // const colorAccessor = () => {return this.props.color.accessor === 'Sequential'
-    //                               ? this.props.colorAccessorSequential
-    //                               : this.props.colorAccessorOrdinal
-    //                             }
+    if (this.props.color.accessor === 'Sequential'){
+        colorsDomain = origArray.map(x => x / maxYObjects)
+        colorsAccessor = this.props.colorAccessorSequential
+    }else{
+        colorsDomain = series
+        colorsAccessor = this.props.colorAccessorOrdinal
+    }
+    // debugger;
+    // colorsDomain.reverse()
+
+
 
     return (
       <span>

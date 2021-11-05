@@ -65,7 +65,10 @@ module.exports = createReactClass({
                   size:'1.0em',
                   weight:'.01'
                 }
-              }
+              },
+      xGridLabelOffset: 50,
+      yGridLabelOffset: 10
+
     };
   },
 
@@ -254,6 +257,8 @@ module.exports = createReactClass({
       {ticks.map((tick, idx) => (
         <g className="tickText" transform={trText(tick)} >
             <text
+
+
               strokeWidth={gridTextFontWeight}
               dy={dy} x={x1} y={y1}
               style={{ stroke: props.tickTextStroke, fill: props.tickTextStroke, 'font-size': gridTextFontSize}}
@@ -264,7 +269,7 @@ module.exports = createReactClass({
               {`${tickFormat(tick)}`.split('\n').map((tickLabel, index) => (
                   <tspan
                     className= {`rd3-axis-text ${chartStyle && chartStyle}` }
-                   x={x1 || -4}
+                   x={x1}
                    dy={dy}
                    key={index}
                   >
