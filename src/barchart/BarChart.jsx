@@ -185,6 +185,10 @@ module.exports = createReactClass({
               gridVerticalStrokeWidth={props.gridVerticalStrokeWidth}
               gridVerticalStrokeDash={props.gridVerticalStrokeDash}
               gridText={props.gridText}
+              translateTickLabel_Y_X={props.translateTickLabel_Y_X}
+              translateTickLabel_Y_Y={props.translateTickLabel_Y_Y}
+              translateTickLabel_X_X={props.translateTickLabel_X_X}
+              translateTickLabel_X_Y={props.translateTickLabel_X_Y}
             />
             <YGrid
               yAxisClassName={props.yAxisClassName}
@@ -207,6 +211,10 @@ module.exports = createReactClass({
               gridHorizontalStrokeWidth={props.gridHorizontalStrokeWidth}
               gridHorizontalStrokeDash={props.gridHorizontalStrokeDash}
               gridText={props.gridText}
+              translateTickLabel_Y_X={props.translateTickLabel_Y_X}
+              translateTickLabel_Y_Y={props.translateTickLabel_Y_Y}
+              translateTickLabel_X_X={props.translateTickLabel_X_X}
+              translateTickLabel_X_Y={props.translateTickLabel_X_Y}
             />
             <DataSeries
               yScale={yScale}

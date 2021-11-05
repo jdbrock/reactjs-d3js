@@ -602,7 +602,7 @@ module.exports = createReactClass({
       xIsDate: false,
       color: {
         accessor: 'Sequential',
-        colors: d3.scaleOrdinal(d3.schemeGnBu[9].reverse())
+        colors: d3.scaleOrdinal(d3.schemeGnBu[9])
       }
     };
   },
@@ -640,7 +640,8 @@ module.exports = createReactClass({
 
     _array.map(function (elem, idxE) {
       var bar = void 0;
-      props.xIsDate ? bar = new Date(elem.x).toLocaleDateString() : bar = elem.x;
+      /* TODO: have to cast from string to bool on the client */
+      props.xIsDate === "true" ? bar = new Date(elem.x).toLocaleDateString() : bar = elem.x;
       if (typeof dataDict[bar] === 'undefined') {
         dataDict[bar] = _defineProperty({ 'x': bar }, elem.name, +elem.y);
       } else {
@@ -683,28 +684,26 @@ module.exports = createReactClass({
       });
     })];
     var yScale = d3.scaleLinear().range([innerHeight, 0]).domain(yDomain);
+    var maxYObjects = d3.max(data.map(function (d) {
+      return Object.keys(d).length;
+    }));
+    var origArray = [].concat(_toConsumableArray(Array(maxYObjects).keys()));
 
-    var origArray = [].concat(_toConsumableArray(Array(data.length).keys()));
     var colorsDomain = void 0;
     var colorsAccessor = void 0;
-    // this.props.color.accessor === 'Sequential'
-    //   ? colorsDomain = origArray.map(x => x / data.length)
-    //   : colorsDomain = series
 
     if (this.props.color.accessor === 'Sequential') {
       colorsDomain = origArray.map(function (x) {
-        return x / data.length;
+        return x / maxYObjects;
       });
       colorsAccessor = this.props.colorAccessorSequential;
     } else {
       colorsDomain = series;
       colorsAccessor = this.props.colorAccessorOrdinal;
     }
+    // debugger;
+    // colorsDomain.reverse()
 
-    // const colorAccessor = () => {return this.props.color.accessor === 'Sequential'
-    //                               ? this.props.colorAccessorSequential
-    //                               : this.props.colorAccessorOrdinal
-    //                             }
 
     return React.createElement('span', null, React.createElement(Chart, {
       viewBox: this.getViewBox(),
@@ -743,7 +742,11 @@ module.exports = createReactClass({
       gridVerticalStroke: props.gridVerticalStroke,
       gridVerticalStrokeWidth: props.gridVerticalStrokeWidth,
       gridVerticalStrokeDash: props.gridVerticalStrokeDash,
-      gridText: props.gridText
+      gridText: props.gridText,
+      translateTickLabel_Y_X: props.translateTickLabel_Y_X,
+      translateTickLabel_Y_Y: props.translateTickLabel_Y_Y,
+      translateTickLabel_X_X: props.translateTickLabel_X_X,
+      translateTickLabel_X_Y: props.translateTickLabel_X_Y
     }), React.createElement(YGrid, {
       yAxisClassName: props.yAxisClassName,
       yAxisTickValues: props.yAxisTickValues,
@@ -764,7 +767,11 @@ module.exports = createReactClass({
       gridHorizontalStroke: props.gridHorizontalStroke,
       gridHorizontalStrokeWidth: props.gridHorizontalStrokeWidth,
       gridHorizontalStrokeDash: props.gridHorizontalStrokeDash,
-      gridText: props.gridText
+      gridText: props.gridText,
+      translateTickLabel_Y_X: props.translateTickLabel_Y_X,
+      translateTickLabel_Y_Y: props.translateTickLabel_Y_Y,
+      translateTickLabel_X_X: props.translateTickLabel_X_X,
+      translateTickLabel_X_Y: props.translateTickLabel_X_Y
     }), React.createElement(DataSeries, {
       yScale: yScale,
       xScale: xScale,
@@ -980,6 +987,14 @@ module.exports = createReactClass((_createReactClass = {
   var y = grouped ? yScale(this.props.yAccessorBar(segment)) : yWidth;
   var key = this.props.series[seriesIdx] + segment.data.x + segment[1];
 
+  // debugger;
+  // console.log(this.props.y0Accessor(segment))
+
+  // Height?!?
+  // console.log( Math.abs(this.props.y0Accessor(segment) - this.props.yAccessorBar(segment)))
+
+  var height = Math.abs(this.props.y0Accessor(segment) - this.props.yAccessorBar(segment));
+  // console.log(barHeight)
   return React.createElement(BarContainer, {
     key: key,
     height: barHeight,
@@ -993,7 +1008,8 @@ module.exports = createReactClass((_createReactClass = {
     datapoint: {
       xValue: this.props.xAccessorBar(segment),
       yValue: this.props.yAccessorBar(segment),
-      seriesName: this.props.series[seriesIdx]
+      seriesName: this.props.series[seriesIdx],
+      height: height
     }
   });
 }), _defineProperty(_createReactClass, 'render', function render() {
@@ -1503,19 +1519,16 @@ module.exports = createReactClass({
     /* TODO - Legado !!!
       Deixar a entrada de dados flat para todos os graficos.
     */
-
     if (props.series !== undefined) {
-      var revColorsDomain = props.colorsDomain.reverse();
-      props.series.reverse().map(function (serie, idx) {
+      props.series.map(function (serie, idx) {
         var itemStyle = Object.assign({}, props.legendStyle.bulletStyle);
-        itemStyle.color = props.color.colors(props.colorsAccessor(revColorsDomain, idx));
+        itemStyle.color = props.color.colors(props.colorsAccessor(props.colorsDomain, idx));
 
-        legendItems.push(React.createElement('g', null, React.createElement('circle', { cx: '30', cy: 10 + 12 * idx, r: '4', fill: itemStyle.color, id: 'circle' }), React.createElement('text', {
+        var rev_idx = props.series.length - idx;
+        legendItems.push(React.createElement('g', null, React.createElement('circle', { cx: '30', cy: 10 + 15 * rev_idx, r: '4', fill: itemStyle.color, id: 'circle' }), React.createElement('text', {
           className: 'rd3-legend-text ' + (chartStyle && chartStyle),
           x: '42',
-          y: 14 + 12 * idx
-          // style={{'font-size':fontSize}}
-          // stroke-width={fontWeight}
+          y: 14 + 15 * rev_idx
         }, serie)));
       });
     } else {
@@ -1526,10 +1539,11 @@ module.exports = createReactClass({
         var itemStyle = Object.assign({}, props.legendStyle.bulletStyle);
         itemStyle.color = props.color.colors(props.colorsAccessor(series, idx));
 
-        legendItems.push(React.createElement('g', null, React.createElement('circle', { cx: '30', cy: 10 + 12 * idx, r: '4', fill: itemStyle.color, id: 'circle' }), React.createElement('text', {
+        var rev_idx = props.series.length - idx;
+        legendItems.push(React.createElement('g', null, React.createElement('circle', { cx: '30', cy: 10 + 15 * rev_idx, r: '4', fill: itemStyle.color, id: 'circle' }), React.createElement('text', {
           className: 'rd3-legend-text ' + (chartStyle && chartStyle),
           x: '50',
-          y: 15 + 12 * idx
+          y: 14 + 15 * rev_idx
           // style={{'font-size':'0.8em'}}
         }, series.name)));
       });
@@ -1609,7 +1623,8 @@ module.exports = createReactClass({
       top: props.y,
       left: props.x,
       display: display,
-      opacity: 0.8
+      opacity: 0.8,
+      width: '100px'
     };
 
     // TODO: add 'right: 0px' style when tooltip is off the chart
@@ -1618,13 +1633,14 @@ module.exports = createReactClass({
       backgroundColor: 'white',
       border: '1px solid',
       borderColor: '#ddd',
-      borderRadius: '2px',
-      padding: '10px',
+      borderRadius: '4px',
+      padding: '5px',
       marginLeft: '10px',
       marginRight: '10px',
-      marginTop: '-15px'
+      marginTop: '-15px',
+      width: '100px'
     };
-    return React.createElement('div', { style: containerStyles }, React.createElement('div', { style: tooltipStyles }, props.child));
+    return React.createElement('div', { style: containerStyles }, React.createElement('div', { style: tooltipStyles, 'class': 'rd3-legend-text' }, props.child));
   }
 });
 
@@ -1808,6 +1824,12 @@ module.exports = createReactClass({
   },
   getDefaultProps: function getDefaultProps() {
     return {
+      // translateTickLabel: 'translate("10px",0)',
+      translateTickLabel_Y_X: 0,
+      translateTickLabel_Y_Y: 0,
+      translateTickLabel_X_X: 0,
+      translateTickLabel_X_Y: 0,
+
       innerTickSize: 6,
       outerTickSize: 6,
       tickStroke: '#000',
@@ -1836,10 +1858,14 @@ module.exports = createReactClass({
           size: '1.0em',
           weight: '.01'
         }
-      }
+      },
+      xGridLabelOffset: 50,
+      yGridLabelOffset: 10
+
     };
   },
   render: function render() {
+    // debugger
     var props = this.props;
 
     /* Context */
@@ -1866,6 +1892,7 @@ module.exports = createReactClass({
     var x2grid = void 0;
     var y2grid = void 0;
     var gridOn = false;
+    var translateTickLabel = void 0;
 
     var sign = props.orient === 'top' || props.orient === 'right' ? -1 : 1;
     var tickSpacing = Math.max(props.innerTickSize, 0) + props.tickPadding;
@@ -1932,6 +1959,7 @@ module.exports = createReactClass({
         x2grid = 0;
         y2grid = -props.height;
         gridTextRotate = props.gridText.rotate.bottom;
+        translateTickLabel = 'translate(' + props.translateTickLabel_X_X + ',' + props.translateTickLabel_X_Y + ')';
         break;
       case 'left':
         tr = function tr(tick) {
@@ -1947,6 +1975,8 @@ module.exports = createReactClass({
         x2grid = props.width;
         y2grid = 0;
         gridTextRotate = props.gridText.rotate.left;
+        translateTickLabel = 'translate(' + props.translateTickLabel_Y_X + ',' + props.translateTickLabel_Y_Y + ')';
+        // debugger;
         break;
       case 'right':
         tr = function tr(tick) {
@@ -2025,13 +2055,13 @@ module.exports = createReactClass({
     gridTextFontSize = props.gridText.font.size;
     gridTextFontWeight = props.gridText.font.weight;
 
-    return React.createElement('g', null, ticks.map(function (tick, idx) {
+    return React.createElement('g', null, React.createElement('g', null, ticks.map(function (tick, idx) {
       return React.createElement('g', { key: idx, className: 'tick', transform: tr(tick) }, gridLine(adjustedScale(tick)), React.createElement('line', {
         className: 'rd3-svg-grid-ticks ' + (chartStyle && chartStyle),
         x2: x2,
         y2: y2
       }));
-    }), ticks.map(function (tick, idx) {
+    })), '/* Move all tick labels at once */', React.createElement('g', { transform: translateTickLabel }, ticks.map(function (tick, idx) {
       return React.createElement('g', { className: 'tickText', transform: trText(tick) }, React.createElement('text', _extends({
         strokeWidth: gridTextFontWeight,
         dy: dy, x: x1, y: y1,
@@ -2042,12 +2072,12 @@ module.exports = createReactClass({
       }), ('' + tickFormat(tick)).split('\n').map(function (tickLabel, index) {
         return React.createElement('tspan', {
           className: 'rd3-axis-text ' + (chartStyle && chartStyle),
-          x: x1 || -4,
+          x: x1,
           dy: dy,
           key: index
         }, tickLabel);
       })));
-    }));
+    })));
   }
 });
 
@@ -2312,7 +2342,10 @@ module.exports = createReactClass({
       gridVerticalStroke: props.gridVerticalStroke,
       gridVerticalStrokeWidth: props.gridVerticalStrokeWidth,
       gridVerticalStrokeDash: props.gridVerticalStrokeDash,
-      gridText: props.gridText
+      gridText: props.gridText,
+
+      translateTickLabel_X_X: props.translateTickLabel_X_X,
+      translateTickLabel_X_Y: props.translateTickLabel_X_Y
     }));
   }
 });
@@ -2503,7 +2536,11 @@ module.exports = createReactClass({
       gridHorizontalStroke: props.gridHorizontalStroke,
       gridHorizontalStrokeWidth: props.gridHorizontalStrokeWidth,
       gridHorizontalStrokeDash: props.gridHorizontalStrokeDash,
-      gridText: props.gridText
+      gridText: props.gridText,
+
+      translateTickLabel_Y_X: props.translateTickLabel_Y_X,
+      translateTickLabel_Y_Y: props.translateTickLabel_Y_Y
+
     }));
   }
 });
@@ -2750,7 +2787,7 @@ module.exports = createReactClass({
       height: '100%',
       viewBox: props.viewBox,
       width: '100%'
-    }, React.createElement('svg', { viewBox: props.viewBox, width: props.svgChart.width }, this._renderTitle(), props.children), React.createElement('svg', { x: props.svgLegend.position.x, y: props.svgLegend.position.y }, this._renderLegend()));
+    }, React.createElement('svg', { viewBox: props.viewBox, width: props.svgChart.width, height: props.svgChart.height }, this._renderTitle(), props.children), React.createElement('svg', { x: props.svgLegend.position.x, y: props.svgLegend.position.y }, this._renderLegend()));
   },
   render: function render() {
     var props = this.props;
@@ -3349,7 +3386,6 @@ module.exports = {
   getDefaultProps: function getDefaultProps() {
     return {
       axesColor: '#000',
-      // colors: d3.scaleOrdinal(d3.schemeCategory10),
       colorAccessorSequential: function colorAccessorSequential(d, idx) {
         return d[idx];
       },
@@ -3442,8 +3478,12 @@ module.exports = {
   getDefaultProps: function getDefaultProps() {
     return {
       showTooltip: true,
+      /* Sum */
+      // tooltipFormat: (d) => String( d.seriesName) + ':\n' + String( d.yValue),
+
+      /* Height */
       tooltipFormat: function tooltipFormat(d) {
-        return String(d.yValue);
+        return String(d.seriesName) + ':\n' + String(d.height);
       }
     };
   },
