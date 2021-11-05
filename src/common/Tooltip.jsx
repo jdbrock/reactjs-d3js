@@ -27,6 +27,7 @@ module.exports = createReactClass({
       left: props.x,
       display,
       opacity: 0.8,
+      width:'100px'
     };
 
     // TODO: add 'right: 0px' style when tooltip is off the chart
@@ -35,15 +36,16 @@ module.exports = createReactClass({
       backgroundColor: 'white',
       border: '1px solid',
       borderColor: '#ddd',
-      borderRadius: '2px',
-      padding: '10px',
+      borderRadius: '4px',
+      padding: '5px',
       marginLeft: '10px',
       marginRight: '10px',
       marginTop: '-15px',
+      width:'100px'
     };
     return (
       <div style={containerStyles}>
-        <div style={tooltipStyles}>
+        <div style={tooltipStyles} class="rd3-legend-text">
           {props.child}
         </div>
       </div>

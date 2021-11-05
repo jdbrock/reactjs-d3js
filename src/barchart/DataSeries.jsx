@@ -44,12 +44,21 @@ module.exports = createReactClass({
   },
 
   _renderBarContainer(segment, seriesIdx) {
+
     const { color, colorsAccessor, colorsDomain, grouped, series, xScale, yScale } = this.props;
     const barHeight = Math.abs(yScale(this.props.y0Accessor(segment)) - yScale(this.props.yAccessorBar(segment)));
     const yWidth = yScale(this.props.y0Accessor(segment) + this.props.yAccessorBar(segment));
     const y = grouped ? yScale(this.props.yAccessorBar(segment)) : yWidth;
     const key = this.props.series[seriesIdx] + segment.data.x +segment[1];
 
+    // debugger;
+    // console.log(this.props.y0Accessor(segment))
+
+    // Height?!?
+    // console.log( Math.abs(this.props.y0Accessor(segment) - this.props.yAccessorBar(segment)))
+
+    const height = Math.abs(this.props.y0Accessor(segment) - this.props.yAccessorBar(segment))
+    // console.log(barHeight)
     return (
       <BarContainer
         key={key}
@@ -65,6 +74,7 @@ module.exports = createReactClass({
           xValue: this.props.xAccessorBar(segment),
           yValue: this.props.yAccessorBar(segment),
           seriesName: this.props.series[seriesIdx],
+          height: height
         }}
       />
     );
