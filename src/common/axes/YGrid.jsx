@@ -90,6 +90,10 @@ module.exports = createReactClass({
           gridHorizontalStrokeWidth={props.gridHorizontalStrokeWidth}
           gridHorizontalStrokeDash={props.gridHorizontalStrokeDash}
           gridText={props.gridText}
+
+          translateTickLabel_Y_X={props.translateTickLabel_Y_X}
+          translateTickLabel_Y_Y={props.translateTickLabel_Y_Y}
+
         />
 
       </g>

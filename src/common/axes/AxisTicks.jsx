@@ -37,6 +37,12 @@ module.exports = createReactClass({
   },
   getDefaultProps() {
     return {
+      // translateTickLabel: 'translate("10px",0)',
+      translateTickLabel_Y_X: 0,
+      translateTickLabel_Y_Y: 0,
+      translateTickLabel_X_X: 0,
+      translateTickLabel_X_Y: 0,
+
       innerTickSize: 6,
       outerTickSize: 6,
       tickStroke: '#000',
@@ -73,6 +79,7 @@ module.exports = createReactClass({
   },
 
   render() {
+    // debugger
     const props = this.props;
 
     /* Context */
@@ -100,6 +107,7 @@ module.exports = createReactClass({
     let x2grid;
     let y2grid;
     let gridOn = false;
+    let translateTickLabel;
 
     const sign = props.orient === 'top' || props.orient === 'right' ? -1 : 1;
     const tickSpacing = Math.max(props.innerTickSize, 0) + props.tickPadding;
@@ -152,6 +160,7 @@ module.exports = createReactClass({
         x2grid = 0;
         y2grid = -props.height;
         gridTextRotate = props.gridText.rotate.bottom;
+        translateTickLabel = 'translate(' + props.translateTickLabel_X_X + ',' + props.translateTickLabel_X_Y + ')';
         break;
       case 'left':
         tr = (tick) => `translate(0,${adjustedScale(tick)})`;
@@ -163,6 +172,8 @@ module.exports = createReactClass({
         x2grid = props.width;
         y2grid = 0;
         gridTextRotate = props.gridText.rotate.left;
+        translateTickLabel = 'translate(' + props.translateTickLabel_Y_X + ',' + props.translateTickLabel_Y_Y + ')';
+        // debugger;
         break;
       case 'right':
         tr = (tick) => `translate(0,${adjustedScale(tick)})`;
@@ -243,43 +254,48 @@ module.exports = createReactClass({
 
     return (
     <g>
-      {ticks.map((tick, idx) => (
-          <g key={idx} className="tick" transform={tr(tick)} >
-            {gridLine(adjustedScale(tick))}
-            <line
-              className = {`rd3-svg-grid-ticks ${chartStyle && chartStyle}` }
-              x2={x2}
-              y2={y2}
-            />
-          </g>
-        ))
-      }
-      {ticks.map((tick, idx) => (
-        <g className="tickText" transform={trText(tick)} >
-            <text
-
-
-              strokeWidth={gridTextFontWeight}
-              dy={dy} x={x1} y={y1}
-              style={{ stroke: props.tickTextStroke, fill: props.tickTextStroke, 'font-size': gridTextFontSize}}
-              textAnchor={textAnchor}
-              {...optionalTextProps}
-              transform={gridTextRotate}
-            >
-              {`${tickFormat(tick)}`.split('\n').map((tickLabel, index) => (
-                  <tspan
-                    className= {`rd3-axis-text ${chartStyle && chartStyle}` }
-                   x={x1}
-                   dy={dy}
-                   key={index}
-                  >
-                    {tickLabel}
-                  </tspan>
-              ))}
-            </text>
+      <g>
+        {ticks.map((tick, idx) => (
+            <g key={idx} className="tick" transform={tr(tick)} >
+              {gridLine(adjustedScale(tick))}
+              <line
+                className = {`rd3-svg-grid-ticks ${chartStyle && chartStyle}` }
+                x2={x2}
+                y2={y2}
+              />
             </g>
-            ))}
+          ))
+      }
+      </g>
+
+      /* Move all tick labels at once */
+      <g transform={translateTickLabel}>
+        {ticks.map((tick, idx) => (
+          <g className="tickText" transform={trText(tick)} >
+              <text
+                strokeWidth={gridTextFontWeight}
+                dy={dy} x={x1} y={y1}
+                style={{ stroke: props.tickTextStroke, fill: props.tickTextStroke, 'font-size': gridTextFontSize}}
+                textAnchor={textAnchor}
+                {...optionalTextProps}
+                transform={gridTextRotate}
+              >
+                {`${tickFormat(tick)}`.split('\n').map((tickLabel, index) => (
+                    <tspan
+                      className= {`rd3-axis-text ${chartStyle && chartStyle}` }
+                    x={x1}
+                    dy={dy}
+                    key={index}
+                    >
+                      {tickLabel}
+                    </tspan>
+                ))}
+              </text>
+              </g>
+              ))}
+      </g>
     </g>
+
     );
   },
 });

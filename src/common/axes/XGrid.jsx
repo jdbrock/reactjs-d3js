@@ -86,6 +86,9 @@ module.exports = createReactClass({
           gridVerticalStrokeWidth={props.gridVerticalStrokeWidth}
           gridVerticalStrokeDash={props.gridVerticalStrokeDash}
           gridText={props.gridText}
+
+          translateTickLabel_X_X={props.translateTickLabel_X_X}
+          translateTickLabel_X_Y={props.translateTickLabel_X_Y}
         />
 
       </g>
