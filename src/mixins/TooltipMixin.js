@@ -33,7 +33,7 @@ module.exports = {
     };
   },
 
-  componentWillReceiveProps() {
+  UNSAFE_componentWillReceiveProps() {
     this.setState({
       changeState: false,
     });
