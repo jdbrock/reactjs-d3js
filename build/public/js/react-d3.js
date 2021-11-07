@@ -3722,7 +3722,7 @@ module.exports = {
       changeState: false
     };
   },
-  componentWillReceiveProps: function componentWillReceiveProps() {
+  UNSAFE_componentWillReceiveProps: function UNSAFE_componentWillReceiveProps() {
     this.setState({
       changeState: false
     });

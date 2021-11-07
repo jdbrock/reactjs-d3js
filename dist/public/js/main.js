@@ -1,4 +1,4 @@
-(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({"/Users/yangwei/code/react-d3/docs/examples/main.js":[function(require,module,exports){
+(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw (f.code="MODULE_NOT_FOUND", f)}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({"/Users/yangwei/code/react-d3/docs/examples/main.js":[function(require,module,exports){
 'use strict';
 
 var React = require('react');
@@ -25074,7 +25074,7 @@ var ReactCompositeComponentInterface = {
    *
    * @optional
    */
-  componentWillMount: SpecPolicy.DEFINE_MANY,
+  UNSAFE_componentWillMount: SpecPolicy.DEFINE_MANY,
 
   /**
    * Invoked when the component has been mounted and has a DOM representation.
@@ -25107,7 +25107,7 @@ var ReactCompositeComponentInterface = {
    * @param {object} nextProps
    * @optional
    */
-  componentWillReceiveProps: SpecPolicy.DEFINE_MANY,
+  UNSAFE_componentWillReceiveProps: SpecPolicy.DEFINE_MANY,
 
   /**
    * Invoked while deciding if the component should be updated as a result of
@@ -25146,7 +25146,7 @@ var ReactCompositeComponentInterface = {
    * @param {ReactReconcileTransaction} transaction
    * @optional
    */
-  componentWillUpdate: SpecPolicy.DEFINE_MANY,
+  UNSAFE_componentWillUpdate: SpecPolicy.DEFINE_MANY,
 
   /**
    * Invoked when the component's DOM representation has been updated.
@@ -25666,8 +25666,8 @@ var ReactCompositeComponentMixin = {
       this._pendingState = null;
       this._pendingForceUpdate = false;
 
-      if (this.componentWillMount) {
-        this.componentWillMount();
+      if (this.UNSAFE_componentWillMount) {
+        this.UNSAFE_componentWillMount();
         // When mounting, calls to `setState` by `componentWillMount` will set
         // `this._pendingState` without triggering a re-render.
         if (this._pendingState) {
@@ -25921,8 +25921,8 @@ var ReactCompositeComponentMixin = {
       this._pendingElement = null;
 
       this._compositeLifeCycleState = CompositeLifeCycle.RECEIVING_PROPS;
-      if (this.componentWillReceiveProps) {
-        this.componentWillReceiveProps(nextProps, nextContext);
+      if (this.UNSAFE_componentWillReceiveProps) {
+        this.UNSAFE_componentWillReceiveProps(nextProps, nextContext);
       }
     }
 
@@ -25993,8 +25993,8 @@ var ReactCompositeComponentMixin = {
     var prevState = this.state;
     var prevContext = this.context;
 
-    if (this.componentWillUpdate) {
-      this.componentWillUpdate(nextProps, nextState, nextContext);
+    if (this.UNSAFE_componentWillUpdate) {
+      this.UNSAFE_componentWillUpdate(nextProps, nextState, nextContext);
     }
 
     this._currentElement = nextElement;
@@ -27640,7 +27640,7 @@ var ReactDOMOption = ReactCompositeComponent.createClass({
 
   mixins: [ReactBrowserComponentMixin],
 
-  componentWillMount: function() {
+  UNSAFE_componentWillMount: function() {
     // TODO (yungsters): Remove support for `selected` in <option>.
     if ("production" !== process.env.NODE_ENV) {
       ("production" !== process.env.NODE_ENV ? warning(
@@ -27780,11 +27780,11 @@ var ReactDOMSelect = ReactCompositeComponent.createClass({
     return {value: this.props.defaultValue || (this.props.multiple ? [] : '')};
   },
 
-  componentWillMount: function() {
+  UNSAFE_componentWillMount: function() {
     this._pendingValue = null;
   },
 
-  componentWillReceiveProps: function(nextProps) {
+  UNSAFE_componentWillReceiveProps: function(nextProps) {
     if (!this.props.multiple && nextProps.multiple) {
       this.setState({value: [this.state.value]});
     } else if (this.props.multiple && !nextProps.multiple) {
@@ -38477,7 +38477,7 @@ exports.XAxis = React.createClass({displayName: "XAxis",
     this._renderAxis(this.props);
   },
 
-  componentWillReceiveProps: function(props) {
+  UNSAFE_componentWillReceiveProps: function(props) {
     this._renderAxis(props);
   },
 
@@ -38571,7 +38571,7 @@ exports.YAxis = React.createClass({displayName: "YAxis",
     this._renderAxis(this.props);
   },
 
-  componentWillReceiveProps: function(props) {
+  UNSAFE_componentWillReceiveProps: function(props) {
     this._renderAxis(props);
   },
 
