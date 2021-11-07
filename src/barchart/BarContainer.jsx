@@ -54,14 +54,15 @@ module.exports = createReactClass({
       handleMouseOver = handleMouseLeave = null;
     }
 
+
+    // Remove props
+    const newProps = Object.assign({}, this.props);
+    delete newProps.hoverAnimation;
+
     return (
       <Bar
-        {...props}
+        {...newProps}
         fill={this.props.fill}
-        // onMouseOver={handleMouseOver}
-        // onMouseLeave={handleMouseLeave}
-
-
         onMouseOver={props.hoverAnimation ? this._animateBar : null}
         onMouseLeave={props.hoverAnimation ? this._restoreBar : null}
       />

@@ -719,9 +719,7 @@ module.exports = createReactClass({
   render: function render() {
     return React.createElement('rect', _extends({
       className: 'rd3-barchart-bar'
-    }, this.props, {
-      fill: this.props.fill
-    }));
+    }, this.props));
   }
 });
 
@@ -814,7 +812,7 @@ module.exports = createReactClass({
       xIsDate: false,
       color: {
         accessor: 'Sequential',
-        colors: d3.scaleOrdinal(d3.schemeGnBu[9])
+        colors: d3.scaleOrdinal(d3.schemeBlues[9].reverse())
       }
     };
   },
@@ -850,6 +848,7 @@ module.exports = createReactClass({
     var _array = props.data;
     var dataDict = {};
 
+    /* Check date field */
     _array.map(function (elem, idxE) {
       var bar = void 0;
       /* TODO: have to cast from string to bool on the client */
@@ -860,15 +859,21 @@ module.exports = createReactClass({
         dataDict[bar][elem.name] = +elem.y;
       }
     });
+
+    /* ENTRADA PRECISA SER ESSES !!! */
     var data = Object.keys(dataDict).map(function (key) {
       return dataDict[key];
     });
 
+    /* COLUMNS */
     var series = new Set(props.data.map(function (item) {
       return item.name;
     }));
     series = Array.from(series);
+
+    /* d3 */
     var _data = this._stack(series)(data);
+    // debugger
 
     var _getDimensions = this.getDimensions(),
         innerHeight = _getDimensions.innerHeight,
@@ -1115,13 +1120,13 @@ module.exports = createReactClass({
       handleMouseOver = handleMouseLeave = null;
     }
 
-    return React.createElement(Bar, _extends({}, props, {
-      fill: this.props.fill
-      // onMouseOver={handleMouseOver}
-      // onMouseLeave={handleMouseLeave}
+    // Remove props
+    var newProps = Object.assign({}, this.props);
+    delete newProps.hoverAnimation;
 
-
-      , onMouseOver: props.hoverAnimation ? this._animateBar : null,
+    return React.createElement(Bar, _extends({}, newProps, {
+      fill: this.props.fill,
+      onMouseOver: props.hoverAnimation ? this._animateBar : null,
       onMouseLeave: props.hoverAnimation ? this._restoreBar : null
     }));
   }
@@ -1198,21 +1203,17 @@ module.exports = createReactClass((_createReactClass = {
   var yWidth = yScale(this.props.y0Accessor(segment) + this.props.yAccessorBar(segment));
   var y = grouped ? yScale(this.props.yAccessorBar(segment)) : yWidth;
   var key = this.props.series[seriesIdx] + segment.data.x + segment[1];
-
-  // debugger;
-  // console.log(this.props.y0Accessor(segment))
-
-  // Height?!?
-  // console.log( Math.abs(this.props.y0Accessor(segment) - this.props.yAccessorBar(segment)))
-
   var height = Math.abs(this.props.y0Accessor(segment) - this.props.yAccessorBar(segment));
-  // console.log(barHeight)
+
+  y = this.props.yAccessorBar(segment) >= 0 ? y : y - barHeight;
+  y = y || 0;
+
   return React.createElement(BarContainer, {
     key: key,
-    height: barHeight,
+    height: barHeight || 0,
     width: xScale.bandwidth(),
     x: xScale(this.props.xAccessorBar(segment)),
-    y: this.props.yAccessorBar(segment) >= 0 ? y : y - barHeight,
+    y: y,
     fill: this.props.color.colors(colorsAccessor(colorsDomain, seriesIdx)),
     hoverAnimation: this.props.hoverAnimation,
     onMouseOver: this.props.onMouseOver,
@@ -1221,7 +1222,7 @@ module.exports = createReactClass((_createReactClass = {
       xValue: this.props.xAccessorBar(segment),
       yValue: this.props.yAccessorBar(segment),
       seriesName: this.props.series[seriesIdx],
-      height: height
+      height: height || 0
     }
   });
 }), _defineProperty(_createReactClass, 'render', function render() {
@@ -1694,8 +1695,8 @@ module.exports = createReactClass({
     data: PropTypes.array.isRequired,
     itemClassName: PropTypes.string,
     margins: PropTypes.object,
-    text: PropTypes.string,
-    width: PropTypes.number.isRequired
+    text: PropTypes.string
+    // width: PropTypes.number.isRequired,
   },
 
   getDefaultProps: function getDefaultProps() {
@@ -1737,7 +1738,7 @@ module.exports = createReactClass({
         itemStyle.color = props.color.colors(props.colorsAccessor(props.colorsDomain, idx));
 
         var rev_idx = props.series.length - idx;
-        legendItems.push(React.createElement('g', null, React.createElement('circle', { cx: '30', cy: 10 + 15 * rev_idx, r: '4', fill: itemStyle.color, id: 'circle' }), React.createElement('text', {
+        legendItems.push(React.createElement('g', { key: 'series_circle:' + idx }, React.createElement('circle', { cx: '30', cy: 10 + 15 * rev_idx, r: '4', fill: itemStyle.color, id: 'circle' }), React.createElement('text', {
           className: 'rd3-legend-text ' + (chartStyle && chartStyle),
           x: '42',
           y: 14 + 15 * rev_idx
@@ -1752,7 +1753,7 @@ module.exports = createReactClass({
         itemStyle.color = props.color.colors(props.colorsAccessor(series, idx));
 
         var rev_idx = props.series.length - idx;
-        legendItems.push(React.createElement('g', null, React.createElement('circle', { cx: '30', cy: 10 + 15 * rev_idx, r: '4', fill: itemStyle.color, id: 'circle' }), React.createElement('text', {
+        legendItems.push(React.createElement('g', { key: 'circle:' + idx }, React.createElement('circle', { cx: '30', cy: 10 + 15 * rev_idx, r: '4', fill: itemStyle.color, id: 'circle' }), React.createElement('text', {
           className: 'rd3-legend-text ' + (chartStyle && chartStyle),
           x: '50',
           y: 14 + 15 * rev_idx
@@ -1852,7 +1853,7 @@ module.exports = createReactClass({
       marginTop: '-15px',
       width: '100px'
     };
-    return React.createElement('div', { style: containerStyles }, React.createElement('div', { style: tooltipStyles, 'class': 'rd3-legend-text' }, props.child));
+    return React.createElement('div', { style: containerStyles }, React.createElement('div', { style: tooltipStyles, className: 'rd3-legend-text' }, props.child));
   }
 });
 
@@ -2274,10 +2275,10 @@ module.exports = createReactClass({
         y2: y2
       }));
     })), '/* Move all tick labels at once */', React.createElement('g', { transform: translateTickLabel }, ticks.map(function (tick, idx) {
-      return React.createElement('g', { className: 'tickText', transform: trText(tick) }, React.createElement('text', _extends({
+      return React.createElement('g', { className: 'tickText', transform: trText(tick), key: idx }, React.createElement('text', _extends({
         strokeWidth: gridTextFontWeight,
         dy: dy, x: x1, y: y1,
-        style: { stroke: props.tickTextStroke, fill: props.tickTextStroke, 'font-size': gridTextFontSize },
+        style: { stroke: props.tickTextStroke, fill: props.tickTextStroke, fontSize: gridTextFontSize },
         textAnchor: textAnchor
       }, optionalTextProps, {
         transform: gridTextRotate
@@ -2994,8 +2995,13 @@ module.exports = createReactClass({
   },
   _renderChart: function _renderChart() {
     var props = this.props;
+
+    /* Context */
+    this.contextType = _ChartContext2.default;
+    var chartStyle = this.contextType._currentValue.chartStyle;
+
     return React.createElement('svg', {
-      className: props.svgClassName,
+      className: props.svgClassName + ' ' + chartStyle,
       height: '100%',
       viewBox: props.viewBox,
       width: '100%'
@@ -3003,10 +3009,16 @@ module.exports = createReactClass({
   },
   render: function render() {
     var props = this.props;
+    /* Context */
+    this.contextType = _ChartContext2.default;
+    var chartStyle = this.contextType._currentValue.chartStyle;
 
     return React.createElement('div', {
-      className: props.className,
-      style: { display: 'grid', width: props.width, height: props.height, background: props.background }
+      className: props.className + ' ' + chartStyle
+      // className={props.className}
+
+      , style: { display: 'grid', width: props.width, height: props.height, background: props.background }
+
     }, React.createElement('div', { style: { display: 'flex', width: props.width, height: props.height } }, this._renderChart()));
   }
 });

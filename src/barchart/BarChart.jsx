@@ -60,7 +60,7 @@ module.exports = createReactClass({
       xIsDate: false,
       color: {
         accessor: 'Sequential',
-        colors: d3.scaleOrdinal(d3.schemeGnBu[9])
+        colors: d3.scaleOrdinal(d3.schemeBlues[9].reverse())
       }
     };
   },
@@ -95,6 +95,7 @@ module.exports = createReactClass({
     const _array = props.data
     const dataDict = {}
 
+    /* Check date field */
     _array.map( (elem, idxE) => {
         let bar;
         /* TODO: have to cast from string to bool on the client */
@@ -105,13 +106,20 @@ module.exports = createReactClass({
           dataDict[bar][elem.name] = +elem.y
         }
     })
+
+    /* ENTRADA PRECISA SER ESSES !!! */
     const data = Object.keys(dataDict).map(function(key){
         return dataDict[key];
     });
 
+    /* COLUMNS */
     let series = new Set(props.data.map((item) => item.name));
     series = Array.from(series);
+
+    /* d3 */
     const _data = this._stack(series)(data);
+    // debugger
+
     const { innerHeight, innerWidth, trans, svgMargins } = this.getDimensions();
 
     const xScale = d3.scaleBand()

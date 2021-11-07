@@ -111,10 +111,15 @@ module.exports = createReactClass({
 
   _renderChart() {
     const props = this.props;
+
+    /* Context */
+    this.contextType = ChartContext;
+    const { chartStyle }  = this.contextType._currentValue;
+
     return (
 
       <svg
-        className={props.svgClassName}
+        className={`${props.svgClassName} ${chartStyle}`}
         height="100%"
         viewBox={props.viewBox}
         width="100%"
@@ -132,11 +137,18 @@ module.exports = createReactClass({
 
   render() {
     const props = this.props;
+    /* Context */
+    this.contextType = ChartContext;
+    const { chartStyle }  = this.contextType._currentValue;
+
 
     return (
       <div
-        className={props.className}
+        className={`${props.className} ${chartStyle}`}
+        // className={props.className}
+
         style={{ display: 'grid', width: props.width, height: props.height, background:props.background }}
+
       >
           <div style={{ display:'flex',  width:props.width, height:props.height  }}>
 
