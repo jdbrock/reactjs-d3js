@@ -38,9 +38,11 @@ module.exports = createReactClass({
 
   _renderBarSeries() {
     const { _data, valuesAccessor } = this.props;
-    return _data.map((layer, seriesIdx) => (
-      valuesAccessor(layer).map(segment => this._renderBarContainer(segment, seriesIdx))
-    ));
+    return _data.map((layer, seriesIdx) => {
+      return (valuesAccessor(layer).map(segment => this._renderBarContainer(segment, seriesIdx)))
+      }
+    )
+
   },
 
   _renderBarContainer(segment, seriesIdx) {
@@ -48,24 +50,23 @@ module.exports = createReactClass({
     const { color, colorsAccessor, colorsDomain, grouped, series, xScale, yScale } = this.props;
     const barHeight = Math.abs(yScale(this.props.y0Accessor(segment)) - yScale(this.props.yAccessorBar(segment)));
     const yWidth = yScale(this.props.y0Accessor(segment) + this.props.yAccessorBar(segment));
-    const y = grouped ? yScale(this.props.yAccessorBar(segment)) : yWidth;
+    let y = grouped ? yScale(this.props.yAccessorBar(segment)) : yWidth;
     const key = this.props.series[seriesIdx] + segment.data.x +segment[1];
-
-    // debugger;
-    // console.log(this.props.y0Accessor(segment))
-
-    // Height?!?
-    // console.log( Math.abs(this.props.y0Accessor(segment) - this.props.yAccessorBar(segment)))
-
     const height = Math.abs(this.props.y0Accessor(segment) - this.props.yAccessorBar(segment))
-    // console.log(barHeight)
+
+    y = ((this.props.yAccessorBar(segment) >= 0) ? y : y - barHeight)
+    y = y || 0
+
+
+
+
     return (
       <BarContainer
         key={key}
-        height={barHeight}
+        height={barHeight || 0}
         width={xScale.bandwidth() }
         x={ xScale(this.props.xAccessorBar(segment)) }
-        y={(this.props.yAccessorBar(segment) >= 0) ? y : y - barHeight}
+        y={y}
         fill={this.props.color.colors(colorsAccessor(colorsDomain, seriesIdx))}
         hoverAnimation={this.props.hoverAnimation}
         onMouseOver={this.props.onMouseOver}
@@ -74,7 +75,7 @@ module.exports = createReactClass({
           xValue: this.props.xAccessorBar(segment),
           yValue: this.props.yAccessorBar(segment),
           seriesName: this.props.series[seriesIdx],
-          height: height
+          height: height || 0
         }}
       />
     );

@@ -19,7 +19,7 @@ module.exports = createReactClass({
     itemClassName: PropTypes.string,
     margins: PropTypes.object,
     text: PropTypes.string,
-    width: PropTypes.number.isRequired,
+    // width: PropTypes.number.isRequired,
   },
 
   getDefaultProps() {
@@ -66,7 +66,7 @@ module.exports = createReactClass({
 
         const rev_idx = props.series.length - idx
         legendItems.push(
-          <g>
+          <g key={`series_circle:${idx}`}>
             <circle cx="30" cy={10 + 15 * rev_idx} r="4" fill={itemStyle.color} id="circle"/>
             <text
               className= {`rd3-legend-text ${chartStyle && chartStyle}` }
@@ -86,7 +86,7 @@ module.exports = createReactClass({
 
         const rev_idx = props.series.length - idx
         legendItems.push(
-          <g>
+          <g key={`circle:${idx}`}>
             <circle cx="30" cy={10 + 15 * rev_idx} r="4" fill={itemStyle.color} id="circle"/>
             <text
               className= {`rd3-legend-text ${chartStyle && chartStyle}` }

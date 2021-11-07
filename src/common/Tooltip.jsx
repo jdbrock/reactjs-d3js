@@ -45,7 +45,7 @@ module.exports = createReactClass({
     };
     return (
       <div style={containerStyles}>
-        <div style={tooltipStyles} class="rd3-legend-text">
+        <div style={tooltipStyles} className="rd3-legend-text">
           {props.child}
         </div>
       </div>

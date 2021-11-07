@@ -28,7 +28,6 @@ module.exports = createReactClass({
       <rect
         className="rd3-barchart-bar"
         {...this.props}
-        fill={this.props.fill}
       />
     );
   },

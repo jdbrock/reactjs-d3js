@@ -271,11 +271,11 @@ module.exports = createReactClass({
       /* Move all tick labels at once */
       <g transform={translateTickLabel}>
         {ticks.map((tick, idx) => (
-          <g className="tickText" transform={trText(tick)} >
+          <g className="tickText" transform={trText(tick)} key={idx} >
               <text
                 strokeWidth={gridTextFontWeight}
                 dy={dy} x={x1} y={y1}
-                style={{ stroke: props.tickTextStroke, fill: props.tickTextStroke, 'font-size': gridTextFontSize}}
+                style={{ stroke: props.tickTextStroke, fill: props.tickTextStroke, fontSize: gridTextFontSize}}
                 textAnchor={textAnchor}
                 {...optionalTextProps}
                 transform={gridTextRotate}
