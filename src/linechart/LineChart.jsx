@@ -4,10 +4,10 @@ const PropTypes = require('prop-types');
 const React = require('react');
 const d3 = require('d3');
 const createReactClass = require('create-react-class');
+const utils = require('../utils');
 
 const { Chart, XAxis, YAxis, XGrid, YGrid, Tooltip } = require('../common');
 const DataSeries = require('./DataSeries');
-const utils = require('../utils');
 const {
   CartesianChartPropsMixin,
   DefaultAccessorsMixin,
@@ -30,7 +30,7 @@ module.exports = createReactClass({
 
   getDefaultProps() {
     return {
-      colors: d3.scaleOrdinal(d3.schemeCategory10),
+      // colors: d3.scaleOrdinal(d3.schemeCategory10),
       circleRadius: 3,
       className: 'rd3-linechart',
       hoverAnimation: true,
@@ -38,10 +38,15 @@ module.exports = createReactClass({
       xAxisClassName: 'rd3-linechart-xaxis',
       yAxisClassName: 'rd3-linechart-yaxis',
       data: [],
+      color: {
+        accessor: 'Sequential',
+        colors: d3.scaleSequential(d3.interpolateSpectral),
+      }
     };
   },
 
   _calculateScales: utils.calculateScales,
+  _rd3FormatInputData: utils.rd3FormatInputData,
 
   render() {
     const props = this.props;
@@ -50,16 +55,21 @@ module.exports = createReactClass({
       return null;
     }
 
+    let data;
+    let series;
+    [data, series] = this._rd3FormatInputData(props.inputDataLayout, props.data, props.xIsDate, props.strokeWidth)
+
+
     const { innerWidth, innerHeight, trans, svgMargins } = this.getDimensions();
     const yOrient = this.getYOrient();
     const domain = props.domain || {};
 
-    if (!Array.isArray(props.data)) {
-      props.data = [props.data];
+    if (!Array.isArray(data)) {
+      data = [data];
     }
 
     // Returns an object of flattened allValues, xValues, and yValues
-    const flattenedData = utils.flattenData(props.data, props.xAccessor, props.yAccessor);
+    const flattenedData = utils.flattenData(data, props.xAccessor, props.yAccessor);
 
     const allValues = flattenedData.allValues;
     const xValues = flattenedData.xValues;
@@ -73,20 +83,39 @@ module.exports = createReactClass({
       domain.y
     );
 
+    let colorsDomain;
+    let colorsAccessor;
+    const origArray = Array.from(series.keys())
+
+    if (this.props.color.accessor === 'Sequential'){
+      colorsDomain = origArray.map(x => x / series.length)
+      colorsAccessor = this.props.colorAccessorSequential
+    }else{
+      colorsDomain = series
+      colorsAccessor = this.props.colorAccessorOrdinal
+    }
+
     return (
       <span onMouseLeave={this.onMouseLeave}>
         <Chart
           viewBox={this.getViewBox()}
           legend={props.legend}
           sideOffset={props.sideOffset}
-          data={props.data}
+          data={data}
           margins={props.margins}
-          colors={props.colors}
-          colorAccessor={props.colorAccessorOrdinal}
+          color={this.props.color}
+          colorsDomain={colorsDomain}
+          colorsAccessor={colorsAccessor}
           width={props.width}
           height={props.height}
           title={props.title}
           shouldUpdate={!this.state.changeState}
+          series={series}
+          svgLegend={props.svgLegend}
+          svgChart={props.svgChart}
+          legendStyle={props.legendStyle}
+          background={props.background}
+          svgTitle={props.svgTitle}
         >
           <g transform={trans} className={props.className}>
             <XGrid
@@ -103,7 +132,7 @@ module.exports = createReactClass({
               tickTextStroke={props.xAxisTickTextStroke}
               xOrient={props.xOrient}
               yOrient={yOrient}
-              data={props.data}
+              data={data}
               margins={svgMargins}
               width={innerWidth}
               height={innerHeight}
@@ -112,6 +141,13 @@ module.exports = createReactClass({
               gridVertical={props.gridVertical}
               gridVerticalStroke={props.gridVerticalStroke}
               gridVerticalStrokeDash={props.gridVerticalStrokeDash}
+
+              gridText={props.gridText}
+              translateTickLabel_Y_X={props.translateTickLabel_Y_X}
+              translateTickLabel_Y_Y={props.translateTickLabel_Y_Y}
+              translateTickLabel_X_X={props.translateTickLabel_X_X}
+              translateTickLabel_X_Y={props.translateTickLabel_X_Y}
+              xIsDate={props.xIsDate}
             />
             <YGrid
               yAxisClassName={props.yAxisClassName}
@@ -135,6 +171,12 @@ module.exports = createReactClass({
               gridHorizontalStroke={props.gridHorizontalStroke}
               gridHorizontalStrokeWidth={props.gridHorizontalStrokeWidth}
               gridHorizontalStrokeDash={props.gridHorizontalStrokeDash}
+
+              gridText={props.gridText}
+              translateTickLabel_Y_X={props.translateTickLabel_Y_X}
+              translateTickLabel_Y_Y={props.translateTickLabel_Y_Y}
+              translateTickLabel_X_X={props.translateTickLabel_X_X}
+              translateTickLabel_X_Y={props.translateTickLabel_X_Y}
             />
 
 
@@ -145,11 +187,14 @@ module.exports = createReactClass({
               yAccessor={props.yAccessor}
               hoverAnimation={props.hoverAnimation}
               circleRadius={props.circleRadius}
-              data={props.data}
+              data={data}
               value={allValues}
               interpolationType={props.interpolationType}
-              colors={props.colors}
-              colorAccessor={props.colorAccessorOrdinal}
+              // colors={props.colors}
+              // colorAccessor={props.colorAccessorOrdinal}
+              color={props.color}
+              colorsDomain={colorsDomain}
+              colorsAccessor={colorsAccessor}
               width={innerWidth}
               height={innerHeight}
               onMouseOver={this.onMouseOver}
@@ -168,7 +213,7 @@ module.exports = createReactClass({
               tickTextStroke={props.xAxisTickTextStroke}
               xOrient={props.xOrient}
               yOrient={yOrient}
-              data={props.data}
+              data={data}
               margins={svgMargins}
               width={innerWidth}
               height={innerHeight}

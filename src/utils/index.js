@@ -1,4 +1,5 @@
 const d3 = require('d3');
+const { number } = require('prop-types');
 
 exports.calculateScales = (width, height, xValues, yValues, xDomain = [], yDomain = []) => {
   let xScale;
@@ -6,7 +7,14 @@ exports.calculateScales = (width, height, xValues, yValues, xDomain = [], yDomai
     xScale = d3.scaleTime()
       .range([0, width]);
   } else {
+    /*
+    TODO: allow select scale num, str, date
+    xScale = d3.scaleBand()
+    xScale.domain(xValues);
+    */
+
     xScale = d3.scaleLinear()
+    // xScale = d3.scaleBand()
       .range([0, width]);
   }
   const xdomain = d3.extent(xValues);
@@ -14,15 +22,23 @@ exports.calculateScales = (width, height, xValues, yValues, xDomain = [], yDomai
   if (xDomain[1] !== undefined && xDomain[1] !== null) xdomain[1] = xDomain[1];
   xScale.domain(xdomain);
 
+  // xScale.domain(xValues.sort());
+
+
+
+
+
   let yScale;
   if (yValues.length > 0 && Object.prototype.toString.call(yValues[0]) === '[object Date]') {
     yScale = d3.scaleTime()
       .range([height, 0]);
   } else {
+    /* TODO: Allow scaleLog */
     yScale = d3.scaleLinear()
       .range([height, 0]);
   }
 
+  yValues = yValues.map( y=>parseInt(y))
   const ydomain = d3.extent(yValues);
   if (yDomain[0] !== undefined && yDomain[0] !== null) ydomain[0] = yDomain[0];
   if (yDomain[1] !== undefined && yDomain[1] !== null) ydomain[1] = yDomain[1];
@@ -68,9 +84,9 @@ exports.flattenData = (data, xAccessor, yAccessor) => {
       // Check for NaN since d3's Voronoi cannot handle NaN values
       // Go ahead and Proceed to next iteration since we don't want NaN
       // in allValues or in xValues or yValues
-      if (isNaN(x)) {
-        return;
-      }
+      // if (isNaN(x)) {
+      //   return;
+      // }
       xValues.push(x);
 
       const y = yAccessor(item);
@@ -148,3 +164,10 @@ exports.shade = (hex, percent) => {
   if (blue.length === 1) blue = `0${blue}`;
   return `#${red}${green}${blue}`;
 };
+
+
+
+
+
+exports.formatInputData = require('./input').formatInputData;
+exports.rd3FormatInputData = require('./input').rd3FormatInputData;

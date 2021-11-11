@@ -14,10 +14,11 @@ module.exports = {
     return {
       showTooltip: true,
       /* Sum */
-      // tooltipFormat: (d) => String( d.seriesName) + ':\n' + String( d.yValue),
-
-      /* Height */
-      tooltipFormat: (d) => String( d.seriesName) + ':\n' + String( d.height) ,
+      tooltipFormat: (d, chart) => {
+        return chart === 'barchart'
+                  ? String( d.seriesName) + ':\n' + String( d.height)
+                  : String( d.seriesName) + ':\n' + String( d.yValue)
+      },
     };
   },
 
@@ -47,7 +48,7 @@ module.exports = {
       tooltip: {
         x,
         y,
-        child: this.props.tooltipFormat.call(this, dataPoint),
+        child: this.props.tooltipFormat.call(this, dataPoint, this.props.chart),
         show: true,
       },
       changeState: true,
