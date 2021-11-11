@@ -108,6 +108,9 @@ module.exports = createReactClass({
     let y2grid;
     let gridOn = false;
     let translateTickLabel;
+    let formatDate;
+    let maxTicksXAxis;
+
 
     const sign = props.orient === 'top' || props.orient === 'right' ? -1 : 1;
     const tickSpacing = Math.max(props.innerTickSize, 0) + props.tickPadding;
@@ -161,6 +164,8 @@ module.exports = createReactClass({
         y2grid = -props.height;
         gridTextRotate = props.gridText.rotate.bottom;
         translateTickLabel = 'translate(' + props.translateTickLabel_X_X + ',' + props.translateTickLabel_X_Y + ')';
+        formatDate = props.xIsDate === true ? (d) => new Date(d).toLocaleDateString() : (d) => d;
+        ticks.length > 40 ? maxTicksXAxis=5 : maxTicksXAxis=1
         break;
       case 'left':
         tr = (tick) => `translate(0,${adjustedScale(tick)})`;
@@ -173,7 +178,8 @@ module.exports = createReactClass({
         y2grid = 0;
         gridTextRotate = props.gridText.rotate.left;
         translateTickLabel = 'translate(' + props.translateTickLabel_Y_X + ',' + props.translateTickLabel_Y_Y + ')';
-        // debugger;
+        formatDate = (d) => d;
+        maxTicksXAxis=1;
         break;
       case 'right':
         tr = (tick) => `translate(0,${adjustedScale(tick)})`;
@@ -252,6 +258,8 @@ module.exports = createReactClass({
     gridTextFontSize = props.gridText.font.size;
     gridTextFontWeight = props.gridText.font.weight;
 
+    // debugger;
+
     return (
     <g>
       <g>
@@ -270,7 +278,9 @@ module.exports = createReactClass({
 
       /* Move all tick labels at once */
       <g transform={translateTickLabel}>
-        {ticks.map((tick, idx) => (
+        {ticks.filter((tick, idx) => (idx%[maxTicksXAxis] === 0 )).map((tick, idx) => (
+
+
           <g className="tickText" transform={trText(tick)} key={idx} >
               <text
                 strokeWidth={gridTextFontWeight}
@@ -287,7 +297,7 @@ module.exports = createReactClass({
                     dy={dy}
                     key={index}
                     >
-                      {tickLabel}
+                      {formatDate(tickLabel)}
                     </tspan>
                 ))}
               </text>

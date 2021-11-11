@@ -148,6 +148,7 @@ const Demos = createReactClass({
             <LineChart
               legend
               data={lineData}
+              inputDataLayout="rd3"
               width="100%"
               height={400}
               viewBoxObject={{
@@ -405,6 +406,7 @@ const Demos = createReactClass({
           <div className="col-md-6">
             <BarChart
                 data={barData}
+                inputDataLayout='csvRows'
                 grouped={true}
                 width="100%"
                 height={400}

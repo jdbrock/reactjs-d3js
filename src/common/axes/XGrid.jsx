@@ -89,6 +89,7 @@ module.exports = createReactClass({
 
           translateTickLabel_X_X={props.translateTickLabel_X_X}
           translateTickLabel_X_Y={props.translateTickLabel_X_Y}
+          xIsDate={props.xIsDate}
         />
 
       </g>

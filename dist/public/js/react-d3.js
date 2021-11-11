@@ -1,4 +1,1005 @@
-(function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.rd3 = f()}})(function(){var define,module,exports;return (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({"/home/robson/projetos/rd3/src/ChartContext.js":[function(require,module,exports){
+(function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.rd3 = f()}})(function(){var define,module,exports;return (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({"/home/robson/projetos/rd3/node_modules/d3-voronoi/dist/d3-voronoi.js":[function(require,module,exports){
+// https://d3js.org/d3-voronoi/ v1.1.4 Copyright 2018 Mike Bostock
+(function (global, factory) {
+typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
+typeof define === 'function' && define.amd ? define(['exports'], factory) :
+(factory((global.d3 = global.d3 || {})));
+}(this, (function (exports) { 'use strict';
+
+function constant(x) {
+  return function() {
+    return x;
+  };
+}
+
+function x(d) {
+  return d[0];
+}
+
+function y(d) {
+  return d[1];
+}
+
+function RedBlackTree() {
+  this._ = null; // root node
+}
+
+function RedBlackNode(node) {
+  node.U = // parent node
+  node.C = // color - true for red, false for black
+  node.L = // left node
+  node.R = // right node
+  node.P = // previous node
+  node.N = null; // next node
+}
+
+RedBlackTree.prototype = {
+  constructor: RedBlackTree,
+
+  insert: function(after, node) {
+    var parent, grandpa, uncle;
+
+    if (after) {
+      node.P = after;
+      node.N = after.N;
+      if (after.N) after.N.P = node;
+      after.N = node;
+      if (after.R) {
+        after = after.R;
+        while (after.L) after = after.L;
+        after.L = node;
+      } else {
+        after.R = node;
+      }
+      parent = after;
+    } else if (this._) {
+      after = RedBlackFirst(this._);
+      node.P = null;
+      node.N = after;
+      after.P = after.L = node;
+      parent = after;
+    } else {
+      node.P = node.N = null;
+      this._ = node;
+      parent = null;
+    }
+    node.L = node.R = null;
+    node.U = parent;
+    node.C = true;
+
+    after = node;
+    while (parent && parent.C) {
+      grandpa = parent.U;
+      if (parent === grandpa.L) {
+        uncle = grandpa.R;
+        if (uncle && uncle.C) {
+          parent.C = uncle.C = false;
+          grandpa.C = true;
+          after = grandpa;
+        } else {
+          if (after === parent.R) {
+            RedBlackRotateLeft(this, parent);
+            after = parent;
+            parent = after.U;
+          }
+          parent.C = false;
+          grandpa.C = true;
+          RedBlackRotateRight(this, grandpa);
+        }
+      } else {
+        uncle = grandpa.L;
+        if (uncle && uncle.C) {
+          parent.C = uncle.C = false;
+          grandpa.C = true;
+          after = grandpa;
+        } else {
+          if (after === parent.L) {
+            RedBlackRotateRight(this, parent);
+            after = parent;
+            parent = after.U;
+          }
+          parent.C = false;
+          grandpa.C = true;
+          RedBlackRotateLeft(this, grandpa);
+        }
+      }
+      parent = after.U;
+    }
+    this._.C = false;
+  },
+
+  remove: function(node) {
+    if (node.N) node.N.P = node.P;
+    if (node.P) node.P.N = node.N;
+    node.N = node.P = null;
+
+    var parent = node.U,
+        sibling,
+        left = node.L,
+        right = node.R,
+        next,
+        red;
+
+    if (!left) next = right;
+    else if (!right) next = left;
+    else next = RedBlackFirst(right);
+
+    if (parent) {
+      if (parent.L === node) parent.L = next;
+      else parent.R = next;
+    } else {
+      this._ = next;
+    }
+
+    if (left && right) {
+      red = next.C;
+      next.C = node.C;
+      next.L = left;
+      left.U = next;
+      if (next !== right) {
+        parent = next.U;
+        next.U = node.U;
+        node = next.R;
+        parent.L = node;
+        next.R = right;
+        right.U = next;
+      } else {
+        next.U = parent;
+        parent = next;
+        node = next.R;
+      }
+    } else {
+      red = node.C;
+      node = next;
+    }
+
+    if (node) node.U = parent;
+    if (red) return;
+    if (node && node.C) { node.C = false; return; }
+
+    do {
+      if (node === this._) break;
+      if (node === parent.L) {
+        sibling = parent.R;
+        if (sibling.C) {
+          sibling.C = false;
+          parent.C = true;
+          RedBlackRotateLeft(this, parent);
+          sibling = parent.R;
+        }
+        if ((sibling.L && sibling.L.C)
+            || (sibling.R && sibling.R.C)) {
+          if (!sibling.R || !sibling.R.C) {
+            sibling.L.C = false;
+            sibling.C = true;
+            RedBlackRotateRight(this, sibling);
+            sibling = parent.R;
+          }
+          sibling.C = parent.C;
+          parent.C = sibling.R.C = false;
+          RedBlackRotateLeft(this, parent);
+          node = this._;
+          break;
+        }
+      } else {
+        sibling = parent.L;
+        if (sibling.C) {
+          sibling.C = false;
+          parent.C = true;
+          RedBlackRotateRight(this, parent);
+          sibling = parent.L;
+        }
+        if ((sibling.L && sibling.L.C)
+          || (sibling.R && sibling.R.C)) {
+          if (!sibling.L || !sibling.L.C) {
+            sibling.R.C = false;
+            sibling.C = true;
+            RedBlackRotateLeft(this, sibling);
+            sibling = parent.L;
+          }
+          sibling.C = parent.C;
+          parent.C = sibling.L.C = false;
+          RedBlackRotateRight(this, parent);
+          node = this._;
+          break;
+        }
+      }
+      sibling.C = true;
+      node = parent;
+      parent = parent.U;
+    } while (!node.C);
+
+    if (node) node.C = false;
+  }
+};
+
+function RedBlackRotateLeft(tree, node) {
+  var p = node,
+      q = node.R,
+      parent = p.U;
+
+  if (parent) {
+    if (parent.L === p) parent.L = q;
+    else parent.R = q;
+  } else {
+    tree._ = q;
+  }
+
+  q.U = parent;
+  p.U = q;
+  p.R = q.L;
+  if (p.R) p.R.U = p;
+  q.L = p;
+}
+
+function RedBlackRotateRight(tree, node) {
+  var p = node,
+      q = node.L,
+      parent = p.U;
+
+  if (parent) {
+    if (parent.L === p) parent.L = q;
+    else parent.R = q;
+  } else {
+    tree._ = q;
+  }
+
+  q.U = parent;
+  p.U = q;
+  p.L = q.R;
+  if (p.L) p.L.U = p;
+  q.R = p;
+}
+
+function RedBlackFirst(node) {
+  while (node.L) node = node.L;
+  return node;
+}
+
+function createEdge(left, right, v0, v1) {
+  var edge = [null, null],
+      index = edges.push(edge) - 1;
+  edge.left = left;
+  edge.right = right;
+  if (v0) setEdgeEnd(edge, left, right, v0);
+  if (v1) setEdgeEnd(edge, right, left, v1);
+  cells[left.index].halfedges.push(index);
+  cells[right.index].halfedges.push(index);
+  return edge;
+}
+
+function createBorderEdge(left, v0, v1) {
+  var edge = [v0, v1];
+  edge.left = left;
+  return edge;
+}
+
+function setEdgeEnd(edge, left, right, vertex) {
+  if (!edge[0] && !edge[1]) {
+    edge[0] = vertex;
+    edge.left = left;
+    edge.right = right;
+  } else if (edge.left === right) {
+    edge[1] = vertex;
+  } else {
+    edge[0] = vertex;
+  }
+}
+
+// Liang–Barsky line clipping.
+function clipEdge(edge, x0, y0, x1, y1) {
+  var a = edge[0],
+      b = edge[1],
+      ax = a[0],
+      ay = a[1],
+      bx = b[0],
+      by = b[1],
+      t0 = 0,
+      t1 = 1,
+      dx = bx - ax,
+      dy = by - ay,
+      r;
+
+  r = x0 - ax;
+  if (!dx && r > 0) return;
+  r /= dx;
+  if (dx < 0) {
+    if (r < t0) return;
+    if (r < t1) t1 = r;
+  } else if (dx > 0) {
+    if (r > t1) return;
+    if (r > t0) t0 = r;
+  }
+
+  r = x1 - ax;
+  if (!dx && r < 0) return;
+  r /= dx;
+  if (dx < 0) {
+    if (r > t1) return;
+    if (r > t0) t0 = r;
+  } else if (dx > 0) {
+    if (r < t0) return;
+    if (r < t1) t1 = r;
+  }
+
+  r = y0 - ay;
+  if (!dy && r > 0) return;
+  r /= dy;
+  if (dy < 0) {
+    if (r < t0) return;
+    if (r < t1) t1 = r;
+  } else if (dy > 0) {
+    if (r > t1) return;
+    if (r > t0) t0 = r;
+  }
+
+  r = y1 - ay;
+  if (!dy && r < 0) return;
+  r /= dy;
+  if (dy < 0) {
+    if (r > t1) return;
+    if (r > t0) t0 = r;
+  } else if (dy > 0) {
+    if (r < t0) return;
+    if (r < t1) t1 = r;
+  }
+
+  if (!(t0 > 0) && !(t1 < 1)) return true; // TODO Better check?
+
+  if (t0 > 0) edge[0] = [ax + t0 * dx, ay + t0 * dy];
+  if (t1 < 1) edge[1] = [ax + t1 * dx, ay + t1 * dy];
+  return true;
+}
+
+function connectEdge(edge, x0, y0, x1, y1) {
+  var v1 = edge[1];
+  if (v1) return true;
+
+  var v0 = edge[0],
+      left = edge.left,
+      right = edge.right,
+      lx = left[0],
+      ly = left[1],
+      rx = right[0],
+      ry = right[1],
+      fx = (lx + rx) / 2,
+      fy = (ly + ry) / 2,
+      fm,
+      fb;
+
+  if (ry === ly) {
+    if (fx < x0 || fx >= x1) return;
+    if (lx > rx) {
+      if (!v0) v0 = [fx, y0];
+      else if (v0[1] >= y1) return;
+      v1 = [fx, y1];
+    } else {
+      if (!v0) v0 = [fx, y1];
+      else if (v0[1] < y0) return;
+      v1 = [fx, y0];
+    }
+  } else {
+    fm = (lx - rx) / (ry - ly);
+    fb = fy - fm * fx;
+    if (fm < -1 || fm > 1) {
+      if (lx > rx) {
+        if (!v0) v0 = [(y0 - fb) / fm, y0];
+        else if (v0[1] >= y1) return;
+        v1 = [(y1 - fb) / fm, y1];
+      } else {
+        if (!v0) v0 = [(y1 - fb) / fm, y1];
+        else if (v0[1] < y0) return;
+        v1 = [(y0 - fb) / fm, y0];
+      }
+    } else {
+      if (ly < ry) {
+        if (!v0) v0 = [x0, fm * x0 + fb];
+        else if (v0[0] >= x1) return;
+        v1 = [x1, fm * x1 + fb];
+      } else {
+        if (!v0) v0 = [x1, fm * x1 + fb];
+        else if (v0[0] < x0) return;
+        v1 = [x0, fm * x0 + fb];
+      }
+    }
+  }
+
+  edge[0] = v0;
+  edge[1] = v1;
+  return true;
+}
+
+function clipEdges(x0, y0, x1, y1) {
+  var i = edges.length,
+      edge;
+
+  while (i--) {
+    if (!connectEdge(edge = edges[i], x0, y0, x1, y1)
+        || !clipEdge(edge, x0, y0, x1, y1)
+        || !(Math.abs(edge[0][0] - edge[1][0]) > epsilon
+            || Math.abs(edge[0][1] - edge[1][1]) > epsilon)) {
+      delete edges[i];
+    }
+  }
+}
+
+function createCell(site) {
+  return cells[site.index] = {
+    site: site,
+    halfedges: []
+  };
+}
+
+function cellHalfedgeAngle(cell, edge) {
+  var site = cell.site,
+      va = edge.left,
+      vb = edge.right;
+  if (site === vb) vb = va, va = site;
+  if (vb) return Math.atan2(vb[1] - va[1], vb[0] - va[0]);
+  if (site === va) va = edge[1], vb = edge[0];
+  else va = edge[0], vb = edge[1];
+  return Math.atan2(va[0] - vb[0], vb[1] - va[1]);
+}
+
+function cellHalfedgeStart(cell, edge) {
+  return edge[+(edge.left !== cell.site)];
+}
+
+function cellHalfedgeEnd(cell, edge) {
+  return edge[+(edge.left === cell.site)];
+}
+
+function sortCellHalfedges() {
+  for (var i = 0, n = cells.length, cell, halfedges, j, m; i < n; ++i) {
+    if ((cell = cells[i]) && (m = (halfedges = cell.halfedges).length)) {
+      var index = new Array(m),
+          array = new Array(m);
+      for (j = 0; j < m; ++j) index[j] = j, array[j] = cellHalfedgeAngle(cell, edges[halfedges[j]]);
+      index.sort(function(i, j) { return array[j] - array[i]; });
+      for (j = 0; j < m; ++j) array[j] = halfedges[index[j]];
+      for (j = 0; j < m; ++j) halfedges[j] = array[j];
+    }
+  }
+}
+
+function clipCells(x0, y0, x1, y1) {
+  var nCells = cells.length,
+      iCell,
+      cell,
+      site,
+      iHalfedge,
+      halfedges,
+      nHalfedges,
+      start,
+      startX,
+      startY,
+      end,
+      endX,
+      endY,
+      cover = true;
+
+  for (iCell = 0; iCell < nCells; ++iCell) {
+    if (cell = cells[iCell]) {
+      site = cell.site;
+      halfedges = cell.halfedges;
+      iHalfedge = halfedges.length;
+
+      // Remove any dangling clipped edges.
+      while (iHalfedge--) {
+        if (!edges[halfedges[iHalfedge]]) {
+          halfedges.splice(iHalfedge, 1);
+        }
+      }
+
+      // Insert any border edges as necessary.
+      iHalfedge = 0, nHalfedges = halfedges.length;
+      while (iHalfedge < nHalfedges) {
+        end = cellHalfedgeEnd(cell, edges[halfedges[iHalfedge]]), endX = end[0], endY = end[1];
+        start = cellHalfedgeStart(cell, edges[halfedges[++iHalfedge % nHalfedges]]), startX = start[0], startY = start[1];
+        if (Math.abs(endX - startX) > epsilon || Math.abs(endY - startY) > epsilon) {
+          halfedges.splice(iHalfedge, 0, edges.push(createBorderEdge(site, end,
+              Math.abs(endX - x0) < epsilon && y1 - endY > epsilon ? [x0, Math.abs(startX - x0) < epsilon ? startY : y1]
+              : Math.abs(endY - y1) < epsilon && x1 - endX > epsilon ? [Math.abs(startY - y1) < epsilon ? startX : x1, y1]
+              : Math.abs(endX - x1) < epsilon && endY - y0 > epsilon ? [x1, Math.abs(startX - x1) < epsilon ? startY : y0]
+              : Math.abs(endY - y0) < epsilon && endX - x0 > epsilon ? [Math.abs(startY - y0) < epsilon ? startX : x0, y0]
+              : null)) - 1);
+          ++nHalfedges;
+        }
+      }
+
+      if (nHalfedges) cover = false;
+    }
+  }
+
+  // If there weren’t any edges, have the closest site cover the extent.
+  // It doesn’t matter which corner of the extent we measure!
+  if (cover) {
+    var dx, dy, d2, dc = Infinity;
+
+    for (iCell = 0, cover = null; iCell < nCells; ++iCell) {
+      if (cell = cells[iCell]) {
+        site = cell.site;
+        dx = site[0] - x0;
+        dy = site[1] - y0;
+        d2 = dx * dx + dy * dy;
+        if (d2 < dc) dc = d2, cover = cell;
+      }
+    }
+
+    if (cover) {
+      var v00 = [x0, y0], v01 = [x0, y1], v11 = [x1, y1], v10 = [x1, y0];
+      cover.halfedges.push(
+        edges.push(createBorderEdge(site = cover.site, v00, v01)) - 1,
+        edges.push(createBorderEdge(site, v01, v11)) - 1,
+        edges.push(createBorderEdge(site, v11, v10)) - 1,
+        edges.push(createBorderEdge(site, v10, v00)) - 1
+      );
+    }
+  }
+
+  // Lastly delete any cells with no edges; these were entirely clipped.
+  for (iCell = 0; iCell < nCells; ++iCell) {
+    if (cell = cells[iCell]) {
+      if (!cell.halfedges.length) {
+        delete cells[iCell];
+      }
+    }
+  }
+}
+
+var circlePool = [];
+
+var firstCircle;
+
+function Circle() {
+  RedBlackNode(this);
+  this.x =
+  this.y =
+  this.arc =
+  this.site =
+  this.cy = null;
+}
+
+function attachCircle(arc) {
+  var lArc = arc.P,
+      rArc = arc.N;
+
+  if (!lArc || !rArc) return;
+
+  var lSite = lArc.site,
+      cSite = arc.site,
+      rSite = rArc.site;
+
+  if (lSite === rSite) return;
+
+  var bx = cSite[0],
+      by = cSite[1],
+      ax = lSite[0] - bx,
+      ay = lSite[1] - by,
+      cx = rSite[0] - bx,
+      cy = rSite[1] - by;
+
+  var d = 2 * (ax * cy - ay * cx);
+  if (d >= -epsilon2) return;
+
+  var ha = ax * ax + ay * ay,
+      hc = cx * cx + cy * cy,
+      x = (cy * ha - ay * hc) / d,
+      y = (ax * hc - cx * ha) / d;
+
+  var circle = circlePool.pop() || new Circle;
+  circle.arc = arc;
+  circle.site = cSite;
+  circle.x = x + bx;
+  circle.y = (circle.cy = y + by) + Math.sqrt(x * x + y * y); // y bottom
+
+  arc.circle = circle;
+
+  var before = null,
+      node = circles._;
+
+  while (node) {
+    if (circle.y < node.y || (circle.y === node.y && circle.x <= node.x)) {
+      if (node.L) node = node.L;
+      else { before = node.P; break; }
+    } else {
+      if (node.R) node = node.R;
+      else { before = node; break; }
+    }
+  }
+
+  circles.insert(before, circle);
+  if (!before) firstCircle = circle;
+}
+
+function detachCircle(arc) {
+  var circle = arc.circle;
+  if (circle) {
+    if (!circle.P) firstCircle = circle.N;
+    circles.remove(circle);
+    circlePool.push(circle);
+    RedBlackNode(circle);
+    arc.circle = null;
+  }
+}
+
+var beachPool = [];
+
+function Beach() {
+  RedBlackNode(this);
+  this.edge =
+  this.site =
+  this.circle = null;
+}
+
+function createBeach(site) {
+  var beach = beachPool.pop() || new Beach;
+  beach.site = site;
+  return beach;
+}
+
+function detachBeach(beach) {
+  detachCircle(beach);
+  beaches.remove(beach);
+  beachPool.push(beach);
+  RedBlackNode(beach);
+}
+
+function removeBeach(beach) {
+  var circle = beach.circle,
+      x = circle.x,
+      y = circle.cy,
+      vertex = [x, y],
+      previous = beach.P,
+      next = beach.N,
+      disappearing = [beach];
+
+  detachBeach(beach);
+
+  var lArc = previous;
+  while (lArc.circle
+      && Math.abs(x - lArc.circle.x) < epsilon
+      && Math.abs(y - lArc.circle.cy) < epsilon) {
+    previous = lArc.P;
+    disappearing.unshift(lArc);
+    detachBeach(lArc);
+    lArc = previous;
+  }
+
+  disappearing.unshift(lArc);
+  detachCircle(lArc);
+
+  var rArc = next;
+  while (rArc.circle
+      && Math.abs(x - rArc.circle.x) < epsilon
+      && Math.abs(y - rArc.circle.cy) < epsilon) {
+    next = rArc.N;
+    disappearing.push(rArc);
+    detachBeach(rArc);
+    rArc = next;
+  }
+
+  disappearing.push(rArc);
+  detachCircle(rArc);
+
+  var nArcs = disappearing.length,
+      iArc;
+  for (iArc = 1; iArc < nArcs; ++iArc) {
+    rArc = disappearing[iArc];
+    lArc = disappearing[iArc - 1];
+    setEdgeEnd(rArc.edge, lArc.site, rArc.site, vertex);
+  }
+
+  lArc = disappearing[0];
+  rArc = disappearing[nArcs - 1];
+  rArc.edge = createEdge(lArc.site, rArc.site, null, vertex);
+
+  attachCircle(lArc);
+  attachCircle(rArc);
+}
+
+function addBeach(site) {
+  var x = site[0],
+      directrix = site[1],
+      lArc,
+      rArc,
+      dxl,
+      dxr,
+      node = beaches._;
+
+  while (node) {
+    dxl = leftBreakPoint(node, directrix) - x;
+    if (dxl > epsilon) node = node.L; else {
+      dxr = x - rightBreakPoint(node, directrix);
+      if (dxr > epsilon) {
+        if (!node.R) {
+          lArc = node;
+          break;
+        }
+        node = node.R;
+      } else {
+        if (dxl > -epsilon) {
+          lArc = node.P;
+          rArc = node;
+        } else if (dxr > -epsilon) {
+          lArc = node;
+          rArc = node.N;
+        } else {
+          lArc = rArc = node;
+        }
+        break;
+      }
+    }
+  }
+
+  createCell(site);
+  var newArc = createBeach(site);
+  beaches.insert(lArc, newArc);
+
+  if (!lArc && !rArc) return;
+
+  if (lArc === rArc) {
+    detachCircle(lArc);
+    rArc = createBeach(lArc.site);
+    beaches.insert(newArc, rArc);
+    newArc.edge = rArc.edge = createEdge(lArc.site, newArc.site);
+    attachCircle(lArc);
+    attachCircle(rArc);
+    return;
+  }
+
+  if (!rArc) { // && lArc
+    newArc.edge = createEdge(lArc.site, newArc.site);
+    return;
+  }
+
+  // else lArc !== rArc
+  detachCircle(lArc);
+  detachCircle(rArc);
+
+  var lSite = lArc.site,
+      ax = lSite[0],
+      ay = lSite[1],
+      bx = site[0] - ax,
+      by = site[1] - ay,
+      rSite = rArc.site,
+      cx = rSite[0] - ax,
+      cy = rSite[1] - ay,
+      d = 2 * (bx * cy - by * cx),
+      hb = bx * bx + by * by,
+      hc = cx * cx + cy * cy,
+      vertex = [(cy * hb - by * hc) / d + ax, (bx * hc - cx * hb) / d + ay];
+
+  setEdgeEnd(rArc.edge, lSite, rSite, vertex);
+  newArc.edge = createEdge(lSite, site, null, vertex);
+  rArc.edge = createEdge(site, rSite, null, vertex);
+  attachCircle(lArc);
+  attachCircle(rArc);
+}
+
+function leftBreakPoint(arc, directrix) {
+  var site = arc.site,
+      rfocx = site[0],
+      rfocy = site[1],
+      pby2 = rfocy - directrix;
+
+  if (!pby2) return rfocx;
+
+  var lArc = arc.P;
+  if (!lArc) return -Infinity;
+
+  site = lArc.site;
+  var lfocx = site[0],
+      lfocy = site[1],
+      plby2 = lfocy - directrix;
+
+  if (!plby2) return lfocx;
+
+  var hl = lfocx - rfocx,
+      aby2 = 1 / pby2 - 1 / plby2,
+      b = hl / plby2;
+
+  if (aby2) return (-b + Math.sqrt(b * b - 2 * aby2 * (hl * hl / (-2 * plby2) - lfocy + plby2 / 2 + rfocy - pby2 / 2))) / aby2 + rfocx;
+
+  return (rfocx + lfocx) / 2;
+}
+
+function rightBreakPoint(arc, directrix) {
+  var rArc = arc.N;
+  if (rArc) return leftBreakPoint(rArc, directrix);
+  var site = arc.site;
+  return site[1] === directrix ? site[0] : Infinity;
+}
+
+var epsilon = 1e-6;
+var epsilon2 = 1e-12;
+var beaches;
+var cells;
+var circles;
+var edges;
+
+function triangleArea(a, b, c) {
+  return (a[0] - c[0]) * (b[1] - a[1]) - (a[0] - b[0]) * (c[1] - a[1]);
+}
+
+function lexicographic(a, b) {
+  return b[1] - a[1]
+      || b[0] - a[0];
+}
+
+function Diagram(sites, extent) {
+  var site = sites.sort(lexicographic).pop(),
+      x,
+      y,
+      circle;
+
+  edges = [];
+  cells = new Array(sites.length);
+  beaches = new RedBlackTree;
+  circles = new RedBlackTree;
+
+  while (true) {
+    circle = firstCircle;
+    if (site && (!circle || site[1] < circle.y || (site[1] === circle.y && site[0] < circle.x))) {
+      if (site[0] !== x || site[1] !== y) {
+        addBeach(site);
+        x = site[0], y = site[1];
+      }
+      site = sites.pop();
+    } else if (circle) {
+      removeBeach(circle.arc);
+    } else {
+      break;
+    }
+  }
+
+  sortCellHalfedges();
+
+  if (extent) {
+    var x0 = +extent[0][0],
+        y0 = +extent[0][1],
+        x1 = +extent[1][0],
+        y1 = +extent[1][1];
+    clipEdges(x0, y0, x1, y1);
+    clipCells(x0, y0, x1, y1);
+  }
+
+  this.edges = edges;
+  this.cells = cells;
+
+  beaches =
+  circles =
+  edges =
+  cells = null;
+}
+
+Diagram.prototype = {
+  constructor: Diagram,
+
+  polygons: function() {
+    var edges = this.edges;
+
+    return this.cells.map(function(cell) {
+      var polygon = cell.halfedges.map(function(i) { return cellHalfedgeStart(cell, edges[i]); });
+      polygon.data = cell.site.data;
+      return polygon;
+    });
+  },
+
+  triangles: function() {
+    var triangles = [],
+        edges = this.edges;
+
+    this.cells.forEach(function(cell, i) {
+      if (!(m = (halfedges = cell.halfedges).length)) return;
+      var site = cell.site,
+          halfedges,
+          j = -1,
+          m,
+          s0,
+          e1 = edges[halfedges[m - 1]],
+          s1 = e1.left === site ? e1.right : e1.left;
+
+      while (++j < m) {
+        s0 = s1;
+        e1 = edges[halfedges[j]];
+        s1 = e1.left === site ? e1.right : e1.left;
+        if (s0 && s1 && i < s0.index && i < s1.index && triangleArea(site, s0, s1) < 0) {
+          triangles.push([site.data, s0.data, s1.data]);
+        }
+      }
+    });
+
+    return triangles;
+  },
+
+  links: function() {
+    return this.edges.filter(function(edge) {
+      return edge.right;
+    }).map(function(edge) {
+      return {
+        source: edge.left.data,
+        target: edge.right.data
+      };
+    });
+  },
+
+  find: function(x, y, radius) {
+    var that = this, i0, i1 = that._found || 0, n = that.cells.length, cell;
+
+    // Use the previously-found cell, or start with an arbitrary one.
+    while (!(cell = that.cells[i1])) if (++i1 >= n) return null;
+    var dx = x - cell.site[0], dy = y - cell.site[1], d2 = dx * dx + dy * dy;
+
+    // Traverse the half-edges to find a closer cell, if any.
+    do {
+      cell = that.cells[i0 = i1], i1 = null;
+      cell.halfedges.forEach(function(e) {
+        var edge = that.edges[e], v = edge.left;
+        if ((v === cell.site || !v) && !(v = edge.right)) return;
+        var vx = x - v[0], vy = y - v[1], v2 = vx * vx + vy * vy;
+        if (v2 < d2) d2 = v2, i1 = v.index;
+      });
+    } while (i1 !== null);
+
+    that._found = i0;
+
+    return radius == null || d2 <= radius * radius ? cell.site : null;
+  }
+};
+
+function voronoi() {
+  var x$$1 = x,
+      y$$1 = y,
+      extent = null;
+
+  function voronoi(data) {
+    return new Diagram(data.map(function(d, i) {
+      var s = [Math.round(x$$1(d, i, data) / epsilon) * epsilon, Math.round(y$$1(d, i, data) / epsilon) * epsilon];
+      s.index = i;
+      s.data = d;
+      return s;
+    }), extent);
+  }
+
+  voronoi.polygons = function(data) {
+    return voronoi(data).polygons();
+  };
+
+  voronoi.links = function(data) {
+    return voronoi(data).links();
+  };
+
+  voronoi.triangles = function(data) {
+    return voronoi(data).triangles();
+  };
+
+  voronoi.x = function(_) {
+    return arguments.length ? (x$$1 = typeof _ === "function" ? _ : constant(+_), voronoi) : x$$1;
+  };
+
+  voronoi.y = function(_) {
+    return arguments.length ? (y$$1 = typeof _ === "function" ? _ : constant(+_), voronoi) : y$$1;
+  };
+
+  voronoi.extent = function(_) {
+    return arguments.length ? (extent = _ == null ? null : [[+_[0][0], +_[0][1]], [+_[1][0], +_[1][1]]], voronoi) : extent && [[extent[0][0], extent[0][1]], [extent[1][0], extent[1][1]]];
+  };
+
+  voronoi.size = function(_) {
+    return arguments.length ? (extent = _ == null ? null : [[0, 0], [+_[0], +_[1]]], voronoi) : extent && [extent[1][0] - extent[0][0], extent[1][1] - extent[0][1]];
+  };
+
+  return voronoi;
+}
+
+exports.voronoi = voronoi;
+
+Object.defineProperty(exports, '__esModule', { value: true });
+
+})));
+
+},{}],"/home/robson/projetos/rd3/src/ChartContext.js":[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -514,6 +1515,32 @@ module.exports = createReactClass({
 },{}],"/home/robson/projetos/rd3/src/barchart/BarChart.jsx":[function(require,module,exports){
 'use strict';
 
+var _slicedToArray = function () {
+  function sliceIterator(arr, i) {
+    var _arr = [];var _n = true;var _d = false;var _e = undefined;try {
+      for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) {
+        _arr.push(_s.value);if (i && _arr.length === i) break;
+      }
+    } catch (err) {
+      _d = true;_e = err;
+    } finally {
+      try {
+        if (!_n && _i["return"]) _i["return"]();
+      } finally {
+        if (_d) throw _e;
+      }
+    }return _arr;
+  }return function (arr, i) {
+    if (Array.isArray(arr)) {
+      return arr;
+    } else if (Symbol.iterator in Object(arr)) {
+      return sliceIterator(arr, i);
+    } else {
+      throw new TypeError("Invalid attempt to destructure non-iterable instance");
+    }
+  };
+}();
+
 function _toConsumableArray(arr) {
   if (Array.isArray(arr)) {
     for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) {
@@ -524,17 +1551,10 @@ function _toConsumableArray(arr) {
   }
 }
 
-function _defineProperty(obj, key, value) {
-  if (key in obj) {
-    Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });
-  } else {
-    obj[key] = value;
-  }return obj;
-}
-
 var PropTypes = window.PropTypes;
 var React = window.React;
 var createReactClass = window.createReactClass;
+var utils = require('../utils');
 
 var d3 = window.d3;
 var DataSeries = require('./DataSeries');
@@ -575,7 +1595,8 @@ module.exports = createReactClass({
     yAxisClassName: PropTypes.string,
     yAxisTickCount: PropTypes.number,
     xIsDate: PropTypes.bool,
-    color: PropTypes.object
+    color: PropTypes.object,
+    inputDataLayout: PropTypes.string.isRequired
   },
 
   mixins: [CartesianChartPropsMixin, DefaultAccessorsMixin, ViewBoxMixin, TooltipMixin],
@@ -604,6 +1625,9 @@ module.exports = createReactClass({
       }
     };
   },
+
+  _formatInputData: utils.formatInputData,
+
   _getLabels: function _getLabels(firstSeries) {
     // we only need first series to get all the labels
     var _props = this.props,
@@ -633,35 +1657,17 @@ module.exports = createReactClass({
       return null;
     }
 
-    var _array = props.data;
-    var dataDict = {};
-
-    /* Check date field */
-    _array.map(function (elem, idxE) {
-      var bar = void 0;
-      /* TODO: have to cast from string to bool on the client */
-      props.xIsDate === "true" ? bar = new Date(elem.x).toLocaleDateString() : bar = elem.x;
-      if (typeof dataDict[bar] === 'undefined') {
-        dataDict[bar] = _defineProperty({ 'x': bar }, elem.name, +elem.y);
-      } else {
-        dataDict[bar][elem.name] = +elem.y;
-      }
-    });
-
-    /* ENTRADA PRECISA SER ESSES !!! */
-    var data = Object.keys(dataDict).map(function (key) {
-      return dataDict[key];
-    });
-
-    /* COLUMNS */
-    var series = new Set(props.data.map(function (item) {
-      return item.name;
-    }));
-    series = Array.from(series);
+    var data = props.data;
+    var series = void 0;
 
     /* d3 */
+    var _formatInputData = this._formatInputData(props.inputDataLayout, data);
+
+    var _formatInputData2 = _slicedToArray(_formatInputData, 2);
+
+    data = _formatInputData2[0];
+    series = _formatInputData2[1];
     var _data = this._stack(series)(data);
-    // debugger
 
     var _getDimensions = this.getDimensions(),
         innerHeight = _getDimensions.innerHeight,
@@ -706,9 +1712,6 @@ module.exports = createReactClass({
       colorsDomain = series;
       colorsAccessor = this.props.colorAccessorOrdinal;
     }
-    // debugger;
-    // colorsDomain.reverse()
-
 
     return React.createElement('span', null, React.createElement(Chart, {
       viewBox: this.getViewBox(),
@@ -751,7 +1754,8 @@ module.exports = createReactClass({
       translateTickLabel_Y_X: props.translateTickLabel_Y_X,
       translateTickLabel_Y_Y: props.translateTickLabel_Y_Y,
       translateTickLabel_X_X: props.translateTickLabel_X_X,
-      translateTickLabel_X_Y: props.translateTickLabel_X_Y
+      translateTickLabel_X_Y: props.translateTickLabel_X_Y,
+      xIsDate: props.xIsDate
     }), React.createElement(YGrid, {
       yAxisClassName: props.yAxisClassName,
       yAxisTickValues: props.yAxisTickValues,
@@ -831,7 +1835,7 @@ module.exports = createReactClass({
   }
 });
 
-},{"../common":"/home/robson/projetos/rd3/src/common/index.js","../mixins":"/home/robson/projetos/rd3/src/mixins/index.js","./DataSeries":"/home/robson/projetos/rd3/src/barchart/DataSeries.jsx"}],"/home/robson/projetos/rd3/src/barchart/BarContainer.jsx":[function(require,module,exports){
+},{"../common":"/home/robson/projetos/rd3/src/common/index.js","../mixins":"/home/robson/projetos/rd3/src/mixins/index.js","../utils":"/home/robson/projetos/rd3/src/utils/index.js","./DataSeries":"/home/robson/projetos/rd3/src/barchart/DataSeries.jsx"}],"/home/robson/projetos/rd3/src/barchart/BarContainer.jsx":[function(require,module,exports){
 'use strict';
 
 var _extends = Object.assign || function (target) {
@@ -1894,6 +2898,8 @@ module.exports = createReactClass({
     var y2grid = void 0;
     var gridOn = false;
     var translateTickLabel = void 0;
+    var formatDate = void 0;
+    var maxTicksXAxis = void 0;
 
     var sign = props.orient === 'top' || props.orient === 'right' ? -1 : 1;
     var tickSpacing = Math.max(props.innerTickSize, 0) + props.tickPadding;
@@ -1961,6 +2967,12 @@ module.exports = createReactClass({
         y2grid = -props.height;
         gridTextRotate = props.gridText.rotate.bottom;
         translateTickLabel = 'translate(' + props.translateTickLabel_X_X + ',' + props.translateTickLabel_X_Y + ')';
+        formatDate = props.xIsDate === true ? function (d) {
+          return new Date(d).toLocaleDateString();
+        } : function (d) {
+          return d;
+        };
+        ticks.length > 40 ? maxTicksXAxis = 5 : maxTicksXAxis = 1;
         break;
       case 'left':
         tr = function tr(tick) {
@@ -1977,7 +2989,10 @@ module.exports = createReactClass({
         y2grid = 0;
         gridTextRotate = props.gridText.rotate.left;
         translateTickLabel = 'translate(' + props.translateTickLabel_Y_X + ',' + props.translateTickLabel_Y_Y + ')';
-        // debugger;
+        formatDate = function formatDate(d) {
+          return d;
+        };
+        maxTicksXAxis = 1;
         break;
       case 'right':
         tr = function tr(tick) {
@@ -2056,13 +3071,17 @@ module.exports = createReactClass({
     gridTextFontSize = props.gridText.font.size;
     gridTextFontWeight = props.gridText.font.weight;
 
+    // debugger;
+
     return React.createElement('g', null, React.createElement('g', null, ticks.map(function (tick, idx) {
       return React.createElement('g', { key: idx, className: 'tick', transform: tr(tick) }, gridLine(adjustedScale(tick)), React.createElement('line', {
         className: 'rd3-svg-grid-ticks ' + (chartStyle && chartStyle),
         x2: x2,
         y2: y2
       }));
-    })), '/* Move all tick labels at once */', React.createElement('g', { transform: translateTickLabel }, ticks.map(function (tick, idx) {
+    })), '/* Move all tick labels at once */', React.createElement('g', { transform: translateTickLabel }, ticks.filter(function (tick, idx) {
+      return idx % [maxTicksXAxis] === 0;
+    }).map(function (tick, idx) {
       return React.createElement('g', { className: 'tickText', transform: trText(tick), key: idx }, React.createElement('text', _extends({
         strokeWidth: gridTextFontWeight,
         dy: dy, x: x1, y: y1,
@@ -2076,7 +3095,7 @@ module.exports = createReactClass({
           x: x1,
           dy: dy,
           key: index
-        }, tickLabel);
+        }, formatDate(tickLabel));
       })));
     })));
   }
@@ -2346,7 +3365,8 @@ module.exports = createReactClass({
       gridText: props.gridText,
 
       translateTickLabel_X_X: props.translateTickLabel_X_X,
-      translateTickLabel_X_Y: props.translateTickLabel_X_Y
+      translateTickLabel_X_Y: props.translateTickLabel_X_Y,
+      xIsDate: props.xIsDate
     }));
   }
 });
@@ -2855,6 +3875,7 @@ var createReactClass = window.createReactClass;
 var d3 = window.d3;
 var VoronoiCircleContainer = require('./VoronoiCircleContainer');
 var Line = require('./Line');
+var voronoi = require('d3-voronoi');
 
 module.exports = createReactClass({
 
@@ -2910,16 +3931,20 @@ module.exports = createReactClass({
     }
 
     var lines = props.data.map(function (series, idx) {
-      return React.createElement(Line, {
-        path: interpolatePath(series.values),
-        stroke: props.colors(props.colorAccessor(series, idx)),
-        strokeWidth: series.strokeWidth,
-        strokeDashArray: series.strokeDashArray,
-        seriesName: series.name,
-        key: idx
-      });
-    });
+      return (
+        // debugger;
+        React.createElement(Line, {
+          path: interpolatePath(series.values),
+          stroke: props.color.colors(props.colorsAccessor(props.colorsDomain, idx))
 
+          // stroke={props.color.colors(props.colorsAccessor(series, idx))}
+          , strokeWidth: series.strokeWidth,
+          strokeDashArray: series.strokeDashArray,
+          seriesName: series.name,
+          key: idx
+        })
+      );
+    });
     var voronoi = d3.voronoi().x(function (d) {
       return xScale(d.coord.x);
     }).y(function (d) {
@@ -2934,12 +3959,11 @@ module.exports = createReactClass({
       var point = polygon.data;
       delete polygon.data;
       var vnode = polygon;
-      // debugger;
 
       cx = props.xScale(point.coord.x);
       cy = props.yScale(point.coord.y);
 
-      circleFill = props.colors(props.colorAccessor(vnode, point.seriesIndex));
+      circleFill = props.color.colors(props.colorsAccessor(props.colorsDomain, idx));
 
       return React.createElement(VoronoiCircleContainer, {
         key: idx,
@@ -2961,7 +3985,7 @@ module.exports = createReactClass({
   }
 });
 
-},{"./Line":"/home/robson/projetos/rd3/src/linechart/Line.jsx","./VoronoiCircleContainer":"/home/robson/projetos/rd3/src/linechart/VoronoiCircleContainer.jsx"}],"/home/robson/projetos/rd3/src/linechart/Line.jsx":[function(require,module,exports){
+},{"./Line":"/home/robson/projetos/rd3/src/linechart/Line.jsx","./VoronoiCircleContainer":"/home/robson/projetos/rd3/src/linechart/VoronoiCircleContainer.jsx","d3-voronoi":"/home/robson/projetos/rd3/node_modules/d3-voronoi/dist/d3-voronoi.js"}],"/home/robson/projetos/rd3/src/linechart/Line.jsx":[function(require,module,exports){
 'use strict';
 
 var PropTypes = window.PropTypes;
@@ -3004,10 +4028,37 @@ module.exports = createReactClass({
 },{}],"/home/robson/projetos/rd3/src/linechart/LineChart.jsx":[function(require,module,exports){
 'use strict';
 
+var _slicedToArray = function () {
+  function sliceIterator(arr, i) {
+    var _arr = [];var _n = true;var _d = false;var _e = undefined;try {
+      for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) {
+        _arr.push(_s.value);if (i && _arr.length === i) break;
+      }
+    } catch (err) {
+      _d = true;_e = err;
+    } finally {
+      try {
+        if (!_n && _i["return"]) _i["return"]();
+      } finally {
+        if (_d) throw _e;
+      }
+    }return _arr;
+  }return function (arr, i) {
+    if (Array.isArray(arr)) {
+      return arr;
+    } else if (Symbol.iterator in Object(arr)) {
+      return sliceIterator(arr, i);
+    } else {
+      throw new TypeError("Invalid attempt to destructure non-iterable instance");
+    }
+  };
+}();
+
 var PropTypes = window.PropTypes;
 var React = window.React;
 var d3 = window.d3;
 var createReactClass = window.createReactClass;
+var utils = require('../utils');
 
 var _require = require('../common'),
     Chart = _require.Chart,
@@ -3018,7 +4069,6 @@ var _require = require('../common'),
     Tooltip = _require.Tooltip;
 
 var DataSeries = require('./DataSeries');
-var utils = require('../utils');
 
 var _require2 = require('../mixins'),
     CartesianChartPropsMixin = _require2.CartesianChartPropsMixin,
@@ -3041,18 +4091,23 @@ module.exports = createReactClass({
 
   getDefaultProps: function getDefaultProps() {
     return {
-      colors: d3.scaleOrdinal(d3.schemeCategory10),
+      // colors: d3.scaleOrdinal(d3.schemeCategory10),
       circleRadius: 3,
       className: 'rd3-linechart',
       hoverAnimation: true,
       margins: { top: 70, right: 20, bottom: 60, left: 60 },
       xAxisClassName: 'rd3-linechart-xaxis',
       yAxisClassName: 'rd3-linechart-yaxis',
-      data: []
+      data: [],
+      color: {
+        accessor: 'Sequential',
+        colors: d3.scaleSequential(d3.interpolateSpectral)
+      }
     };
   },
 
   _calculateScales: utils.calculateScales,
+  _rd3FormatInputData: utils.rd3FormatInputData,
 
   render: function render() {
     var props = this.props;
@@ -3060,6 +4115,16 @@ module.exports = createReactClass({
     if (this.props.data && this.props.data.length < 1) {
       return null;
     }
+
+    var data = void 0;
+    var series = void 0;
+
+    var _rd3FormatInputData = this._rd3FormatInputData(props.inputDataLayout, props.data, props.xIsDate, props.strokeWidth);
+
+    var _rd3FormatInputData2 = _slicedToArray(_rd3FormatInputData, 2);
+
+    data = _rd3FormatInputData2[0];
+    series = _rd3FormatInputData2[1];
 
     var _getDimensions = this.getDimensions(),
         innerWidth = _getDimensions.innerWidth,
@@ -3070,30 +4135,51 @@ module.exports = createReactClass({
     var yOrient = this.getYOrient();
     var domain = props.domain || {};
 
-    if (!Array.isArray(props.data)) {
-      props.data = [props.data];
+    if (!Array.isArray(data)) {
+      data = [data];
     }
 
     // Returns an object of flattened allValues, xValues, and yValues
-    var flattenedData = utils.flattenData(props.data, props.xAccessor, props.yAccessor);
+    var flattenedData = utils.flattenData(data, props.xAccessor, props.yAccessor);
 
     var allValues = flattenedData.allValues;
     var xValues = flattenedData.xValues;
     var yValues = flattenedData.yValues;
     var scales = this._calculateScales(innerWidth, innerHeight, xValues, yValues, domain.x, domain.y);
 
+    var colorsDomain = void 0;
+    var colorsAccessor = void 0;
+    var origArray = Array.from(series.keys());
+
+    if (this.props.color.accessor === 'Sequential') {
+      colorsDomain = origArray.map(function (x) {
+        return x / series.length;
+      });
+      colorsAccessor = this.props.colorAccessorSequential;
+    } else {
+      colorsDomain = series;
+      colorsAccessor = this.props.colorAccessorOrdinal;
+    }
+
     return React.createElement('span', { onMouseLeave: this.onMouseLeave }, React.createElement(Chart, {
       viewBox: this.getViewBox(),
       legend: props.legend,
       sideOffset: props.sideOffset,
-      data: props.data,
+      data: data,
       margins: props.margins,
-      colors: props.colors,
-      colorAccessor: props.colorAccessorOrdinal,
+      color: this.props.color,
+      colorsDomain: colorsDomain,
+      colorsAccessor: colorsAccessor,
       width: props.width,
       height: props.height,
       title: props.title,
-      shouldUpdate: !this.state.changeState
+      shouldUpdate: !this.state.changeState,
+      series: series,
+      svgLegend: props.svgLegend,
+      svgChart: props.svgChart,
+      legendStyle: props.legendStyle,
+      background: props.background,
+      svgTitle: props.svgTitle
     }, React.createElement('g', { transform: trans, className: props.className }, React.createElement(XGrid, {
       xAxisClassName: props.xAxisClassName,
       xAxisTickValues: props.xAxisTickValues,
@@ -3108,7 +4194,7 @@ module.exports = createReactClass({
       tickTextStroke: props.xAxisTickTextStroke,
       xOrient: props.xOrient,
       yOrient: yOrient,
-      data: props.data,
+      data: data,
       margins: svgMargins,
       width: innerWidth,
       height: innerHeight,
@@ -3116,7 +4202,14 @@ module.exports = createReactClass({
       stroke: props.axesColor,
       gridVertical: props.gridVertical,
       gridVerticalStroke: props.gridVerticalStroke,
-      gridVerticalStrokeDash: props.gridVerticalStrokeDash
+      gridVerticalStrokeDash: props.gridVerticalStrokeDash,
+
+      gridText: props.gridText,
+      translateTickLabel_Y_X: props.translateTickLabel_Y_X,
+      translateTickLabel_Y_Y: props.translateTickLabel_Y_Y,
+      translateTickLabel_X_X: props.translateTickLabel_X_X,
+      translateTickLabel_X_Y: props.translateTickLabel_X_Y,
+      xIsDate: props.xIsDate
     }), React.createElement(YGrid, {
       yAxisClassName: props.yAxisClassName,
       yScale: scales.yScale,
@@ -3138,7 +4231,13 @@ module.exports = createReactClass({
       gridHorizontal: props.gridHorizontal,
       gridHorizontalStroke: props.gridHorizontalStroke,
       gridHorizontalStrokeWidth: props.gridHorizontalStrokeWidth,
-      gridHorizontalStrokeDash: props.gridHorizontalStrokeDash
+      gridHorizontalStrokeDash: props.gridHorizontalStrokeDash,
+
+      gridText: props.gridText,
+      translateTickLabel_Y_X: props.translateTickLabel_Y_X,
+      translateTickLabel_Y_Y: props.translateTickLabel_Y_Y,
+      translateTickLabel_X_X: props.translateTickLabel_X_X,
+      translateTickLabel_X_Y: props.translateTickLabel_X_Y
     }), React.createElement(DataSeries, {
       xScale: scales.xScale,
       yScale: scales.yScale,
@@ -3146,11 +4245,14 @@ module.exports = createReactClass({
       yAccessor: props.yAccessor,
       hoverAnimation: props.hoverAnimation,
       circleRadius: props.circleRadius,
-      data: props.data,
+      data: data,
       value: allValues,
-      interpolationType: props.interpolationType,
-      colors: props.colors,
-      colorAccessor: props.colorAccessorOrdinal,
+      interpolationType: props.interpolationType
+      // colors={props.colors}
+      // colorAccessor={props.colorAccessorOrdinal}
+      , color: props.color,
+      colorsDomain: colorsDomain,
+      colorsAccessor: colorsAccessor,
       width: innerWidth,
       height: innerHeight,
       onMouseOver: this.onMouseOver
@@ -3168,7 +4270,7 @@ module.exports = createReactClass({
       tickTextStroke: props.xAxisTickTextStroke,
       xOrient: props.xOrient,
       yOrient: yOrient,
-      data: props.data,
+      data: data,
       margins: svgMargins,
       width: innerWidth,
       height: innerHeight,
@@ -3491,11 +4593,8 @@ module.exports = {
     return {
       showTooltip: true,
       /* Sum */
-      // tooltipFormat: (d) => String( d.seriesName) + ':\n' + String( d.yValue),
-
-      /* Height */
-      tooltipFormat: function tooltipFormat(d) {
-        return String(d.seriesName) + ':\n' + String(d.height);
+      tooltipFormat: function tooltipFormat(d, chart) {
+        return chart === 'barchart' ? String(d.seriesName) + ':\n' + String(d.height) : String(d.seriesName) + ':\n' + String(d.yValue);
       }
     };
   },
@@ -3523,7 +4622,7 @@ module.exports = {
       tooltip: {
         x: x,
         y: y,
-        child: this.props.tooltipFormat.call(this, dataPoint),
+        child: this.props.tooltipFormat.call(this, dataPoint, this.props.chart),
         show: true
       },
       changeState: true
@@ -4671,6 +5770,9 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
 var d3 = window.d3;
 
+var _require = window.PropTypes,
+    number = _require.number;
+
 exports.calculateScales = function (width, height, xValues, yValues) {
   var xDomain = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : [];
   var yDomain = arguments.length > 5 && arguments[5] !== undefined ? arguments[5] : [];
@@ -4679,20 +5781,35 @@ exports.calculateScales = function (width, height, xValues, yValues) {
   if (xValues.length > 0 && Object.prototype.toString.call(xValues[0]) === '[object Date]') {
     xScale = d3.scaleTime().range([0, width]);
   } else {
-    xScale = d3.scaleLinear().range([0, width]);
+    /*
+    TODO: allow select scale num, str, date
+    xScale = d3.scaleBand()
+    xScale.domain(xValues);
+    */
+
+    xScale = d3.scaleLinear()
+    // xScale = d3.scaleBand()
+    .range([0, width]);
   }
   var xdomain = d3.extent(xValues);
   if (xDomain[0] !== undefined && xDomain[0] !== null) xdomain[0] = xDomain[0];
   if (xDomain[1] !== undefined && xDomain[1] !== null) xdomain[1] = xDomain[1];
   xScale.domain(xdomain);
 
+  // xScale.domain(xValues.sort());
+
+
   var yScale = void 0;
   if (yValues.length > 0 && Object.prototype.toString.call(yValues[0]) === '[object Date]') {
     yScale = d3.scaleTime().range([height, 0]);
   } else {
+    /* TODO: Allow scaleLog */
     yScale = d3.scaleLinear().range([height, 0]);
   }
 
+  yValues = yValues.map(function (y) {
+    return parseInt(y);
+  });
   var ydomain = d3.extent(yValues);
   if (yDomain[0] !== undefined && yDomain[0] !== null) ydomain[0] = yDomain[0];
   if (yDomain[1] !== undefined && yDomain[1] !== null) ydomain[1] = yDomain[1];
@@ -4742,9 +5859,9 @@ exports.flattenData = function (data, xAccessor, yAccessor) {
       // Check for NaN since d3's Voronoi cannot handle NaN values
       // Go ahead and Proceed to next iteration since we don't want NaN
       // in allValues or in xValues or yValues
-      if (isNaN(x)) {
-        return;
-      }
+      // if (isNaN(x)) {
+      //   return;
+      // }
       xValues.push(x);
 
       var y = yAccessor(item);
@@ -4822,6 +5939,153 @@ exports.shade = function (hex, percent) {
   blue = min(255, round((1 + percent) * B)).toString(16);
   if (blue.length === 1) blue = '0' + blue;
   return '#' + red + green + blue;
+};
+
+exports.formatInputData = require('./input').formatInputData;
+exports.rd3FormatInputData = require('./input').rd3FormatInputData;
+
+},{"./input":"/home/robson/projetos/rd3/src/utils/input.js"}],"/home/robson/projetos/rd3/src/utils/input.js":[function(require,module,exports){
+'use strict';
+
+function _defineProperty(obj, key, value) {
+    if (key in obj) {
+        Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });
+    } else {
+        obj[key] = value;
+    }return obj;
+}
+
+/*
+    Different format for input data are allowed.
+    Converts each one for rd3 internal format.
+*/
+
+var csvRows = function csvRows(data) {
+    var dataDict = {};
+    data.map(function (elem, idxE) {
+        var bar = elem.x;
+        if (typeof dataDict[bar] === 'undefined') {
+            dataDict[bar] = _defineProperty({ 'x': bar }, elem.name, +elem.y);
+        } else {
+            dataDict[bar][elem.name] = +elem.y;
+        }
+    });
+
+    var series = new Set(data.map(function (item) {
+        return item.name;
+    }));
+    series = Array.from(series);
+
+    data = Object.keys(dataDict).map(function (key) {
+        return dataDict[key];
+    });
+
+    return [data, series];
+};
+
+/* FOR BARCHART ONLY. HAVE TO READAPT BARCHART TO RD3 STANDARD */
+exports.formatInputData = function (inputDataLayout, data) {
+    if (inputDataLayout === 'csvRows') {
+        return csvRows(data);
+    } else if (inputDataLayout === 'csvStandard') {
+        var series = Object.keys(data[0]).filter(function (f) {
+            return f !== 'x';
+        });
+        return [data, series];
+    }
+};
+
+/* CONVERT EXTERNAL INPUT TO RD3 API FORMAT */
+/* RD3 FORMAT
+[{
+    name: 'series1',
+    values: [{ x: 0, y: 20 }, { x: 1, y: 30 }, { x: 2, y: 10 }, { x: 3, y: 5 }, { x: 4, y: 8 }, { x: 5, y: 15 }, { x: 6, y: 10 }],
+    strokeWidth: 3,
+    strokeDashArray: '5,5'
+}]
+*/
+
+/* CSV Standard
+0:
+Lib 1: "74.0"
+Lib 2: "0.0"
+Lib 3: "5.0"
+Lib 4: "14.0"
+Lib 5: "10.0"
+Lib 6: "197.0"
+Lib 7: "160.0"
+x: "202044"
+*/
+
+var csvStandard2rd3 = function csvStandard2rd3(data, xIsDate, strokeWidth) {
+
+    var dataObj = [];
+    data.map(function (d) {
+        var _loop = function _loop(prop) {
+            if (prop === 'x') {
+                return 'continue';
+            }
+            var curObj = dataObj.filter(function (obj) {
+                return obj.name === prop;
+            });
+            curObj = curObj[0];
+            if (curObj === undefined) {
+
+                curObj = { 'name': prop, 'strokeWidth': parseInt(strokeWidth), 'values': [] };
+                dataObj.push(curObj);
+            }
+            var x = xIsDate === true ? new Date(Date.parse(d.x)) : d.x;
+            curObj['values'].push({ x: x, y: parseFloat(d[prop]) });
+        };
+
+        for (var prop in d) {
+            var _ret = _loop(prop);
+
+            if (_ret === 'continue') continue;
+        }
+    });
+    var series = Object.keys(data[0]).filter(function (f) {
+        return f !== 'x';
+    });
+
+    return [dataObj, series];
+};
+
+var csvRows2rd3 = function csvRows2rd3(data, xIsDate, strokeWidth) {
+    var dataObj = [];
+    data.map(function (d) {
+        var curObj = dataObj.filter(function (obj) {
+            return obj.name === d.name;
+        });
+        // debugger
+        curObj = curObj[0];
+        if (curObj === undefined) {
+            curObj = { 'name': d.name, 'strokeWidth': strokeWidth, 'values': [] };
+            dataObj.push(curObj);
+        }
+        var x = xIsDate === true ? new Date(d.x) : d.x;
+        curObj['values'].push({ x: x, y: d.y });
+    });
+
+    var series = new Set(data.map(function (item) {
+        return item.name;
+    }));
+    series = Array.from(series);
+
+    return [dataObj, series];
+};
+
+exports.rd3FormatInputData = function (inputDataLayout, data, xIsDate, strokeWidth) {
+    if (inputDataLayout === 'rd3') {
+        return [data, data.map(function (d) {
+            return d.name;
+        })];
+    }
+    if (inputDataLayout === 'csvRows') {
+        return csvRows2rd3(data, xIsDate, strokeWidth);
+    } else if (inputDataLayout === 'csvStandard') {
+        return csvStandard2rd3(data, xIsDate, strokeWidth);
+    }
 };
 
 },{}]},{},["/home/robson/projetos/rd3/src/index.js"])("/home/robson/projetos/rd3/src/index.js")

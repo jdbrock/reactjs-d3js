@@ -3,6 +3,7 @@
 const PropTypes = require('prop-types');
 const React = require('react');
 const createReactClass = require('create-react-class');
+const utils = require('../utils');
 
 const d3 = require('d3');
 const DataSeries = require('./DataSeries');
@@ -37,6 +38,7 @@ module.exports = createReactClass({
     yAxisTickCount: PropTypes.number,
     xIsDate: PropTypes.bool,
     color: PropTypes.object,
+    inputDataLayout: PropTypes.string.isRequired,
   },
 
 
@@ -65,6 +67,8 @@ module.exports = createReactClass({
     };
   },
 
+  _formatInputData: utils.formatInputData,
+
 
   _getLabels(firstSeries) {
     // we only need first series to get all the labels
@@ -92,34 +96,12 @@ module.exports = createReactClass({
       return null;
     }
 
-    const _array = props.data
-    const dataDict = {}
-
-    /* Check date field */
-    _array.map( (elem, idxE) => {
-        let bar;
-        /* TODO: have to cast from string to bool on the client */
-        props.xIsDate === "true" ? bar = new Date(elem.x).toLocaleDateString() : bar = elem.x;
-        if (typeof dataDict[bar] === 'undefined'){
-          dataDict[bar] = {'x':bar, [elem.name]:+elem.y}
-        }else{
-          dataDict[bar][elem.name] = +elem.y
-        }
-    })
-
-    /* ENTRADA PRECISA SER ESSES !!! */
-    const data = Object.keys(dataDict).map(function(key){
-        return dataDict[key];
-    });
-
-    /* COLUMNS */
-    let series = new Set(props.data.map((item) => item.name));
-    series = Array.from(series);
+    let data = props.data
+    let series;
+    [data, series] = this._formatInputData(props.inputDataLayout, data)
 
     /* d3 */
     const _data = this._stack(series)(data);
-    // debugger
-
     const { innerHeight, innerWidth, trans, svgMargins } = this.getDimensions();
 
     const xScale = d3.scaleBand()
@@ -146,10 +128,6 @@ module.exports = createReactClass({
         colorsDomain = series
         colorsAccessor = this.props.colorAccessorOrdinal
     }
-    // debugger;
-    // colorsDomain.reverse()
-
-
 
     return (
       <span>
@@ -197,6 +175,7 @@ module.exports = createReactClass({
               translateTickLabel_Y_Y={props.translateTickLabel_Y_Y}
               translateTickLabel_X_X={props.translateTickLabel_X_X}
               translateTickLabel_X_Y={props.translateTickLabel_X_Y}
+              xIsDate={props.xIsDate}
             />
             <YGrid
               yAxisClassName={props.yAxisClassName}

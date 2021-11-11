@@ -7,6 +7,8 @@ const createReactClass = require('create-react-class');
 const d3 = require('d3');
 const VoronoiCircleContainer = require('./VoronoiCircleContainer');
 const Line = require('./Line');
+const voronoi = require('d3-voronoi')
+
 
 module.exports = createReactClass({
 
@@ -55,10 +57,14 @@ module.exports = createReactClass({
       interpolatePath.x(d => props.xScale(props.xAccessor(d)));
     }
 
-    const lines = props.data.map((series, idx) => (
+    const lines = props.data.map((series, idx) =>
+        // debugger;
+      (
         <Line
           path={interpolatePath(series.values)}
-          stroke={props.colors(props.colorAccessor(series, idx))}
+          stroke={props.color.colors(props.colorsAccessor(props.colorsDomain, idx))}
+
+          // stroke={props.color.colors(props.colorsAccessor(series, idx))}
           strokeWidth={series.strokeWidth}
           strokeDashArray={series.strokeDashArray}
           seriesName={series.name}
@@ -66,8 +72,6 @@ module.exports = createReactClass({
         />
       )
     );
-
-
     const voronoi = d3.voronoi()
       .x(d => xScale(d.coord.x))
       .y(d => yScale(d.coord.y))
@@ -77,17 +81,15 @@ module.exports = createReactClass({
     let cy;
     let circleFill;
 
-
     const regions = voronoi(props.value).polygons().map( (polygon, idx) => {
       const point = polygon.data;
       delete polygon.data;
       const vnode = polygon;
-      // debugger;
 
       cx = props.xScale(point.coord.x);
       cy = props.yScale(point.coord.y);
 
-      circleFill = props.colors(props.colorAccessor(vnode, point.seriesIndex));
+      circleFill=props.color.colors(props.colorsAccessor(props.colorsDomain, idx));
 
       return (
         <VoronoiCircleContainer
