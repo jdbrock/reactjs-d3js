@@ -129,7 +129,10 @@ module.exports = createReactClass({
     if (props.tickFormatting) {
       tickFormat = props.tickFormatting;
     } else if (scale.tickFormat) {
-      tickFormat = scale.tickFormat.apply(scale, props.tickArguments);
+      tickFormat = (d) => d;
+      /* TODO: implement props.tickArguments */
+      // tickFormat = d3.timeFormat("%b %y");
+      // tickFormat = scale.tickFormat.apply(scale, props.tickArguments);
     } else {
       tickFormat = (d) => d;
     }
@@ -164,7 +167,10 @@ module.exports = createReactClass({
         y2grid = -props.height;
         gridTextRotate = props.gridText.rotate.bottom;
         translateTickLabel = 'translate(' + props.translateTickLabel_X_X + ',' + props.translateTickLabel_X_Y + ')';
-        formatDate = props.xIsDate === true ? (d) => new Date(d).toLocaleDateString() : (d) => d;
+        formatDate = props.xIsDate === true ? (d) => d3.timeFormat(props.xTickFormat)(d) : (d) => d;
+
+        // tickFormat = d3.timeFormat("%b %y");
+        // formatDate = (d) => d;
         ticks.length > 40 ? maxTicksXAxis=5 : maxTicksXAxis=1
         break;
       case 'left':
@@ -290,16 +296,19 @@ module.exports = createReactClass({
                 {...optionalTextProps}
                 transform={gridTextRotate}
               >
-                {`${tickFormat(tick)}`.split('\n').map((tickLabel, index) => (
+                {`${tickFormat(tick)}`.split('\n').map((tickLabel, index) => {
+                  {/* debugger; */}
+                  return(
                     <tspan
                       className= {`rd3-axis-text ${chartStyle && chartStyle}` }
                     x={x1}
                     dy={dy}
                     key={index}
                     >
-                      {formatDate(tickLabel)}
-                    </tspan>
-                ))}
+                    {/* {tickLabel} */}
+                      {formatDate(tick)}
+                    </tspan>)
+                })}
               </text>
               </g>
               ))}

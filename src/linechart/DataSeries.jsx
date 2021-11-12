@@ -82,6 +82,7 @@ module.exports = createReactClass({
     let circleFill;
 
     const regions = voronoi(props.value).polygons().map( (polygon, idx) => {
+      // debugger;
       const point = polygon.data;
       delete polygon.data;
       const vnode = polygon;
@@ -89,11 +90,12 @@ module.exports = createReactClass({
       cx = props.xScale(point.coord.x);
       cy = props.yScale(point.coord.y);
 
-      circleFill=props.color.colors(props.colorsAccessor(props.colorsDomain, idx));
+      circleFill=props.color.colors(props.colorsAccessor(props.colorsDomain, point.seriesIndex));
 
       return (
         <VoronoiCircleContainer
           key={idx}
+          voronoiStroke={props.voronoiStroke}
           circleFill={circleFill}
           vnode={vnode}
           hoverAnimation={props.hoverAnimation}

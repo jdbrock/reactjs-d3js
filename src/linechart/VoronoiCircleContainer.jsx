@@ -79,7 +79,11 @@ module.exports = createReactClass({
           cx={props.cx}
           cy={props.cy}
           circleRadius={this.state.circleRadius}
-          circleFill={this.state.circleFill}
+          /* state.circleFill changes on MouseOver/Leave.
+          state.props, changes on styling property change  */
+          circleFill={this.props.circleFill}
+          voronoiStroke={props.voronoiStroke}
+
         />
       </g>
     );

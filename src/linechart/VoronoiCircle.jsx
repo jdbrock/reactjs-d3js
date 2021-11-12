@@ -14,16 +14,17 @@ module.exports = createReactClass({
     handleMouseOver: PropTypes.any,
     handleMouseLeave: PropTypes.any,
     voronoiPath: PropTypes.any,
+    voronoiStroke: PropTypes.string,
     cx: PropTypes.any,
     cy: PropTypes.any,
     circleRadius: PropTypes.any,
     circleFill: PropTypes.any,
   },
-
   getDefaultProps() {
     return {
       circleRadius: 3,
       circleFill: '#1f77b4',
+      voronoiStroke:''
     };
   },
 
@@ -34,7 +35,7 @@ module.exports = createReactClass({
           onMouseOver={this.props.handleMouseOver}
           onMouseLeave={this.props.handleMouseLeave}
           fill="transparent"
-          stroke='#F5F5F5'
+          stroke={this.props.voronoiStroke}
           d={this.props.voronoiPath}
         />
         <circle

@@ -3132,7 +3132,12 @@ module.exports = createReactClass({
     if (props.tickFormatting) {
       tickFormat = props.tickFormatting;
     } else if (scale.tickFormat) {
-      tickFormat = scale.tickFormat.apply(scale, props.tickArguments);
+      tickFormat = function tickFormat(d) {
+        return d;
+      };
+      /* TODO: implement props.tickArguments */
+      // tickFormat = d3.timeFormat("%b %y");
+      // tickFormat = scale.tickFormat.apply(scale, props.tickArguments);
     } else {
       tickFormat = function tickFormat(d) {
         return d;
@@ -3182,10 +3187,13 @@ module.exports = createReactClass({
         gridTextRotate = props.gridText.rotate.bottom;
         translateTickLabel = 'translate(' + props.translateTickLabel_X_X + ',' + props.translateTickLabel_X_Y + ')';
         formatDate = props.xIsDate === true ? function (d) {
-          return new Date(d).toLocaleDateString();
+          return d3.timeFormat(props.xTickFormat)(d);
         } : function (d) {
           return d;
         };
+
+        // tickFormat = d3.timeFormat("%b %y");
+        // formatDate = (d) => d;
         ticks.length > 40 ? maxTicksXAxis = 5 : maxTicksXAxis = 1;
         break;
       case 'left':
@@ -3304,12 +3312,13 @@ module.exports = createReactClass({
       }, optionalTextProps, {
         transform: gridTextRotate
       }), ('' + tickFormat(tick)).split('\n').map(function (tickLabel, index) {
+        {/* debugger; */}
         return React.createElement('tspan', {
           className: 'rd3-axis-text ' + (chartStyle && chartStyle),
           x: x1,
           dy: dy,
           key: index
-        }, formatDate(tickLabel));
+        }, formatDate(tick));
       })));
     })));
   }
@@ -3580,7 +3589,9 @@ module.exports = createReactClass({
 
       translateTickLabel_X_X: props.translateTickLabel_X_X,
       translateTickLabel_X_Y: props.translateTickLabel_X_Y,
-      xIsDate: props.xIsDate
+      xIsDate: props.xIsDate,
+      xTickFormat: props.xTickFormat
+
     }));
   }
 });
@@ -4170,6 +4181,7 @@ module.exports = createReactClass({
     var circleFill = void 0;
 
     var regions = voronoi(props.value).polygons().map(function (polygon, idx) {
+      // debugger;
       var point = polygon.data;
       delete polygon.data;
       var vnode = polygon;
@@ -4177,10 +4189,11 @@ module.exports = createReactClass({
       cx = props.xScale(point.coord.x);
       cy = props.yScale(point.coord.y);
 
-      circleFill = props.color.colors(props.colorsAccessor(props.colorsDomain, idx));
+      circleFill = props.color.colors(props.colorsAccessor(props.colorsDomain, point.seriesIndex));
 
       return React.createElement(VoronoiCircleContainer, {
         key: idx,
+        voronoiStroke: props.voronoiStroke,
         circleFill: circleFill,
         vnode: vnode,
         hoverAnimation: props.hoverAnimation,
@@ -4306,7 +4319,7 @@ module.exports = createReactClass({
   getDefaultProps: function getDefaultProps() {
     return {
       // colors: d3.scaleOrdinal(d3.schemeCategory10),
-      circleRadius: 3,
+      circleRadius: 4,
       className: 'rd3-linechart',
       hoverAnimation: true,
       margins: { top: 70, right: 20, bottom: 60, left: 60 },
@@ -4315,7 +4328,7 @@ module.exports = createReactClass({
       data: [],
       color: {
         accessor: 'Sequential',
-        colors: d3.scaleSequential(d3.interpolateSpectral)
+        colors: d3.scaleSequential(d3.schemeTableau10)
       }
     };
   },
@@ -4375,6 +4388,9 @@ module.exports = createReactClass({
       colorsAccessor = this.props.colorAccessorOrdinal;
     }
 
+    // console.log(props.voronoiStroke)
+    // debugger;
+
     return React.createElement('span', { onMouseLeave: this.onMouseLeave }, React.createElement(Chart, {
       viewBox: this.getViewBox(),
       legend: props.legend,
@@ -4408,6 +4424,7 @@ module.exports = createReactClass({
       tickTextStroke: props.xAxisTickTextStroke,
       xOrient: props.xOrient,
       yOrient: yOrient,
+      xTickFormat: props.xTickFormat,
       data: data,
       margins: svgMargins,
       width: innerWidth,
@@ -4469,7 +4486,8 @@ module.exports = createReactClass({
       colorsAccessor: colorsAccessor,
       width: innerWidth,
       height: innerHeight,
-      onMouseOver: this.onMouseOver
+      onMouseOver: this.onMouseOver,
+      voronoiStroke: props.voronoiStroke
     }), React.createElement(XAxis, {
       xAxisClassName: props.xAxisClassName,
       xAxisTickValues: props.xAxisTickValues,
@@ -4535,16 +4553,17 @@ module.exports = createReactClass({
     handleMouseOver: PropTypes.any,
     handleMouseLeave: PropTypes.any,
     voronoiPath: PropTypes.any,
+    voronoiStroke: PropTypes.string,
     cx: PropTypes.any,
     cy: PropTypes.any,
     circleRadius: PropTypes.any,
     circleFill: PropTypes.any
   },
-
   getDefaultProps: function getDefaultProps() {
     return {
       circleRadius: 3,
-      circleFill: '#1f77b4'
+      circleFill: '#1f77b4',
+      voronoiStroke: ''
     };
   },
   render: function render() {
@@ -4552,7 +4571,7 @@ module.exports = createReactClass({
       onMouseOver: this.props.handleMouseOver,
       onMouseLeave: this.props.handleMouseLeave,
       fill: 'transparent',
-      stroke: '#F5F5F5',
+      stroke: this.props.voronoiStroke,
       d: this.props.voronoiPath
     }), React.createElement('circle', {
       onMouseOver: this.props.handleMouseOver,
@@ -4654,8 +4673,12 @@ module.exports = createReactClass({
       voronoiPath: this._drawPath(props.vnode),
       cx: props.cx,
       cy: props.cy,
-      circleRadius: this.state.circleRadius,
-      circleFill: this.state.circleFill
+      circleRadius: this.state.circleRadius
+      /* state.circleFill changes on MouseOver/Leave.
+      state.props, changes on styling property change  */
+      , circleFill: this.props.circleFill,
+      voronoiStroke: props.voronoiStroke
+
     }));
   }
 });
