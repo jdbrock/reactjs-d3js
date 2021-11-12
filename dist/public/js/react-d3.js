@@ -4174,9 +4174,6 @@ module.exports = createReactClass({
       colorsAccessor = this.props.colorAccessorOrdinal;
     }
 
-    // console.log(props.voronoiStroke)
-    // debugger;
-
     return React.createElement('span', { onMouseLeave: this.onMouseLeave }, React.createElement(Chart, {
       viewBox: this.getViewBox(),
       legend: props.legend,
