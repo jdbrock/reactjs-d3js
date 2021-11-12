@@ -95,8 +95,6 @@ module.exports = createReactClass({
       colorsAccessor = this.props.colorAccessorOrdinal
     }
 
-    // console.log(props.voronoiStroke)
-    // debugger;
 
     return (
       <span onMouseLeave={this.onMouseLeave}>
