@@ -31,7 +31,7 @@ module.exports = createReactClass({
   getDefaultProps() {
     return {
       // colors: d3.scaleOrdinal(d3.schemeCategory10),
-      circleRadius: 3,
+      circleRadius: 4,
       className: 'rd3-linechart',
       hoverAnimation: true,
       margins: { top: 70, right: 20, bottom: 60, left: 60 },
@@ -40,7 +40,7 @@ module.exports = createReactClass({
       data: [],
       color: {
         accessor: 'Sequential',
-        colors: d3.scaleSequential(d3.interpolateSpectral),
+        colors: d3.scaleSequential(d3.schemeTableau10),
       }
     };
   },
@@ -95,6 +95,9 @@ module.exports = createReactClass({
       colorsAccessor = this.props.colorAccessorOrdinal
     }
 
+    // console.log(props.voronoiStroke)
+    // debugger;
+
     return (
       <span onMouseLeave={this.onMouseLeave}>
         <Chart
@@ -132,6 +135,7 @@ module.exports = createReactClass({
               tickTextStroke={props.xAxisTickTextStroke}
               xOrient={props.xOrient}
               yOrient={yOrient}
+              xTickFormat={props.xTickFormat}
               data={data}
               margins={svgMargins}
               width={innerWidth}
@@ -198,6 +202,7 @@ module.exports = createReactClass({
               width={innerWidth}
               height={innerHeight}
               onMouseOver={this.onMouseOver}
+              voronoiStroke={props.voronoiStroke}
             />
             <XAxis
               xAxisClassName={props.xAxisClassName}
