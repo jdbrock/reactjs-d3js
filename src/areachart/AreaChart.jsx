@@ -155,6 +155,15 @@ module.exports = createReactClass({
             gridVerticalStroke={props.gridVerticalStroke}
             gridVerticalStrokeWidth={props.gridVerticalStrokeWidth}
             gridVerticalStrokeDash={props.gridVerticalStrokeDash}
+
+
+            xTickFormat={props.xTickFormat}
+            gridText={props.gridText}
+            translateTickLabel_Y_X={props.translateTickLabel_Y_X}
+            translateTickLabel_Y_Y={props.translateTickLabel_Y_Y}
+            translateTickLabel_X_X={props.translateTickLabel_X_X}
+            translateTickLabel_X_Y={props.translateTickLabel_X_Y}
+            xIsDate={props.xIsDate}
           />
           <YGrid
             yAxisClassName="rd3-areachart-yaxis"
@@ -177,6 +186,14 @@ module.exports = createReactClass({
             gridHorizontalStroke={props.gridHorizontalStroke}
             gridHorizontalStrokeWidth={props.gridHorizontalStrokeWidth}
             gridHorizontalStrokeDash={props.gridHorizontalStrokeDash}
+            xTickFormat={props.xTickFormat}
+            gridText={props.gridText}
+            translateTickLabel_Y_X={props.translateTickLabel_Y_X}
+            translateTickLabel_Y_Y={props.translateTickLabel_Y_Y}
+            translateTickLabel_X_X={props.translateTickLabel_X_X}
+            translateTickLabel_X_Y={props.translateTickLabel_X_Y}
+            xIsDate={props.xIsDate}
+
           />
           {dataSeries}
           <XAxis

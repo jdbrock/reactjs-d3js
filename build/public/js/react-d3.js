@@ -147,7 +147,7 @@ var Demos = createReactClass({
       height: 400,
       title: 'Area Chart',
       xAxisTickInterval: { unit: 'year', interval: 2 },
-      xAxisLabel: 'Year',
+      xAxisLabel: '',
       yAxisLabel: 'Share Price',
       xAccessor: function xAccessor(d) {
         return new Date(d[0]);
@@ -159,8 +159,20 @@ var Demos = createReactClass({
       , gridHorizontal: true,
       gridVertical: true,
       gridHorizontalStrokeDash: '',
-      gridVerticalStrokeDash: ''
-    })), React.createElement('div', { className: 'col-md-6' }, React.createElement('pre', { ref: 'block' }, React.createElement('code', { className: 'js' }, 'var areaData = [\n  {\n    name: "series1",\n    values: [ { x: [object Date], y: 20.5 }, ..., { x: [object Date], y: 4.2 } ]\n  },\n  ...\n  {\n    name: "series2",\n    values: [ { x: [object Date], y: 3.2 }, ..., { x: [object Date], y: 11.2 } ]\n  }\n];')), React.createElement('pre', { ref: 'block' }, React.createElement('code', { className: 'html' }, '<AreaChart\n  data={areaData}\n  width="100%"\n  height={300}\n  viewBoxObject={{\n    x: 0,\n    y: 0,\n    height: 400,\n    width: 500\n  }}\n  domain={{y: [,60]}}\n  xAxisTickInterval={{unit: \'year\', interval: 2}}\n  title="Area Chart"\n/>')))), React.createElement('div', { className: 'row' }, React.createElement('hr', null)), React.createElement('div', { className: 'row' }, React.createElement('div', { className: 'col-md-6' }, React.createElement(CandlestickChart, {
+      gridVerticalStrokeDash: '',
+      xIsDate: true,
+      xTickFormat: '%b %y',
+      gridText: { rotate: { bottom: "rotate(-65)" },
+        translate: { text: {
+            x: -26,
+            y: 18
+          } },
+        font: { size: '0.8em',
+          weight: '0.3'
+        }
+      }
+
+    })), React.createElement('p', null, '\xA0'), React.createElement('div', { className: 'col-md-6' }, React.createElement('pre', { ref: 'block' }, React.createElement('code', { className: 'js' }, 'var areaData = [\n  {\n    name: "series1",\n    values: [ { x: [object Date], y: 20.5 }, ..., { x: [object Date], y: 4.2 } ]\n  },\n  ...\n  {\n    name: "series2",\n    values: [ { x: [object Date], y: 3.2 }, ..., { x: [object Date], y: 11.2 } ]\n  }\n];')), React.createElement('pre', { ref: 'block' }, React.createElement('code', { className: 'html' }, '<AreaChart\n  data={areaData}\n  width="100%"\n  height={300}\n  viewBoxObject={{\n    x: 0,\n    y: 0,\n    height: 400,\n    width: 500\n  }}\n  domain={{y: [,60]}}\n  xAxisTickInterval={{unit: \'year\', interval: 2}}\n  title="Area Chart"\n/>')))), React.createElement('div', { className: 'row' }, React.createElement('hr', null)), React.createElement('div', { className: 'row' }, React.createElement('div', { className: 'col-md-6' }, React.createElement(CandlestickChart, {
       data: this.state.ohlcData,
       width: '100%',
       height: 400,
@@ -176,8 +188,20 @@ var Demos = createReactClass({
       gridHorizontal: true,
       gridVertical: true,
       gridHorizontalStrokeDash: true,
-      gridVerticalStrokeDash: ''
-    })), React.createElement('div', { className: 'col-md-6' }, React.createElement('pre', { ref: 'block' }, React.createElement('code', { className: 'js' }, 'var ohlcData = [\n  {\n    name: "AAPL",\n    values: [ { x: [object Date], open: 451.69, high: 456.23, low: 435, close: 439.88 },\n              { x: [object Date], open: 437.82, high: 453.21, low: 435.86 , close: 449.83 },\n              ...\n            ]\n  }\n];')), React.createElement('pre', { ref: 'block' }, React.createElement('code', { className: 'html' }, '<CandlestickChart\n  data={ohlcData}\n  width={500}\n  height={400}\n  xAxisTickInterval={{unit: \'month\', interval: 1}}\n  yAxisOffset={-10}\n  title="Candlestick Chart"\n  domain={{y:[400, 500]}}\n/>')))), React.createElement('div', { className: 'row' }, React.createElement('hr', null)), React.createElement('div', { className: 'row' }, React.createElement('div', { className: 'col-md-6' }, React.createElement(BarChart, (_React$createElement = {
+      gridVerticalStrokeDash: '',
+      xIsDate: true,
+      xTickFormat: "%b %d, %y",
+
+      gridText: { rotate: { bottom: "rotate(-65)" },
+        translate: { text: {
+            x: -26,
+            y: 33
+          } },
+        font: { size: '0.8em',
+          weight: '0.3'
+        }
+      }
+    })), React.createElement('p', null, '\xA0'), React.createElement('div', { className: 'col-md-6' }, React.createElement('pre', { ref: 'block' }, React.createElement('code', { className: 'js' }, 'var ohlcData = [\n  {\n    name: "AAPL",\n    values: [ { x: [object Date], open: 451.69, high: 456.23, low: 435, close: 439.88 },\n              { x: [object Date], open: 437.82, high: 453.21, low: 435.86 , close: 449.83 },\n              ...\n            ]\n  }\n];')), React.createElement('pre', { ref: 'block' }, React.createElement('code', { className: 'html' }, '<CandlestickChart\n  data={ohlcData}\n  width={500}\n  height={400}\n  xAxisTickInterval={{unit: \'month\', interval: 1}}\n  yAxisOffset={-10}\n  title="Candlestick Chart"\n  domain={{y:[400, 500]}}\n/>')))), React.createElement('div', { className: 'row' }, React.createElement('hr', null)), React.createElement('div', { className: 'row' }, React.createElement('div', { className: 'col-md-6' }, React.createElement(BarChart, (_React$createElement = {
       data: barData,
       inputDataLayout: 'csvRows',
       grouped: true,
@@ -1496,7 +1520,15 @@ module.exports = createReactClass({
       gridVertical: props.gridVertical,
       gridVerticalStroke: props.gridVerticalStroke,
       gridVerticalStrokeWidth: props.gridVerticalStrokeWidth,
-      gridVerticalStrokeDash: props.gridVerticalStrokeDash
+      gridVerticalStrokeDash: props.gridVerticalStrokeDash,
+
+      xTickFormat: props.xTickFormat,
+      gridText: props.gridText,
+      translateTickLabel_Y_X: props.translateTickLabel_Y_X,
+      translateTickLabel_Y_Y: props.translateTickLabel_Y_Y,
+      translateTickLabel_X_X: props.translateTickLabel_X_X,
+      translateTickLabel_X_Y: props.translateTickLabel_X_Y,
+      xIsDate: props.xIsDate
     }), React.createElement(YGrid, {
       yAxisClassName: 'rd3-areachart-yaxis',
       yScale: yScale,
@@ -1517,7 +1549,15 @@ module.exports = createReactClass({
       gridHorizontal: props.gridHorizontal,
       gridHorizontalStroke: props.gridHorizontalStroke,
       gridHorizontalStrokeWidth: props.gridHorizontalStrokeWidth,
-      gridHorizontalStrokeDash: props.gridHorizontalStrokeDash
+      gridHorizontalStrokeDash: props.gridHorizontalStrokeDash,
+      xTickFormat: props.xTickFormat,
+      gridText: props.gridText,
+      translateTickLabel_Y_X: props.translateTickLabel_Y_X,
+      translateTickLabel_Y_Y: props.translateTickLabel_Y_Y,
+      translateTickLabel_X_X: props.translateTickLabel_X_X,
+      translateTickLabel_X_Y: props.translateTickLabel_X_Y,
+      xIsDate: props.xIsDate
+
     }), dataSeries, React.createElement(XAxis, {
       xAxisClassName: 'rd3-areachart-xaxis',
       xScale: xScale,
@@ -2425,7 +2465,11 @@ module.exports = createReactClass({
       stroke: props.axesColor,
       gridVertical: props.gridVertical,
       gridVerticalStroke: props.gridVerticalStroke,
-      gridVerticalStrokeDash: props.gridVerticalStrokeDash
+      gridVerticalStrokeDash: props.gridVerticalStrokeDash,
+      xIsDate: props.xIsDate,
+      xTickFormat: props.xTickFormat,
+      gridText: props.gridText
+
     }), React.createElement(YGrid, {
       yAxisClassName: props.yAxisClassName,
       yScale: scales.yScale,
@@ -2447,7 +2491,9 @@ module.exports = createReactClass({
       gridHorizontal: props.gridHorizontal,
       gridHorizontalStroke: props.gridHorizontalStroke,
       gridHorizontalStrokeWidth: props.gridHorizontalStrokeWidth,
-      gridHorizontalStrokeDash: props.gridVerticalStrokeDash
+      gridHorizontalStrokeDash: props.gridVerticalStrokeDash,
+      gridText: props.gridText
+
     }), dataSeries, React.createElement(XAxis, {
       xAxisClassName: props.xAxisClassName,
       xScale: scales.xScale,
@@ -4107,7 +4153,7 @@ module.exports = createReactClass({
   displayName: 'DataSeries',
 
   propTypes: {
-    color: PropTypes.func,
+    color: PropTypes.object,
     colorAccessor: PropTypes.func,
     data: PropTypes.array,
     interpolationType: PropTypes.string,
@@ -4156,19 +4202,15 @@ module.exports = createReactClass({
     }
 
     var lines = props.data.map(function (series, idx) {
-      return (
-        // debugger;
-        React.createElement(Line, {
-          path: interpolatePath(series.values),
-          stroke: props.color.colors(props.colorsAccessor(props.colorsDomain, idx))
-
-          // stroke={props.color.colors(props.colorsAccessor(series, idx))}
-          , strokeWidth: series.strokeWidth,
-          strokeDashArray: series.strokeDashArray,
-          seriesName: series.name,
-          key: idx
-        })
-      );
+      // debugger;
+      return React.createElement(Line, {
+        path: interpolatePath(series.values),
+        stroke: props.color.colors(props.colorsAccessor(props.colorsDomain, idx)),
+        strokeWidth: series.strokeWidth,
+        strokeDashArray: series.strokeDashArray,
+        seriesName: series.name,
+        key: idx
+      });
     });
     var voronoi = d3.voronoi().x(function (d) {
       return xScale(d.coord.x);
@@ -6268,8 +6310,11 @@ var csvStandard2rd3 = function csvStandard2rd3(data, xIsDate, strokeWidth) {
                 curObj = { 'name': prop, 'strokeWidth': parseInt(strokeWidth), 'values': [] };
                 dataObj.push(curObj);
             }
+            // const x = xIsDate === true ? new Date(Date.parse(d.x)) : d.x;
+            // curObj['values'].push({x:x, y:parseFloat(d[prop])})
+
             var x = xIsDate === true ? new Date(Date.parse(d.x)) : d.x;
-            curObj['values'].push({ x: x, y: parseFloat(d[prop]) });
+            curObj['values'].push({ x: x, y: +d[prop] });
         };
 
         for (var prop in d) {

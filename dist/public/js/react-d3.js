@@ -1282,7 +1282,15 @@ module.exports = createReactClass({
       gridVertical: props.gridVertical,
       gridVerticalStroke: props.gridVerticalStroke,
       gridVerticalStrokeWidth: props.gridVerticalStrokeWidth,
-      gridVerticalStrokeDash: props.gridVerticalStrokeDash
+      gridVerticalStrokeDash: props.gridVerticalStrokeDash,
+
+      xTickFormat: props.xTickFormat,
+      gridText: props.gridText,
+      translateTickLabel_Y_X: props.translateTickLabel_Y_X,
+      translateTickLabel_Y_Y: props.translateTickLabel_Y_Y,
+      translateTickLabel_X_X: props.translateTickLabel_X_X,
+      translateTickLabel_X_Y: props.translateTickLabel_X_Y,
+      xIsDate: props.xIsDate
     }), React.createElement(YGrid, {
       yAxisClassName: 'rd3-areachart-yaxis',
       yScale: yScale,
@@ -1303,7 +1311,15 @@ module.exports = createReactClass({
       gridHorizontal: props.gridHorizontal,
       gridHorizontalStroke: props.gridHorizontalStroke,
       gridHorizontalStrokeWidth: props.gridHorizontalStrokeWidth,
-      gridHorizontalStrokeDash: props.gridHorizontalStrokeDash
+      gridHorizontalStrokeDash: props.gridHorizontalStrokeDash,
+      xTickFormat: props.xTickFormat,
+      gridText: props.gridText,
+      translateTickLabel_Y_X: props.translateTickLabel_Y_X,
+      translateTickLabel_Y_Y: props.translateTickLabel_Y_Y,
+      translateTickLabel_X_X: props.translateTickLabel_X_X,
+      translateTickLabel_X_Y: props.translateTickLabel_X_Y,
+      xIsDate: props.xIsDate
+
     }), dataSeries, React.createElement(XAxis, {
       xAxisClassName: 'rd3-areachart-xaxis',
       xScale: xScale,
@@ -2211,7 +2227,11 @@ module.exports = createReactClass({
       stroke: props.axesColor,
       gridVertical: props.gridVertical,
       gridVerticalStroke: props.gridVerticalStroke,
-      gridVerticalStrokeDash: props.gridVerticalStrokeDash
+      gridVerticalStrokeDash: props.gridVerticalStrokeDash,
+      xIsDate: props.xIsDate,
+      xTickFormat: props.xTickFormat,
+      gridText: props.gridText
+
     }), React.createElement(YGrid, {
       yAxisClassName: props.yAxisClassName,
       yScale: scales.yScale,
@@ -2233,7 +2253,9 @@ module.exports = createReactClass({
       gridHorizontal: props.gridHorizontal,
       gridHorizontalStroke: props.gridHorizontalStroke,
       gridHorizontalStrokeWidth: props.gridHorizontalStrokeWidth,
-      gridHorizontalStrokeDash: props.gridVerticalStrokeDash
+      gridHorizontalStrokeDash: props.gridVerticalStrokeDash,
+      gridText: props.gridText
+
     }), dataSeries, React.createElement(XAxis, {
       xAxisClassName: props.xAxisClassName,
       xScale: scales.xScale,
@@ -3893,7 +3915,7 @@ module.exports = createReactClass({
   displayName: 'DataSeries',
 
   propTypes: {
-    color: PropTypes.func,
+    color: PropTypes.object,
     colorAccessor: PropTypes.func,
     data: PropTypes.array,
     interpolationType: PropTypes.string,
@@ -3942,19 +3964,15 @@ module.exports = createReactClass({
     }
 
     var lines = props.data.map(function (series, idx) {
-      return (
-        // debugger;
-        React.createElement(Line, {
-          path: interpolatePath(series.values),
-          stroke: props.color.colors(props.colorsAccessor(props.colorsDomain, idx))
-
-          // stroke={props.color.colors(props.colorsAccessor(series, idx))}
-          , strokeWidth: series.strokeWidth,
-          strokeDashArray: series.strokeDashArray,
-          seriesName: series.name,
-          key: idx
-        })
-      );
+      // debugger;
+      return React.createElement(Line, {
+        path: interpolatePath(series.values),
+        stroke: props.color.colors(props.colorsAccessor(props.colorsDomain, idx)),
+        strokeWidth: series.strokeWidth,
+        strokeDashArray: series.strokeDashArray,
+        seriesName: series.name,
+        key: idx
+      });
     });
     var voronoi = d3.voronoi().x(function (d) {
       return xScale(d.coord.x);
@@ -6054,8 +6072,11 @@ var csvStandard2rd3 = function csvStandard2rd3(data, xIsDate, strokeWidth) {
                 curObj = { 'name': prop, 'strokeWidth': parseInt(strokeWidth), 'values': [] };
                 dataObj.push(curObj);
             }
+            // const x = xIsDate === true ? new Date(Date.parse(d.x)) : d.x;
+            // curObj['values'].push({x:x, y:parseFloat(d[prop])})
+
             var x = xIsDate === true ? new Date(Date.parse(d.x)) : d.x;
-            curObj['values'].push({ x: x, y: parseFloat(d[prop]) });
+            curObj['values'].push({ x: x, y: +d[prop] });
         };
 
         for (var prop in d) {

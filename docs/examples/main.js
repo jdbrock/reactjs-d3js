@@ -284,7 +284,7 @@ const Demos = createReactClass({
               height={400}
               title="Area Chart"
               xAxisTickInterval={{ unit: 'year', interval: 2 }}
-              xAxisLabel="Year"
+              xAxisLabel=""
               yAxisLabel="Share Price"
               xAccessor={(d) => new Date(d[0])
               }
@@ -294,9 +294,23 @@ const Demos = createReactClass({
               gridVertical
               gridHorizontalStrokeDash=""
               gridVerticalStrokeDash=""
+              xIsDate={true}
+              xTickFormat={'%b %y'}
+              gridText={{rotate:{bottom:"rotate(-65)"},
+                         translate:{text:{
+                                      x:-26,
+                                      y:18
+                                    }},
+                          font:{size:'0.8em',
+                                weight:'0.3'
+                              }
+                        }}
+
             />
           </div>
+          <p>&nbsp;</p>
           <div className="col-md-6">
+
             <pre ref="block">
               <code className="js">
               {
@@ -360,8 +374,22 @@ const Demos = createReactClass({
               gridVertical
               gridHorizontalStrokeDash
               gridVerticalStrokeDash=''
+              xIsDate={true}
+              xTickFormat={"%b %d, %y"}
+
+              gridText={{rotate:{bottom:"rotate(-65)"},
+                         translate:{text:{
+                                      x:-26,
+                                      y:33
+                                    }},
+                          font:{size:'0.8em',
+                                weight:'0.3'
+                              }
+                        }}
             />
           </div>
+          <p>&nbsp;</p>
+
           <div className="col-md-6">
             <pre ref="block">
               <code className="js">
