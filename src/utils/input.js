@@ -74,8 +74,11 @@ const csvStandard2rd3 = (data, xIsDate, strokeWidth) => {
                 curObj = {'name': prop, 'strokeWidth':parseInt(strokeWidth),  'values': []}
                 dataObj.push(curObj)
             }
+            // const x = xIsDate === true ? new Date(Date.parse(d.x)) : d.x;
+            // curObj['values'].push({x:x, y:parseFloat(d[prop])})
+
             const x = xIsDate === true ? new Date(Date.parse(d.x)) : d.x;
-            curObj['values'].push({x:x, y:parseFloat(d[prop])})
+            curObj['values'].push({x:x, y:+d[prop]})
         }
     })
     let series = Object.keys(data[0]).filter( f => f !== 'x')

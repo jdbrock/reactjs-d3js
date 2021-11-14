@@ -121,6 +121,10 @@ module.exports = createReactClass({
               gridVertical={props.gridVertical}
               gridVerticalStroke={props.gridVerticalStroke}
               gridVerticalStrokeDash={props.gridVerticalStrokeDash}
+              xIsDate={props.xIsDate}
+              xTickFormat={props.xTickFormat}
+              gridText={props.gridText}
+
             />
             <YGrid
               yAxisClassName={props.yAxisClassName}
@@ -144,6 +148,8 @@ module.exports = createReactClass({
               gridHorizontalStroke={props.gridHorizontalStroke}
               gridHorizontalStrokeWidth={props.gridHorizontalStrokeWidth}
               gridHorizontalStrokeDash={props.gridVerticalStrokeDash}
+              gridText={props.gridText}
+
             />
           {dataSeries}
           <XAxis

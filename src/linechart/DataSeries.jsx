@@ -15,7 +15,7 @@ module.exports = createReactClass({
   displayName: 'DataSeries',
 
   propTypes: {
-    color: PropTypes.func,
+    color: PropTypes.object,
     colorAccessor: PropTypes.func,
     data: PropTypes.array,
     interpolationType: PropTypes.string,
@@ -57,21 +57,19 @@ module.exports = createReactClass({
       interpolatePath.x(d => props.xScale(props.xAccessor(d)));
     }
 
-    const lines = props.data.map((series, idx) =>
-        // debugger;
-      (
+    const lines = props.data.map((series, idx) =>{
+      // debugger;
+      return (
         <Line
           path={interpolatePath(series.values)}
           stroke={props.color.colors(props.colorsAccessor(props.colorsDomain, idx))}
-
-          // stroke={props.color.colors(props.colorsAccessor(series, idx))}
           strokeWidth={series.strokeWidth}
           strokeDashArray={series.strokeDashArray}
           seriesName={series.name}
           key={idx}
         />
       )
-    );
+    });
     const voronoi = d3.voronoi()
       .x(d => xScale(d.coord.x))
       .y(d => yScale(d.coord.y))
