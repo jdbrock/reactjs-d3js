@@ -161,7 +161,9 @@ const Demos = createReactClass({
               yAxisLabel="Altitude"
               xAxisLabel="Elapsed Time (sec)"
               domain={{ x: [, ], y: [, ] }}
+              circleRadius={3}
               gridHorizontal
+
             />
           </div>
           <div className="col-md-6">
@@ -274,6 +276,9 @@ const Demos = createReactClass({
           <div className="col-md-6">
             <AreaChart
               data={this.state.areaData}
+              inputDataLayout="rd3"
+
+
               width="100%"
               viewBoxObject={{
                 x: 0,

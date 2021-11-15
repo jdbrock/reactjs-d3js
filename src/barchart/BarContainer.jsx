@@ -23,8 +23,19 @@ module.exports = createReactClass({
       // fill is named as fill instead of initialFill to avoid
       // confusion when passing down props from top parent
       fill: this.props.fill,
+      fillCtl: this.props.fill,
     };
   },
+
+  statics: { getDerivedStateFromProps(props, current_state) {
+    if (current_state.fillCtl !== props.fill) {
+      return {
+        fillCtl:props.fill,
+        fill: props.fill,
+      }
+    }
+    return null
+  }},
 
   _animateBar() {
     const rect = ReactDOM.findDOMNode(this).getBoundingClientRect();
@@ -62,7 +73,7 @@ module.exports = createReactClass({
     return (
       <Bar
         {...newProps}
-        fill={this.props.fill}
+        fill={this.state.fill}
         onMouseOver={props.hoverAnimation ? this._animateBar : null}
         onMouseLeave={props.hoverAnimation ? this._restoreBar : null}
       />
