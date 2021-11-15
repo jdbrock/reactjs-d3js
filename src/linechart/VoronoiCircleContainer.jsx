@@ -31,8 +31,19 @@ module.exports = createReactClass({
     return {
       circleRadius: this.props.circleRadius,
       circleFill: this.props.circleFill,
+      circleFillCtl:this.props.fill,
     };
   },
+
+  statics: { getDerivedStateFromProps(props, current_state) {
+    if (current_state.circleFillCtl !== props.fill) {
+      return {
+        circleFillCtl:props.fill,
+        circleFill: props.fill,
+      }
+    }
+    return null
+  }},
 
   _animateCircle() {
     const rect = ReactDOM.findDOMNode(this).getElementsByTagName('circle')[0].getBoundingClientRect();

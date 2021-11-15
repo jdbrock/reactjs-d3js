@@ -3,6 +3,7 @@
 const PropTypes = require('prop-types');
 const React = require('react');
 const createReactClass = require('create-react-class');
+const utils = require('../utils');
 
 const d3 = require('d3');
 const DataSeries = require('./DataSeries');
@@ -19,6 +20,8 @@ module.exports = createReactClass({
     interpolationType: PropTypes.string,
     hoverAnimation: PropTypes.bool,
     data: PropTypes.array.isRequired,
+    normalize: PropTypes.bool,
+    displayYAxis: PropTypes.bool,
   },
 
   mixins: [CartesianChartPropsMixin, DefaultAccessorsMixin, ViewBoxMixin],
@@ -35,8 +38,16 @@ module.exports = createReactClass({
       className: 'rd3-areachart',
       hoverAnimation: true,
       data: [],
+      color: {
+        accessor: 'Sequential',
+        colors: d3.scaleSequential(d3.schemeTableau10),
+      },
+      normalize:false,
+      displayYAxis:true
     };
   },
+
+  _rd3FormatInputData: utils.rd3FormatInputData,
 
   render() {
     const props = this.props;
@@ -45,14 +56,19 @@ module.exports = createReactClass({
       props.interpolationType ||
       (props.interpolate ? 'cardinal' : 'linear');
 
+
+    if (this.props.data && this.props.data.length < 1) {
+      return null;
+    }
+
+    let series;
+    [data, series] = this._rd3FormatInputData('areachart', props.inputDataLayout, props.data, props.xIsDate, props.strokeWidth)
+
     const { innerWidth, innerHeight, trans, svgMargins } = this.getDimensions();
     const yOrient = this.getYOrient();
 
     if (!Array.isArray(data)) {
       data = [data];
-    }
-    if (this.props.data && this.props.data.length < 1) {
-      return null;
     }
 
     const yScale = d3.scaleLinear()
@@ -65,11 +81,38 @@ module.exports = createReactClass({
     const domain = props.domain || {};
     const xDomain = domain.x || [];
     const yDomain = domain.y || [];
-    const seriesNames = Object.keys(data[0]).filter( f => f !== 'date') || [];
+    const seriesNames = series
 
-    const yMaxValues = d3.sum(seriesNames.map( n => {
-        return d3.max(data.map( d => { return d[n]}))
-    }))
+    // let yMaxValues = d3.max(data.map( d => {
+    //   return d3.sum(seriesNames.map( n => { return d[n]}))
+    // }))
+
+    let seriesMaxValues = data.map( d => {
+        return d3.sum(seriesNames.map( n => { return d[n]}))
+    })
+
+    let yMaxValues = d3.max(seriesMaxValues)
+
+
+    if (props.normalize === true){
+    // if ( 1===1 ){
+      const seriesNormalizeFactor = seriesMaxValues.map( s => yMaxValues/s )
+      const dataNormalized = []
+      data = data.map( (d, idx) => {
+        const factor = seriesNormalizeFactor[idx]
+        let dataAux = {}
+        Object.entries(d).map((key, index) => {
+          if (key[0] === 'date'){
+            dataAux[key[0]] = key[1]
+          }
+          else{
+            dataAux[key[0]] = (key[1] *= factor)
+          }
+        })
+        dataNormalized.push(dataAux)
+      })
+      data = dataNormalized
+    }
 
 
     /* TODO - generalize. Only acceptint field date for x axis*/
@@ -77,8 +120,8 @@ module.exports = createReactClass({
       xValues.push(d.date);
     })
 
-
     let xScale;
+
     if (xValues.length > 0 &&
       Object.prototype.toString.call(xValues[0]) === '[object Date]' &&
       props.xAxisTickInterval) {
@@ -96,31 +139,45 @@ module.exports = createReactClass({
     const ydomain = [0, yMaxValues];
     if (yDomain[0] !== undefined && yDomain[0] !== null) ydomain[0] = yDomain[0];
     if (yDomain[1] !== undefined && yDomain[1] !== null) ydomain[1] = yDomain[1];
-
     yScale.domain(ydomain);
 
-    const colorsDomain = Array.from(Array(seriesNames.length).keys())
-    props.colors.domain(colorsDomain);
+    // const colorsDomain = Array.from(Array(seriesNames.length).keys())
+    // props.colors.domain(colorsDomain);
 
     const stack = d3.stack()
     stack.keys(seriesNames)
 
     const layers = stack(data)
-    const dataSeries = layers.map((d, idx) => (
-        <DataSeries
-        key={idx}
-        fill={props.colors(props.colorAccessorOrdinal(d, idx))}
-        // seriesName={d.name}
-        index={idx}
-        xScale={xScale}
-        yScale={yScale}
-        data={d}
-        xAccessor={props.xAccessor}
-        yAccessor={props.yAccessor}
-        interpolationType={interpolationType}
-        hoverAnimation={props.hoverAnimation}
-      />
 
+
+
+
+    let colorsDomain;
+    let colorsAccessor;
+    const origArray = Array.from(series.keys())
+
+    if (this.props.color.accessor === 'Sequential'){
+      colorsDomain = origArray.map(x => x / series.length)
+      colorsAccessor = this.props.colorAccessorSequential
+    }else{
+      colorsDomain = series
+      colorsAccessor = this.props.colorAccessorOrdinal
+    }
+
+
+    const dataSeries = layers.map((d, idx) => (
+      <DataSeries
+      key={idx}
+      fill={props.color.colors(colorsAccessor(colorsDomain, idx))}
+      index={idx}
+      xScale={xScale}
+      yScale={yScale}
+      data={d}
+      xAccessor={props.xAccessor}
+      yAccessor={props.yAccessor}
+      interpolationType={interpolationType}
+      hoverAnimation={props.hoverAnimation}
+      />
     ));
 
     return (
@@ -129,9 +186,21 @@ module.exports = createReactClass({
         legend={props.legend}
         data={data}
         margins={props.margins}
+
+        color={this.props.color}
+        colorsDomain={colorsDomain}
+        colorsAccessor={colorsAccessor}
+
         width={props.width}
         height={props.height}
         title={props.title}
+
+        series={series}
+        svgLegend={props.svgLegend}
+        svgChart={props.svgChart}
+        legendStyle={props.legendStyle}
+        background={props.background}
+        svgTitle={props.svgTitle}
       >
         <g transform={trans} className={props.className}>
         <XGrid
@@ -165,6 +234,7 @@ module.exports = createReactClass({
             translateTickLabel_X_Y={props.translateTickLabel_X_Y}
             xIsDate={props.xIsDate}
           />
+          { props.displayYAxis &&
           <YGrid
             yAxisClassName="rd3-areachart-yaxis"
             yScale={yScale}
@@ -180,7 +250,7 @@ module.exports = createReactClass({
             yOrient={yOrient}
             margins={svgMargins}
             width={innerWidth}
-            height={props.height}
+            height={innerHeight}
             horizontalChart={props.horizontal}
             gridHorizontal={props.gridHorizontal}
             gridHorizontalStroke={props.gridHorizontalStroke}
@@ -195,6 +265,7 @@ module.exports = createReactClass({
             xIsDate={props.xIsDate}
 
           />
+          }
           {dataSeries}
           <XAxis
             xAxisClassName="rd3-areachart-xaxis"
@@ -218,6 +289,7 @@ module.exports = createReactClass({
             gridVerticalStrokeWidth={props.gridVerticalStrokeWidth}
             gridVerticalStrokeDash={props.gridVerticalStrokeDash}
           />
+          { props.displayYAxis &&
           <YAxis
             yAxisClassName="rd3-areachart-yaxis"
             yScale={yScale}
@@ -233,13 +305,13 @@ module.exports = createReactClass({
             yOrient={yOrient}
             margins={svgMargins}
             width={innerWidth}
-            height={props.height}
+            height={innerHeight}
             horizontalChart={props.horizontal}
             gridHorizontal={props.gridHorizontal}
             gridHorizontalStroke={props.gridHorizontalStroke}
             gridHorizontalStrokeWidth={props.gridHorizontalStrokeWidth}
             gridHorizontalStrokeDash={props.gridHorizontalStrokeDash}
-          />
+          />}
         </g>
       </Chart>
     );

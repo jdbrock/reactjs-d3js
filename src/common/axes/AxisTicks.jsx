@@ -283,7 +283,7 @@ module.exports = createReactClass({
       </g>
 
       /* Move all tick labels at once */
-      <g transform={translateTickLabel}>
+      <g transform={translateTickLabel} className= {`rd3-axis-text-group ${chartStyle && chartStyle}` }>
         {ticks.filter((tick, idx) => (idx%[maxTicksXAxis] === 0 )).map((tick, idx) => (
 
 

@@ -24,12 +24,23 @@ module.exports = createReactClass({
   getInitialState() {
     return {
       fill: this.props.fill,
+      fillCtl: this.props.fill,
     };
   },
 
+  statics: { getDerivedStateFromProps(props, current_state) {
+    if (current_state.fillCtl !== props.fill) {
+      return {
+        fillCtl:props.fill,
+        fill: props.fill,
+      }
+    }
+    return null
+  }},
+
   _animateArea() {
     this.setState({
-      fill: shade(this.props.fill, 0.02),
+      fill: shade(this.props.fill, 0.1),
     });
   },
 

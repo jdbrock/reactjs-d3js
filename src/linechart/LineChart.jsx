@@ -30,7 +30,6 @@ module.exports = createReactClass({
 
   getDefaultProps() {
     return {
-      // colors: d3.scaleOrdinal(d3.schemeCategory10),
       circleRadius: 4,
       className: 'rd3-linechart',
       hoverAnimation: true,
@@ -57,7 +56,7 @@ module.exports = createReactClass({
 
     let data;
     let series;
-    [data, series] = this._rd3FormatInputData(props.inputDataLayout, props.data, props.xIsDate, props.strokeWidth)
+    [data, series] = this._rd3FormatInputData('linechart', props.inputDataLayout, props.data, props.xIsDate, props.strokeWidth)
 
 
     const { innerWidth, innerHeight, trans, svgMargins } = this.getDimensions();

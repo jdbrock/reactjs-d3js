@@ -145,13 +145,32 @@ exports.flattenData = (data, xAccessor, yAccessor) => {
 };
 
 
+function componentToHex(c) {
+  var hex = c.toString(16);
+  return hex.length == 1 ? "0" + hex : hex;
+}
+
+function rgbToHex(rgb) {
+  return "#" + componentToHex(parseInt(rgb[0])) + componentToHex(parseInt(rgb[1])) + componentToHex(parseInt(rgb[2]));
+}
+
+
 exports.shade = (hex, percent) => {
   let red;
   let green;
   let blue;
   const min = Math.min;
   const round = Math.round;
-  if (hex.length !== 7) { return hex; }
+
+  if (hex.length !== 7) {
+    const rgb = hex.substring(4, hex.length-1)
+         .replace(/ /g, '')
+         .split(',');
+    hex = rgbToHex(rgb)
+  }
+  if (hex.length > 10) { return hex; }
+
+
   const number = parseInt(hex.slice(1), 16);
   const R = number >> 16;
   const G = number >> 8 & 0xFF;
