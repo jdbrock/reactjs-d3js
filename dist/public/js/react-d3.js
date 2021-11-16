@@ -2943,6 +2943,8 @@ function _interopRequireDefault(obj) {
   return obj && obj.__esModule ? obj : { default: obj };
 }
 
+var utils = require('../../utils');
+
 var React = window.React;
 var PropTypes = window.PropTypes;
 var createReactClass = window.createReactClass;
@@ -3147,8 +3149,9 @@ module.exports = createReactClass({
         gridTextRotate = props.gridText.rotate.left;
         translateTickLabel = 'translate(' + props.translateTickLabel_Y_X + ',' + props.translateTickLabel_Y_Y + ')';
         formatDate = function formatDate(d) {
-          return d;
+          return utils.nFormatter(d, 2);
         };
+        // formatDate = (d) => d;
         maxTicksXAxis = 1;
         break;
       case 'right':
@@ -3259,7 +3262,7 @@ module.exports = createReactClass({
   }
 });
 
-},{"../../ChartContext":"/home/robson/projetos/rd3/src/ChartContext.js"}],"/home/robson/projetos/rd3/src/common/axes/Label.jsx":[function(require,module,exports){
+},{"../../ChartContext":"/home/robson/projetos/rd3/src/ChartContext.js","../../utils":"/home/robson/projetos/rd3/src/utils/index.js"}],"/home/robson/projetos/rd3/src/common/axes/Label.jsx":[function(require,module,exports){
 'use strict';
 
 var _ChartContext = require('../../ChartContext');
@@ -4758,6 +4761,8 @@ module.exports = {
 },{}],"/home/robson/projetos/rd3/src/mixins/TooltipMixin.js":[function(require,module,exports){
 'use strict';
 
+var utils = require('../utils');
+
 var PropTypes = window.PropTypes;
 
 module.exports = {
@@ -4772,7 +4777,7 @@ module.exports = {
       showTooltip: true,
       /* Sum */
       tooltipFormat: function tooltipFormat(d, chart) {
-        return chart === 'barchart' ? String(d.seriesName) + ':\n' + String(d.height) : String(d.seriesName) + ':\n' + String(d.yValue);
+        return chart === 'barchart' ? String(d.seriesName) + ':\n' + String(utils.nFormatter(d.height, 2)) : String(d.seriesName) + ':\n' + String(utils.nFormatter(d.yValue, 2));
       }
     };
   },
@@ -4822,7 +4827,7 @@ module.exports = {
   }
 };
 
-},{}],"/home/robson/projetos/rd3/src/mixins/ViewBoxMixin.js":[function(require,module,exports){
+},{"../utils":"/home/robson/projetos/rd3/src/utils/index.js"}],"/home/robson/projetos/rd3/src/mixins/ViewBoxMixin.js":[function(require,module,exports){
 
 'use strict';
 
@@ -4887,6 +4892,8 @@ module.exports = {
 
     var xAxisOffset = Math.abs(props.xAxisOffset || 0);
     var yAxisOffset = Math.abs(props.yAxisOffset || 0);
+
+    // debugger;
 
     var xOffset = svgMargins.left + (yOrient === 'left' ? yAxisOffset : 0);
     var yOffset = svgMargins.top + (xOrient === 'top' ? xAxisOffset : 0);
@@ -6132,6 +6139,15 @@ exports.shade = function (hex, percent) {
   blue = min(255, round((1 + percent) * B)).toString(16);
   if (blue.length === 1) blue = '0' + blue;
   return '#' + red + green + blue;
+};
+
+exports.nFormatter = function (num, digits) {
+  var lookup = [{ value: 1, symbol: "" }, { value: 1e3, symbol: "k" }, { value: 1e6, symbol: "M" }, { value: 1e9, symbol: "G" }, { value: 1e12, symbol: "T" }, { value: 1e15, symbol: "P" }, { value: 1e18, symbol: "E" }];
+  var rx = /\.0+$|(\.[0-9]*[1-9])0+$/;
+  var item = lookup.slice().reverse().find(function (item) {
+    return num >= item.value;
+  });
+  return item ? (num / item.value).toFixed(digits).replace(rx, "$1") + item.symbol : "0";
 };
 
 exports.formatInputData = require('./input').formatInputData;
