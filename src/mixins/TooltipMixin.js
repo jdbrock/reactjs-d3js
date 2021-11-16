@@ -1,7 +1,9 @@
 'use strict';
+const utils = require('../utils');
 
 
 const PropTypes = require('prop-types');
+
 
 module.exports = {
 
@@ -16,8 +18,8 @@ module.exports = {
       /* Sum */
       tooltipFormat: (d, chart) => {
         return chart === 'barchart'
-                  ? String( d.seriesName) + ':\n' + String( d.height)
-                  : String( d.seriesName) + ':\n' + String( d.yValue)
+                  ? String( d.seriesName) + ':\n' + String( utils.nFormatter(d.height, 2))
+                  : String( d.seriesName) + ':\n' + String( utils.nFormatter(d.yValue, 2))
       },
     };
   },

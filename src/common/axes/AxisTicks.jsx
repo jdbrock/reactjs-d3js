@@ -1,6 +1,9 @@
 'use strict';
 import ChartContext from '../../ChartContext';
 
+const utils = require('../../utils');
+
+
 const React = require('react');
 const PropTypes = require('prop-types');
 const createReactClass = require('create-react-class');
@@ -184,7 +187,8 @@ module.exports = createReactClass({
         y2grid = 0;
         gridTextRotate = props.gridText.rotate.left;
         translateTickLabel = 'translate(' + props.translateTickLabel_Y_X + ',' + props.translateTickLabel_Y_Y + ')';
-        formatDate = (d) => d;
+        formatDate = (d) => utils.nFormatter(d,2);
+        // formatDate = (d) => d;
         maxTicksXAxis=1;
         break;
       case 'right':
