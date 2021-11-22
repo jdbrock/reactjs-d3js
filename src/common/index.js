@@ -9,3 +9,5 @@ exports.Chart = require('./charts').Chart;
 exports.Legend = require('./Legend');
 exports.Tooltip = require('./Tooltip');
 exports.Voronoi = require('./Voronoi');
+
+exports.BreadCrumb = require('./BreadCrumb');
