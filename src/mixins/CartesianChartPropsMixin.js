@@ -57,34 +57,34 @@ module.exports = {
         return d[idx]
       },
       colorAccessorOrdinal: (d, idx) => idx,
-      height: 200,
-      horizontal: false,
-      legend: false,
-      legendOffset: 120,
-      title: '',
-      width: 400,
-      // xAxisFormatter: no predefined value right now
-      xAxisLabel: '',
-      xAxisLabelOffset: 38,
-      xAxisOffset: 0,
-      // xAxisTickCount: no predefined value right now
-      // xAxisTickInterval: no predefined value right now
-      // xAxisTickValues: no predefined value right now
-      xAxisTickStroke: '#000',
-      xAxisTickTextStroke: '#000',
-      xOrient: 'bottom',
-      // xScale: no predefined value right now
-      // yAxisFormatter: no predefined value right now
-      yAxisLabel: '',
-      yAxisLabelOffset: 35,
-      yAxisOffset: 0,
-      // yAxisTickCount: no predefined value right now
-      // yAxisTickInterval: no predefined value right now
-      // yAxisTickValues: no predefined value right now
-      yAxisTickStroke: '#000',
-      yAxisTickTextStroke: '#000',
-      yOrient: 'default',
-      // yScale: no predefined value right now
+        height: 200,
+        horizontal: false,
+        legend: false,
+        legendOffset: 120,
+        title: '',
+        width: 400,
+        // xAxisFormatter: no predefined value right now
+        xAxisLabel: '',
+        xAxisLabelOffset: 38,
+        xAxisOffset: 0,
+        // xAxisTickCount: no predefined value right now
+        // xAxisTickInterval: no predefined value right now
+        // xAxisTickValues: no predefined value right now
+        xAxisTickStroke: '#000',
+        xAxisTickTextStroke: '#000',
+        xOrient: 'bottom',
+        // xScale: no predefined value right now
+        // yAxisFormatter: no predefined value right now
+        yAxisLabel: '',
+        yAxisLabelOffset: 35,
+        yAxisOffset: 0,
+        // yAxisTickCount: no predefined value right now
+        // yAxisTickInterval: no predefined value right now
+        // yAxisTickValues: no predefined value right now
+        yAxisTickStroke: '#000',
+        yAxisTickTextStroke: '#000',
+        yOrient: 'default',
+        // yScale: no predefined value right now
     };
   },
 

@@ -107,13 +107,15 @@ const Demos = createReactClass({
 
     // 2014 Most Populous Countries
     // http://www.prb.org/pdf14/2014-world-population-data-sheet_eng.pdf
-    const treemapData = [{ label: 'Origin', parent:'', value: '' },
-                          { label: 'China', parent:'Origin', value: 1364 },
-                          { label: 'India', parent:'Origin', value: 1296 },
-                          { label: 'United States', parent:'Origin', value: 318 },
-                          { label: 'Indonesia', parent:'Origin', value: 251 },
-                          { label: 'Brazil', parent:'Origin', value: 203 }
-                          ];
+
+    const treemapData =[{ label: 'Origin', parent:'', value: '' },
+    { label: 'China', parent:'Origin', value: 1364 },
+    { label: 'India', parent:'Origin', value: 1296 },
+    { label: 'United States', parent:'Origin', value: 318 },
+    { label: 'Indonesia', parent:'Origin', value: 251 },
+    { label: 'Brazil', parent:'Origin', value: 203 }
+  ];
+
 
     const scatterData = [
       {
@@ -536,6 +538,7 @@ const Demos = createReactClass({
             </pre>
           </div>
         </div>
+
 
 
 

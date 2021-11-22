@@ -7,14 +7,15 @@ const createReactClass = require('create-react-class');
 const d3 = require('d3');
 const CellContainer = require('./CellContainer');
 
+/* color accessors */
+const { CartesianChartPropsMixin } = require('../mixins');
+
 module.exports = createReactClass({
 
   displayName: 'DataSeries',
 
   propTypes: {
     data: PropTypes.array,
-    colors: PropTypes.func,
-    colorAccessor: PropTypes.func,
     width: PropTypes.number,
     height: PropTypes.number,
   },
@@ -22,10 +23,10 @@ module.exports = createReactClass({
   getDefaultProps() {
     return {
       data: [],
-      colors: d3.scaleOrdinal(d3.schemePastel2),
-      colorAccessor: (d, idx) => idx,
     };
   },
+
+  mixins: [CartesianChartPropsMixin],
 
   render() {
     const props = this.props;
@@ -43,6 +44,23 @@ module.exports = createReactClass({
 
     const tree = treemap(root);
 
+    let series = []
+    root.children.map( d => {
+      series.push(d.id)
+    })
+
+    let colorsDomain;
+    let colorsAccessor;
+    const origArray = Array.from(series.keys())
+
+    if (this.props.color.accessor === 'Sequential'){
+      colorsDomain = origArray.map(x => x / series.length)
+      colorsAccessor = this.props.colorAccessorSequential
+    }else{
+      colorsDomain = series
+      colorsAccessor = this.props.colorAccessorOrdinal
+    }
+
     const cells = tree.children.map((node, idx) => (
         <CellContainer
           key={idx}
@@ -50,11 +68,13 @@ module.exports = createReactClass({
           y={node.y0}
           width={node.x1 - node.x0}
           height={node.y1 - node.y0}
-          fill={props.colors(props.colorAccessor(node, idx))}
+          fill={this.props.color.colors(colorsAccessor(colorsDomain, idx))}
+
           label={node.data.label}
           fontSize={props.fontSize}
           textColor={props.textColor}
           hoverAnimation={props.hoverAnimation}
+          drillData={props.drillData}
         />
     ), this);
 
