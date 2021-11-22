@@ -8,7 +8,7 @@ module.exports = createReactClass({
 
     getInitialState() {
         return {
-          chartStyle:'asdf'
+          chartStyle:''
         };
       },
 
