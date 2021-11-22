@@ -1,4 +1,6 @@
 'use strict';
+import ChartContext from '../../ChartContext';
+
 
 const PropTypes = require('prop-types');
 const React = require('react');
@@ -31,6 +33,7 @@ module.exports = createReactClass({
       svgClassName: 'rd3-chart',
       titleClassName: 'rd3-chart-title',
       title: '',
+      svgChart:{width:"100%", height:"100%"}
     };
   },
 
@@ -67,13 +70,33 @@ module.exports = createReactClass({
   render() {
     const props = this.props;
 
+    /* Context */
+    this.contextType = ChartContext;
+    const { chartStyle }  = this.contextType._currentValue;
+
+
     return (
-      <div
-        className={props.className}
+      // <div
+      //   className={props.className}
+      // >
+      //   {this._renderTitle()}
+      //   {this._renderChart()}
+      // </div>
+
+
+      <svg
+        className={`${props.svgClassName} ${chartStyle}`}
+        height={props.height}
+        viewBox={props.viewBox}
+        width="100%"
       >
-        {this._renderTitle()}
-        {this._renderChart()}
-      </div>
+        <svg viewBox={props.viewBox} width={props.svgChart.width} height={props.svgChart.height}>
+          {this._renderTitle()}
+          {this._renderChart()}
+        </svg>
+      </svg>
+
+
     );
   },
 });
