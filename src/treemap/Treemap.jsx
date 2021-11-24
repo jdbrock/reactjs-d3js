@@ -8,6 +8,7 @@ const createReactClass = require('create-react-class');
 const Chart = require('../common').Chart;
 const DataSeries = require('./DataSeries');
 const BreadCrumb = require('../common/BreadCrumb');
+import ChartContext from '../ChartContext';
 
 module.exports = createReactClass({
 
@@ -124,8 +125,16 @@ module.exports = createReactClass({
       return null;
     }
 
+    /* Context */
+    this.contextType = ChartContext;
+    const { chartStyle }  = this.contextType._currentValue;
+
     return (
+
       <div>
+      <div className={`rd3-chart-treemap ${chartStyle}`}>
+
+      {/* <div className={`rd3-chart-treemap`}> */}
       <Chart
         title={props.title}
         width={props.width}
@@ -148,8 +157,10 @@ module.exports = createReactClass({
             drillData={this._drillData}
           />
         </g>
+
       </Chart>
-      <BreadCrumb breadcrumb={this.state.bc}/>
+      </div>
+      <BreadCrumb breadcrumb={this.state.bc} title={props.title}/>
       </div>
     );
   },
