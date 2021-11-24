@@ -25141,21 +25141,26 @@ var createReactClass = window.createReactClass;
 module.exports = createReactClass({
     displayName: 'BreadCrumb',
     render: function render() {
+        var _this = this;
+
         var breadcrumb = [];
         this.props.breadcrumb.reverse().map(function (bc, i, _ref) {
             var length = _ref.length;
 
+            var label = '';
+            bc.label === 'Origin' ? label = _this.props.title : label = bc.label;
+
             if (i + 1 === length) {
                 breadcrumb.push(React.createElement('div', { key: bc.label, onClick: function onClick() {
                         return bc.ev(bc.label, 'up');
-                    }, style: { "paddingLeft": "4px" } }, ' ', bc.label, ' '));
+                    }, style: { "paddingLeft": "4px" } }, ' ', label, ' '));
             } else {
                 breadcrumb.push(React.createElement('div', { key: bc.label, onClick: function onClick() {
                         return bc.ev(bc.label, 'up');
-                    }, style: { "paddingLeft": "4px" } }, ' ', bc.label + " > ", '  '));
+                    }, style: { "paddingLeft": "4px" } }, ' ', label + " > ", '  '));
             }
         });
-        return React.createElement('div', { style: { display: "flex", "flexDirection": "row" } }, breadcrumb);
+        return React.createElement('div', { style: { display: "flex", "flexDirection": "row", "justify-content": "center" } }, breadcrumb);
     }
 });
 
@@ -26353,22 +26358,12 @@ module.exports = createReactClass({
     this.contextType = _ChartContext2.default;
     var chartStyle = this.contextType._currentValue.chartStyle;
 
-    return (
-      // <div
-      //   className={props.className}
-      // >
-      //   {this._renderTitle()}
-      //   {this._renderChart()}
-      // </div>
-
-
-      React.createElement('svg', {
-        className: props.svgClassName + ' ' + chartStyle,
-        height: props.height,
-        viewBox: props.viewBox,
-        width: '100%'
-      }, React.createElement('svg', { viewBox: props.viewBox, width: props.svgChart.width, height: props.svgChart.height }, this._renderTitle(), this._renderChart()))
-    );
+    return React.createElement('svg', {
+      className: props.svgClassName + ' ' + chartStyle,
+      height: props.height,
+      viewBox: props.viewBox,
+      width: props.width
+    }, React.createElement('svg', { viewBox: props.viewBox, width: props.width, height: props.svgChart.height }, this._renderTitle(), this._renderChart()));
   }
 });
 
@@ -28283,6 +28278,14 @@ exports.ScatterChart = require('./ScatterChart');
 },{"./ScatterChart":"/home/robson/projetos/rd3/src/scatterchart/ScatterChart.jsx"}],"/home/robson/projetos/rd3/src/treemap/Cell.jsx":[function(require,module,exports){
 'use strict';
 
+var _ChartContext = require('../ChartContext');
+
+var _ChartContext2 = _interopRequireDefault(_ChartContext);
+
+function _interopRequireDefault(obj) {
+  return obj && obj.__esModule ? obj : { default: obj };
+}
+
 var PropTypes = window.PropTypes;
 var React = window.React;
 var createReactClass = window.createReactClass;
@@ -28302,6 +28305,10 @@ module.exports = createReactClass({
 
     var props = this.props;
 
+    /* Context */
+    this.contextType = _ChartContext2.default;
+    var chartStyle = this.contextType._currentValue.chartStyle;
+
     var textStyle = {
       textAnchor: 'middle',
       fontSize: props.fontSize
@@ -28316,11 +28323,11 @@ module.exports = createReactClass({
     */
     var delayLabel = function delayLabel(props) {
       setTimeout(function () {
-        new d3plus.TextBox().data(label).fontResize(true).fontMax(36)
+        new d3plus.TextBox().data(label).fontResize(true).fontMax(28)
         // .fontMin(12)
         .fontWeight(800).padding(function (d) {
           return props.width * .05;
-        }).fontColor('#FFFFFF').width(function (d) {
+        }).fontColor(null).width(function (d) {
           return props.width * .9;
         }).height(function (d) {
           return props.height * 1;
@@ -28332,10 +28339,10 @@ module.exports = createReactClass({
       }, 10);
     };
 
-    return React.createElement('g', { transform: t, label: delayLabel(this.props), id: id, onClick: function onClick() {
+    return React.createElement('g', { transform: t, className: 'rd3-treemap-parent ' + chartStyle, label: delayLabel(this.props), id: id, onClick: function onClick() {
         return props.handleClick(_this.props.label, 'down');
       } }, React.createElement('rect', {
-      className: 'rd3-treemap-cell',
+      className: 'rd3-treemap-cell ' + chartStyle,
       width: props.width,
       height: props.height,
       fill: props.fill,
@@ -28347,7 +28354,7 @@ module.exports = createReactClass({
   }
 });
 
-},{"d3plus-text":"/home/robson/projetos/rd3/node_modules/d3plus-text/build/d3plus-text.full.js"}],"/home/robson/projetos/rd3/src/treemap/CellContainer.jsx":[function(require,module,exports){
+},{"../ChartContext":"/home/robson/projetos/rd3/src/ChartContext.js","d3plus-text":"/home/robson/projetos/rd3/node_modules/d3plus-text/build/d3plus-text.full.js"}],"/home/robson/projetos/rd3/src/treemap/CellContainer.jsx":[function(require,module,exports){
 'use strict';
 
 var _extends = Object.assign || function (target) {
@@ -28516,6 +28523,14 @@ module.exports = createReactClass({
 },{"../mixins":"/home/robson/projetos/rd3/src/mixins/index.js","./CellContainer":"/home/robson/projetos/rd3/src/treemap/CellContainer.jsx"}],"/home/robson/projetos/rd3/src/treemap/Treemap.jsx":[function(require,module,exports){
 'use strict';
 
+var _ChartContext = require('../ChartContext');
+
+var _ChartContext2 = _interopRequireDefault(_ChartContext);
+
+function _interopRequireDefault(obj) {
+  return obj && obj.__esModule ? obj : { default: obj };
+}
+
 var d3 = window.d3;
 var PropTypes = window.PropTypes;
 var React = window.React;
@@ -28635,7 +28650,11 @@ module.exports = createReactClass({
       return null;
     }
 
-    return React.createElement('div', null, React.createElement(Chart, {
+    /* Context */
+    this.contextType = _ChartContext2.default;
+    var chartStyle = this.contextType._currentValue.chartStyle;
+
+    return React.createElement('div', null, React.createElement('div', { className: 'rd3-chart-treemap ' + chartStyle }, React.createElement(Chart, {
       title: props.title,
       width: props.width,
       height: props.height,
@@ -28653,11 +28672,11 @@ module.exports = createReactClass({
       fontSize: props.fontSize,
       hoverAnimation: props.hoverAnimation,
       drillData: this._drillData
-    }))), React.createElement(BreadCrumb, { breadcrumb: this.state.bc }));
+    })))), React.createElement(BreadCrumb, { breadcrumb: this.state.bc, title: props.title }));
   }
 });
 
-},{"../common":"/home/robson/projetos/rd3/src/common/index.js","../common/BreadCrumb":"/home/robson/projetos/rd3/src/common/BreadCrumb.jsx","./DataSeries":"/home/robson/projetos/rd3/src/treemap/DataSeries.jsx"}],"/home/robson/projetos/rd3/src/treemap/index.js":[function(require,module,exports){
+},{"../ChartContext":"/home/robson/projetos/rd3/src/ChartContext.js","../common":"/home/robson/projetos/rd3/src/common/index.js","../common/BreadCrumb":"/home/robson/projetos/rd3/src/common/BreadCrumb.jsx","./DataSeries":"/home/robson/projetos/rd3/src/treemap/DataSeries.jsx"}],"/home/robson/projetos/rd3/src/treemap/index.js":[function(require,module,exports){
 'use strict';
 
 exports.Treemap = require('./Treemap');

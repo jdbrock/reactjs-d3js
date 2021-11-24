@@ -76,27 +76,17 @@ module.exports = createReactClass({
 
 
     return (
-      // <div
-      //   className={props.className}
-      // >
-      //   {this._renderTitle()}
-      //   {this._renderChart()}
-      // </div>
-
-
       <svg
         className={`${props.svgClassName} ${chartStyle}`}
         height={props.height}
         viewBox={props.viewBox}
-        width="100%"
+        width={props.width}
       >
-        <svg viewBox={props.viewBox} width={props.svgChart.width} height={props.svgChart.height}>
+        <svg viewBox={props.viewBox} width={props.width} height={props.svgChart.height}>
           {this._renderTitle()}
           {this._renderChart()}
         </svg>
       </svg>
-
-
     );
   },
 });

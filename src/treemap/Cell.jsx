@@ -4,6 +4,7 @@ const PropTypes = require('prop-types');
 const React = require('react');
 const createReactClass = require('create-react-class');
 const d3plus = require('d3plus-text');
+import ChartContext from '../ChartContext';
 
 
 module.exports = createReactClass({
@@ -17,6 +18,10 @@ module.exports = createReactClass({
 
   render() {
     const props = this.props;
+
+    /* Context */
+    this.contextType = ChartContext;
+    const { chartStyle }  = this.contextType._currentValue;
 
     const textStyle = {
       textAnchor: 'middle',
@@ -34,11 +39,11 @@ module.exports = createReactClass({
       new d3plus.TextBox()
       .data(label)
       .fontResize(true)
-      .fontMax(36)
+      .fontMax(28)
       // .fontMin(12)
       .fontWeight(800)
       .padding((d)=> {return props.width * .05})
-      .fontColor('#FFFFFF')
+      .fontColor(null)
       .width((d)=> {return props.width * .9})
       .height((d)=> {return props.height * 1})
       // .x((d)=> {return props.width * .05})
@@ -52,9 +57,9 @@ module.exports = createReactClass({
 
 
     return (
-        <g transform={t} label={delayLabel(this.props)} id={id} onClick={()=>props.handleClick(this.props.label, 'down')}>
+        <g transform={t} className={`rd3-treemap-parent ${chartStyle}`} label={delayLabel(this.props)} id={id} onClick={()=>props.handleClick(this.props.label, 'down')}>
           <rect
-            className="rd3-treemap-cell"
+            className={`rd3-treemap-cell ${chartStyle}`}
             width={props.width}
             height={props.height}
             fill={props.fill}
