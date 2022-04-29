@@ -2,7 +2,7 @@
 
 This is a fork of **rd3** - https://github.com/yang-wei/rd3
 
-**rd3** was a **ReactJS** + **D3JS** charting framework. Using both togheter, provides a **pixel perfect** experience. 
+**ReactJS** + **D3JS** charting framework. Using both togheter, provides a **pixel perfect** experience. 
 
 When **rd3** has been discontinued, it was working on **NodeJS** version 8, **D3JS** version 3 and **ReactJS** version 16.
 
