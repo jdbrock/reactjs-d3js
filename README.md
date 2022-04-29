@@ -1,15 +1,17 @@
-## Fork of react-d3 running on d3js version 7
+# ReactJS-D3JS
 
-This is a fork of rd3 - https://github.com/yang-wei/rd3
+This is a fork of **rd3** - https://github.com/yang-wei/rd3
 
-When rd3 was discontinued, it was working on node version 8, d3 version 3 and react version 16.
+**rd3** was a **ReactJS** + **D3JS** charting framework. Using both togheter, provides a **pixel perfect** experience. 
 
-It was upgraded here to work on d3js v7.0.4, react 16 and node 12.
+When **rd3** has been discontinued, it was working on **NodeJS** version 8, **D3JS** version 3 and **ReactJS** version 16.
+
+I upgrade it to work on **D3JS** v7.0.4, **ReactJS** 16 and **NodeJS** 12.
 
 LineChart, ScatterChart and Stackedarea are migrated, with minor bugs.
 
 ## Demo
-https://fortinbras.github.io/reactjs-d3js/
+https://bv.fapesp.br/pt/metricas/teste_graficos/
 
 ### License
 MIT
