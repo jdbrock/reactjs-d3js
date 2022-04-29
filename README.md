@@ -1,6 +1,6 @@
 # ReactJS-D3JS
 
-This is a fork of **rd3** - https://github.com/yang-wei/rd3
+This is a fork of [**rd3**](https://github.com/yang-wei/rd3)
 
 **ReactJS** + **D3JS** charting framework. Using both togheter, provides a **pixel perfect** experience. 
 
@@ -11,7 +11,9 @@ I upgrade it to work on **D3JS** v7.0.4, **ReactJS** 16 and **NodeJS** 12.
 LineChart, ScatterChart and Stackedarea are migrated, with minor bugs.
 
 ## Demo
-https://bv.fapesp.br/pt/metricas/teste_graficos/
+Beatiful ReacJS + D3JS:
+
+[Check this out](https://bv.fapesp.br/pt/metricas/teste_graficos/) 
 
 ### License
 MIT
