@@ -10,10 +10,25 @@ I upgrade it to work on **D3JS** v7.0.4, **ReactJS** 16 and **NodeJS** 12.
 
 LineChart, ScatterChart and Stackedarea are migrated, with minor bugs.
 
+This projects still mantains some idiosincrasies of the original project, so you have some parts in Class Based Components and Function Based Components in ReacJS.
+
+It has some really nice features, like the **Voronoy Algorithm** to calculate distance between points to display tooltips, and so bo. 
+
 ## Demo
 Beatiful ReacJS + D3JS:
 
 [Check this out](https://bv.fapesp.br/pt/metricas/teste_graficos/) 
+
+## Create and customize charts
+CLient to create and customize charts:
+
+https://github.com/robson-koji/rde-client/
+
+
+There is still a lot of work to include new types of charts. At the moment we have, **Line Chart**, **Scatter Chart**, **Bart Chart**, **Area chart**, **Tree Chart**.
+
+
+
 
 ### License
 MIT
