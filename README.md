@@ -17,7 +17,7 @@ It has some really nice features, like the **Voronoy Algorithm** to calculate di
 ## Demo
 Beatiful ReacJS + D3JS:
 
-[Check this out](https://bv.fapesp.br/pt/metricas/teste_graficos/) 
+[Check this out](https://robson-koji.github.io/rde-client/) 
 
 ## Create and customize charts
 CLient to create and customize charts:
